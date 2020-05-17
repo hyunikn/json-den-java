@@ -1,4 +1,4 @@
-package com.wingsoft.jsonden.json;
+package com.wingsoft.jsonden;
 
 public class JsonNull extends JsonPrim {
     public JsonNull(String text) {
