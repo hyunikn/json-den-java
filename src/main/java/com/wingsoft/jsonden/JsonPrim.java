@@ -5,14 +5,23 @@ abstract class JsonPrim extends Json {
     // ===================================================
     // Public
 
-    @Override
-    protected void fill(StringBuffer sbuf, int indentSize, int indentLevel) {
-        putIndent(sbuf, indentSize, indentLevel);
-        sbuf.append(text);
+    public static JsonPrim parse(String s) {
+        Json parsed = Json.parse(s);
+        if (parsed instanceof JsonPrim) {
+            return (JsonPrim) parsed;
+        } else {
+            throw new Error("not parsed into a JsonPrim but " + parsed.getClass().getSimpleName());
+        }
     }
 
     @Override
-    public Json get(String path) {
+    public Json getChild(String name) {
+        return null;
+    }
+
+    @Override
+    public Json putChild(String name, Json child) {
+        // TODO
         return null;
     }
 
@@ -23,6 +32,12 @@ abstract class JsonPrim extends Json {
 
     protected JsonPrim(String text) {
         this.text = text;
+    }
+
+    @Override
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+        putIndent(sbuf, indentSize, indentLevel);
+        sbuf.append(text);
     }
 
     // ===================================================

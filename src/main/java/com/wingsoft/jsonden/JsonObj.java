@@ -5,7 +5,23 @@ public class JsonObj extends Json {
     // ===================================================
     // Public
 
-    public Json get(String path) {
+    public static JsonObj parse(String s) {
+        Json parsed = Json.parse(s);
+        if (parsed instanceof JsonObj) {
+            return (JsonObj) parsed;
+        } else {
+            throw new Error("not parsed into a JsonObj but " + parsed.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    public Json getChild(String name) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public Json putChild(String name, Json child) {
         // TODO
         return null;
     }
@@ -13,8 +29,10 @@ public class JsonObj extends Json {
     // ===================================================
     // Protected
 
-    protected void fill(StringBuffer sbuf, int indentSize, int indentLevel) {
+    @Override
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
         // TODO
     }
+
 }
 

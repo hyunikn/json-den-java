@@ -8,6 +8,15 @@ public class JsonNum extends JsonPrim {
     // ===================================================
     // Public
 
+    public static Json parse(String s) {
+        Json parsed = Json.parse(s);
+        if (parsed instanceof JsonNum) {
+            return (JsonNum) parsed;
+        } else {
+            throw new Error("not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
+        }
+    }
+
     public JsonNum(byte b) {
         super(Byte.toString(b));
     }
@@ -38,10 +47,6 @@ public class JsonNum extends JsonPrim {
 
     public JsonNum(BigDecimal bd) {
         super(bd == null ? excAsStr("argument cannot be null") : bd.toString());
-    }
-
-    public static JsonNum parse(String s) {
-        return new JsonNum(parseNum(s));
     }
 
     // ===================================================
