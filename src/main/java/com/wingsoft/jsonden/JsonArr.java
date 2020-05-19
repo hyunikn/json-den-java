@@ -30,7 +30,7 @@ public class JsonArr extends Json {
     // Protected
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void _stringify(StringBuffer sbuf, int indentSize, int indentLevel) {
         // TODO
     }
 }

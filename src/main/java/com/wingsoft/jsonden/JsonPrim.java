@@ -35,7 +35,7 @@ abstract class JsonPrim extends Json {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void _stringify(StringBuffer sbuf, int indentSize, int indentLevel) {
         putIndent(sbuf, indentSize, indentLevel);
         sbuf.append(text);
     }
