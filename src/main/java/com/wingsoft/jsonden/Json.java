@@ -25,15 +25,20 @@ public abstract class Json {
         } else {
             String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
 
-            Json ret = this;
-            for (String s: segments) {
-                ret = ret.getChild(s);
-                if (ret == null) {
-                    return null;
+            if (segments.length == 1) {
+                // shortcut for this base case
+                this.getChild(segments[0]);
+            } else {
+                Json ret = this;
+                for (String s: segments) {
+                    ret = ret.getChild(s);
+                    if (ret == null) {
+                        return null;
+                    }
                 }
-            }
 
-            return ret;
+                return ret;
+            }
         }
     }
 
@@ -45,15 +50,20 @@ public abstract class Json {
             String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
             int pathLen = segments.length;
 
-            Json parent = this;
-            for (int i = 0; i < pathLen - 1; i++) {
-                parent = parent.getChild(segments[i]);
-                if (parent == null) {
-                    throw new Error("no descendant named '" + segments[i] + "'");
+            if (pathLen == 1) {
+                // shortcut for this base case
+                return this.putChild(segments[0], json);
+            } else {
+                Json parent = this;
+                for (int i = 0; i < pathLen - 1; i++) {
+                    parent = parent.getChild(segments[i]);
+                    if (parent == null) {
+                        throw new Error("no descendant named '" + segments[i] + "'");
+                    }
                 }
-            }
 
-            return parent.putChild(segments[pathLen - 1], json);
+                return parent.putChild(segments[pathLen - 1], json);
+            }
         }
     }
 
