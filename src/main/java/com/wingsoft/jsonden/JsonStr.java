@@ -5,7 +5,7 @@ public class JsonStr extends JsonPrim {
     // ===================================================
     // Public
 
-    public static Json parse(String s) {
+    public static JsonStr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
             return (JsonStr) parsed;
@@ -26,11 +26,16 @@ public class JsonStr extends JsonPrim {
     // Protected
 
     @Override
-    protected void fill(StringBuffer sbuf, int indentSize, int indentLevel) {
-        putIndent(sbuf, indentSize, indentLevel);
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+        writeIndent(sbuf, indentSize, indentLevel);
         sbuf.append('"');
         sbuf.append(text);
         sbuf.append('"');
+    }
+
+    @Override
+    protected String getTypeName() {
+        return "string";
     }
 }
 

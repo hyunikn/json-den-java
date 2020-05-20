@@ -5,7 +5,7 @@ public class JsonBool extends JsonPrim {
     // ===================================================
     // Public
 
-    public static Json parse(String s) {
+    public static JsonBool parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonBool) {
             return (JsonBool) parsed;
@@ -17,5 +17,14 @@ public class JsonBool extends JsonPrim {
     public JsonBool(boolean b) {
         super(Boolean.toString(b));
     }
+
+    // ===================================================
+    // Protected
+
+    @Override
+    protected String getTypeName() {
+        return "boolean";
+    }
+
 }
 

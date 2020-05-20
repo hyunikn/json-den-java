@@ -14,23 +14,29 @@ public class JsonArr extends Json {
         }
     }
 
-    @Override
-    public Json getChild(String name) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public Json putChild(String name, Json child) {
-        // TODO
-        return null;
-    }
-
     // ===================================================
     // Protected
 
     @Override
-    protected void _stringify(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
         // TODO
     }
+
+    @Override
+    protected Json getChild(String name) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected Json putChild(String name, Json child) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected String getTypeName() {
+        return "array";
+    }
+
 }

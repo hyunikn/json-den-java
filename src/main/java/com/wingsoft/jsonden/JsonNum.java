@@ -8,7 +8,7 @@ public class JsonNum extends JsonPrim {
     // ===================================================
     // Public
 
-    public static Json parse(String s) {
+    public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;
@@ -58,6 +58,14 @@ public class JsonNum extends JsonPrim {
     }
 
     // ===================================================
+    // Protected
+
+    @Override
+    protected String getTypeName() {
+        return "number";
+    }
+
+    // ===================================================
     // Private
 
     static String parseNum(String s) {
@@ -69,6 +77,5 @@ public class JsonNum extends JsonPrim {
 
         return s;
     }
-
 }
 

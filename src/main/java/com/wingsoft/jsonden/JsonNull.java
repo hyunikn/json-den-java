@@ -5,7 +5,7 @@ public class JsonNull extends JsonPrim {
     // ===================================================
     // Public
 
-    public static Json parse(String s) {
+    public static JsonNull parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNull) {
             return (JsonNull) parsed;
@@ -16,6 +16,14 @@ public class JsonNull extends JsonPrim {
 
     public JsonNull() {
         super("null");
+    }
+
+    // ===================================================
+    // Protected
+
+    @Override
+    protected String getTypeName() {
+        return "null";
     }
 }
 

@@ -14,17 +14,6 @@ abstract class JsonPrim extends Json {
         }
     }
 
-    @Override
-    public Json getChild(String name) {
-        return null;
-    }
-
-    @Override
-    public Json putChild(String name, Json child) {
-        // TODO
-        return null;
-    }
-
     // ===================================================
     // Protected
 
@@ -35,9 +24,20 @@ abstract class JsonPrim extends Json {
     }
 
     @Override
-    protected void _stringify(StringBuffer sbuf, int indentSize, int indentLevel) {
-        putIndent(sbuf, indentSize, indentLevel);
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+        writeIndent(sbuf, indentSize, indentLevel);
         sbuf.append(text);
+    }
+
+    @Override
+    protected Json getChild(String name) {
+        return null;
+    }
+
+    @Override
+    protected Json putChild(String name, Json child) {
+        throw new Error("a JSON node of a primitive type (in this case, " + this.getTypeName() +
+                ") cannot have a child node");
     }
 
     // ===================================================
