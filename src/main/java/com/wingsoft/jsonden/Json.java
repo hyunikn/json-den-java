@@ -27,7 +27,7 @@ public abstract class Json {
 
             if (segments.length == 1) {
                 // shortcut for this base case
-                this.getChild(segments[0]);
+                return this.getChild(segments[0]);
             } else {
                 Json ret = this;
                 for (String s: segments) {
