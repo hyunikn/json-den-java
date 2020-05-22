@@ -19,52 +19,15 @@ public abstract class Json {
     }
 
     public Json get(String path) {
-
-        if (path == null) {
-            throw new Error("path cannot be null");
-        } else {
-            String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
-
-            if (segments.length == 1) {
-                // shortcut for this base case
-                return this.getChild(segments[0]);
-            } else {
-                Json ret = this;
-                for (String s: segments) {
-                    ret = ret.getChild(s);
-                    if (ret == null) {
-                        return null;
-                    }
-                }
-
-                return ret;
-            }
-        }
+        return crudCommon(CrudCase.GET, path, null);
     }
 
     public Json put(String path, Json json) {
+        return crudCommon(CrudCase.PUT, path, json);
+    }
 
-        if (path == null) {
-            throw new Error("path cannot be null");
-        } else {
-            String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
-            int pathLen = segments.length;
-
-            if (pathLen == 1) {
-                // shortcut for this base case
-                return this.putChild(segments[0], json);
-            } else {
-                Json parent = this;
-                for (int i = 0; i < pathLen - 1; i++) {
-                    parent = parent.getChild(segments[i]);
-                    if (parent == null) {
-                        throw new Error("no descendant named '" + segments[i] + "'");
-                    }
-                }
-
-                return parent.putChild(segments[pathLen - 1], json);
-            }
-        }
+    public Json remove(String path) {
+        return crudCommon(CrudCase.REMOVE, path, null);
     }
 
     @Override
@@ -79,6 +42,7 @@ public abstract class Json {
     protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
     protected abstract Json getChild(String name);
     protected abstract Json putChild(String name, Json child);
+    protected abstract Json removeChild(String name);
     protected abstract String getTypeName();
 
     // --------------------------------------------------
@@ -106,6 +70,12 @@ public abstract class Json {
     // ===================================================
     // Private
 
+    private enum CrudCase {
+        GET,
+        PUT,
+        REMOVE;
+    }
+
     private static final String[] indents = new String[] {
         null,
         " ",
@@ -125,6 +95,41 @@ public abstract class Json {
 
         if (indentLevel < 0) {
             throw new Error("indentLevel cannot be a negative integer");
+        }
+    }
+
+    private Json getParentOf(String[] path) {
+
+        int pathLen = path.length;
+
+        Json node = this;
+        for (int i = 0; i < pathLen - 1; i++) {
+            node = node.getChild(path[i]);
+            if (node == null) {
+                throw new Error("no descendant named '" + path[i] + "'");
+            }
+        }
+
+        return node;
+    }
+
+    private Json crudCommon(CrudCase case_, String path, Json newNode) {
+
+        if (path == null) {
+            throw new Error("path cannot be null");
+        } else {
+            String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
+            switch (case_) {
+                case GET:
+                    return getParentOf(segments).getChild(segments[segments.length - 1]);
+                case PUT:
+                    return getParentOf(segments).putChild(segments[segments.length - 1], newNode);
+                case REMOVE:
+                    return getParentOf(segments).removeChild(segments[segments.length - 1]);
+                default:
+                    assert(false);
+                    return null;
+            }
         }
     }
 }

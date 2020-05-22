@@ -3,7 +3,7 @@ package com.wingsoft.jsonden;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
-public class JsonNum extends JsonPrim {
+public class JsonNum extends JsonSimple {
 
     // ===================================================
     // Public
@@ -13,7 +13,7 @@ public class JsonNum extends JsonPrim {
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;
         } else {
-            throw new Error("not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
+            throw new Error("not parsed into a JsonNum but " + parsed.getTypeName());
         }
     }
 

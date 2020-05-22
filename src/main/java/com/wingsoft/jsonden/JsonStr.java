@@ -1,6 +1,6 @@
 package com.wingsoft.jsonden;
 
-public class JsonStr extends JsonPrim {
+public class JsonStr extends JsonSimple {
 
     // ===================================================
     // Public
@@ -10,7 +10,7 @@ public class JsonStr extends JsonPrim {
         if (parsed instanceof JsonStr) {
             return (JsonStr) parsed;
         } else {
-            throw new Error("not parsed into a JsonStr but " + parsed.getClass().getSimpleName());
+            throw new Error("not parsed into a JsonStr but " + parsed.getTypeName());
         }
     }
 

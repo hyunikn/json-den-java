@@ -10,7 +10,7 @@ public class JsonArr extends Json {
         if (parsed instanceof JsonArr) {
             return (JsonArr) parsed;
         } else {
-            throw new Error("not parsed into a JsonArr but " + parsed.getClass().getSimpleName());
+            throw new Error("not parsed into a JsonArr but " + parsed.getTypeName());
         }
     }
 
@@ -30,6 +30,12 @@ public class JsonArr extends Json {
 
     @Override
     protected Json putChild(String name, Json child) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected Json removeChild(String name) {
         // TODO
         return null;
     }

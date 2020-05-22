@@ -10,7 +10,7 @@ public class JsonObj extends Json {
         if (parsed instanceof JsonObj) {
             return (JsonObj) parsed;
         } else {
-            throw new Error("not parsed into a JsonObj but " + parsed.getClass().getSimpleName());
+            throw new Error("not parsed into a JsonObj but " + parsed.getTypeName());
         }
     }
 
@@ -30,6 +30,12 @@ public class JsonObj extends Json {
 
     @Override
     protected Json putChild(String name, Json child) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    protected Json removeChild(String name) {
         // TODO
         return null;
     }
