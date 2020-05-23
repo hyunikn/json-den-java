@@ -10,7 +10,7 @@ public class JsonBool extends JsonSimple {
         if (parsed instanceof JsonBool) {
             return (JsonBool) parsed;
         } else {
-            throw new Error("not parsed into a JsonBool but " + parsed.getTypeName());
+            throw new Error("not parsed into a JsonBool but " + parsed.getClass().getSimpleName());
         }
     }
 

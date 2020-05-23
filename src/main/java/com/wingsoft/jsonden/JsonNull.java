@@ -10,7 +10,7 @@ public class JsonNull extends JsonSimple {
         if (parsed instanceof JsonNull) {
             return (JsonNull) parsed;
         } else {
-            throw new Error("not parsed into a JsonNull but " + parsed.getTypeName());
+            throw new Error("not parsed into a JsonNull but " + parsed.getClass().getSimpleName());
         }
     }
 

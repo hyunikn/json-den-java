@@ -18,16 +18,28 @@ public abstract class Json {
         return sbuf.toString();
     }
 
-    public Json get(String path) {
-        return crudCommon(CrudCase.GET, path, null);
+    // for JsonObj, JsonArr
+    public Json getx(String path) {
+        return reachAndDo(CrudCase.GET, path, null);
+    }
+    public Json removex(String path) {
+        return reachAndDo(CrudCase.REMOVE, path, null);
     }
 
-    public Json put(String path, Json json) {
-        return crudCommon(CrudCase.PUT, path, json);
+    // for JsonObj
+    public Json setx(String path, Json json) {
+        return reachAndDo(CrudCase.SET, path, json);
     }
 
-    public Json remove(String path) {
-        return crudCommon(CrudCase.REMOVE, path, null);
+    // for JsonArr
+    public Json updatex(String path, Json json) {
+        return reachAndDo(CrudCase.UPDATE, path, json);
+    }
+    public Json insertx(String path, Json json) {
+        return reachAndDo(CrudCase.INSERT, path, json);
+    }
+    public Json appendx(String path, Json json) {
+        return reachAndDo(CrudCase.APPEND, path, json);
     }
 
     @Override
@@ -38,12 +50,38 @@ public abstract class Json {
     // ===================================================
     // Protected
 
+    protected enum CrudCase {
+        GET,
+        REMOVE,
+        SET,
+        UPDATE,
+        INSERT,
+        APPEND,
+        BOUND_CRUD_CASE;
+    }
+
     protected Json() { }
     protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
-    protected abstract Json getChild(String name);
-    protected abstract Json putChild(String name, Json child);
-    protected abstract Json removeChild(String name);
     protected abstract String getTypeName();
+
+    protected Json getChild(String child) {
+        return throwNoChild(child, "get");
+    }
+    protected abstract Json removeChild(String child) {
+        return throwNoChild(child, "remove");
+    }
+    protected abstract Json setChild(String child, Json child) {
+        return throwNoChild(child, "set");
+    }
+    protected abstract Json updateChild(String child, Json child) {
+        return throwNoChild(child, "update");
+    }
+    protected abstract Json insertChild(String child, Json child) {
+        return throwNoChild(child, "insert");
+    }
+    protected abstract Json appendChild(Json child) {
+        return throwInapplicable("append");
+    }
 
     // --------------------------------------------------
     // Utility
@@ -70,12 +108,6 @@ public abstract class Json {
     // ===================================================
     // Private
 
-    private enum CrudCase {
-        GET,
-        PUT,
-        REMOVE;
-    }
-
     private static final String[] indents = new String[] {
         null,
         " ",
@@ -88,6 +120,17 @@ public abstract class Json {
         "        "
     };
 
+    private Json throwNoChild(String child, String op) {
+        throw new Error("failed to " + op + " a child node " + name + ": " +
+                getClass().getSimpleName() + " nodes do not have a child node");
+    }
+
+    private Json throwInapplicable(String op) {
+        throw new Error("the operation '" + op + "' is not applicable to " +
+                getClass().getSimpleName() + " nodes");
+    }
+
+
     private void checkStringifyOptions(int indentSize, int indentLevel) {
         if (indentSize > 8) {
             throw new Error("indentSize cannot be larger than eight");
@@ -98,12 +141,12 @@ public abstract class Json {
         }
     }
 
-    private Json getParentOf(String[] path) {
+    private Json getNodeAt(String[] path, final int offset) {
 
-        int pathLen = path.length;
+        final int pathLen = path.length;
 
         Json node = this;
-        for (int i = 0; i < pathLen - 1; i++) {
+        for (int i = 0; i < pathLen - offset; i++) {
             node = node.getChild(path[i]);
             if (node == null) {
                 throw new Error("no descendant named '" + path[i] + "'");
@@ -113,19 +156,42 @@ public abstract class Json {
         return node;
     }
 
-    private Json crudCommon(CrudCase case_, String path, Json newNode) {
+    private Json getParent(String[] path) {
+        return getNodeAt(path, 1);
+    }
+
+    private Json getNode(String[] path) {
+        return getNodeAt(path, 0);
+    }
+
+    private Json reachAndDo(CrudCase case_, String path, Json node) {
 
         if (path == null) {
             throw new Error("path cannot be null");
         } else {
+
+            if (case_ == CrudCase.SET || case_ == CrudCase.UPDATE ||
+                case_ == CrudCase.INSERT || case_ == CurdCase.APPEND) {
+
+                if (node == null) {
+                    throw new Error("a null node");
+                }
+            }
+
             String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
             switch (case_) {
                 case GET:
-                    return getParentOf(segments).getChild(segments[segments.length - 1]);
-                case PUT:
-                    return getParentOf(segments).putChild(segments[segments.length - 1], newNode);
+                    return getParent(segments).getChild(segments[segments.length - 1]);
                 case REMOVE:
-                    return getParentOf(segments).removeChild(segments[segments.length - 1]);
+                    return getParent(segments).removeChild(segments[segments.length - 1]);
+                case SET:
+                    return getParent(segments).setChild(segments[segments.length - 1], node);
+                case UPDATE:
+                    return getParent(segments).updateChild(segments[segments.length - 1], node);
+                case INSERT:
+                    return getParent(segments).insertChild(segments[segments.length - 1], node);
+                case APPEND:
+                    return getNode(segments).appendChild(node);
                 default:
                     assert(false);
                     return null;

@@ -13,7 +13,7 @@ public class JsonNum extends JsonSimple {
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;
         } else {
-            throw new Error("not parsed into a JsonNum but " + parsed.getTypeName());
+            throw new Error("not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
         }
     }
 
