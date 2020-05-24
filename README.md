@@ -1,5 +1,6 @@
 JSON-Den-Java
 =============
-JSON parser, manipulator and printer
-(Under construction)
+JSON decoder and encoder.
+It parses, manipulates, and stringifies JSON.
+It is not yet finished.
 
