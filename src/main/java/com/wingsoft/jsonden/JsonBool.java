@@ -5,6 +5,10 @@ public class JsonBool extends JsonSimple {
     // ===================================================
     // Public
 
+    public JsonBool(boolean val) {
+        super(Boolean.toString(val));
+    }
+
     public static JsonBool parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonBool) {
@@ -14,12 +18,21 @@ public class JsonBool extends JsonSimple {
         }
     }
 
-    public JsonBool(boolean b) {
-        super(Boolean.toString(b));
+    @Override
+    public boolean asBoolean() {
+        if (!cached) {
+            val = Boolean.parseBoolean(text);
+            cached = true;
+        }
+
+        return val;
     }
 
     // ===================================================
     // Protected
+
+    boolean val;
+    boolean cached;
 
     @Override
     protected String getTypeName() {

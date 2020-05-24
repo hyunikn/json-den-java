@@ -1,6 +1,6 @@
 package com.wingsoft.jsonden;
 
-abstract class JsonSimple extends Json {
+public abstract class JsonSimple extends Json {
 
     // ===================================================
     // Public
@@ -16,7 +16,14 @@ abstract class JsonSimple extends Json {
 
     @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
-        writeIndent(sbuf, indentSize, indentLevel);
+
+        if (indentSize < 0) {
+            // negative indent size indicates that we are right after a key in an object
+            indentSize *= -1;
+        } else {
+            writeIndent(sbuf, indentSize, indentLevel);
+        }
+
         sbuf.append(text);
     }
 

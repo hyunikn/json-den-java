@@ -8,6 +8,30 @@ public class JsonNum extends JsonSimple {
     // ===================================================
     // Public
 
+    public JsonNum(byte val) {
+        super(Byte.toString(val));
+    }
+
+    public JsonNum(short val) {
+        super(Short.toString(val));
+    }
+
+    public JsonNum(int val) {
+        super(Integer.toString(val));
+    }
+
+    public JsonNum(long val) {
+        super(Long.toString(val));
+    }
+
+    public JsonNum(float val) {
+        super(Float.toString(val));
+    }
+
+    public JsonNum(double val) {
+        super(Double.toString(val));
+    }
+
     public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
@@ -17,48 +41,94 @@ public class JsonNum extends JsonSimple {
         }
     }
 
-    public JsonNum(byte b) {
-        super(Byte.toString(b));
+    @Override
+    public byte asByte() {
+        if (!byteCached) {
+            byteVal = Byte.parseByte(text);
+            byteCached = true;
+        }
+
+        return byteVal;
     }
 
-    public JsonNum(short s) {
-        super(Short.toString(s));
+    @Override
+    public short asShort() {
+        if (!shortCached) {
+            shortVal = Short.parseShort(text);
+            shortCached = true;
+        }
+
+        return shortVal;
     }
 
-    public JsonNum(int i) {
-        super(Integer.toString(i));
+    @Override
+    public int asInt() {
+        if (!intCached) {
+            intVal = Integer.parseInt(text);
+            intCached = true;
+        }
+
+        return intVal;
     }
 
-    public JsonNum(long l) {
-        super(Long.toString(l));
+    @Override
+    public long asLong() {
+        if (!longCached) {
+            longVal = Long.parseLong(text);
+            longCached = true;
+        }
+
+        return longVal;
     }
 
-    public JsonNum(float f) {
-        super(Float.toString(f));
+    @Override
+    public float asFloat() {
+        if (!floatCached) {
+            floatVal = Float.parseFloat(text);
+            floatCached = true;
+        }
+
+        return floatVal;
     }
 
-    public JsonNum(double d) {
-        super(Double.toString(d));
+    @Override
+    public double asDouble() {
+        if (!doubleCached) {
+            doubleVal = Double.parseDouble(text);
+            doubleCached = true;
+        }
+
+        return doubleVal;
     }
 
-    public JsonNum(BigInteger bi) {
-        super(bi == null ? excAsStr("argument cannot be null") : bi.toString());
-    }
-
-    public JsonNum(BigDecimal bd) {
-        super(bd == null ? excAsStr("argument cannot be null") : bd.toString());
-    }
-
-    // ===================================================
+   // ===================================================
     // Package
 
-    // invoked internally for a checked text (for example, by the above parse() or the lexer)
+    // invoked internally for a checked text
     JsonNum(String text) {
         super(text);
     }
 
     // ===================================================
     // Protected
+
+    protected byte byteVal;
+    protected boolean byteCached;
+
+    protected short shortVal;
+    protected boolean shortCached;
+
+    protected int intVal;
+    protected boolean intCached;
+
+    protected long longVal;
+    protected boolean longCached;
+
+    protected float floatVal;
+    protected boolean floatCached;
+
+    protected double doubleVal;
+    protected boolean doubleCached;
 
     @Override
     protected String getTypeName() {

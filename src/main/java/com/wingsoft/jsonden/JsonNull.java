@@ -5,6 +5,10 @@ public class JsonNull extends JsonSimple {
     // ===================================================
     // Public
 
+    public JsonNull() {
+        super("null");
+    }
+
     public static JsonNull parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNull) {
@@ -14,8 +18,9 @@ public class JsonNull extends JsonSimple {
         }
     }
 
-    public JsonNull() {
-        super("null");
+    @Override
+    public boolean isNull() {
+        return true;
     }
 
     // ===================================================

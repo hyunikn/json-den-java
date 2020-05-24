@@ -5,6 +5,10 @@ public class JsonStr extends JsonSimple {
     // ===================================================
     // Public
 
+    public JsonStr(String str) {
+        super(str);
+    }
+
     public static JsonStr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
@@ -12,10 +16,6 @@ public class JsonStr extends JsonSimple {
         } else {
             throw new Error("not parsed into a JsonStr but " + parsed.getClass().getSimpleName());
         }
-    }
-
-    public JsonStr(String str) {
-        super(str);
     }
 
     public String asString() {
@@ -26,16 +26,23 @@ public class JsonStr extends JsonSimple {
     // Protected
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
-        writeIndent(sbuf, indentSize, indentLevel);
-        sbuf.append('"');
-        sbuf.append(text);
-        sbuf.append('"');
+    protected String getTypeName() {
+        return "string";
     }
 
     @Override
-    protected String getTypeName() {
-        return "string";
+    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+
+        if (indentSize < 0) {
+            // negative indent size indicates that we are right after a key in an object
+            indentSize *= -1;
+        } else {
+            writeIndent(sbuf, indentSize, indentLevel);
+        }
+
+        sbuf.append('"');
+        sbuf.append(text);
+        sbuf.append('"');
     }
 }
 

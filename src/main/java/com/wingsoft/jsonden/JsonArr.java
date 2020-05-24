@@ -7,6 +7,8 @@ public class JsonArr extends Json {
     // ===================================================
     // Public
 
+    public JsonArr() {}
+
     public static JsonArr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonArr) {
@@ -21,45 +23,89 @@ public class JsonArr extends Json {
         if (i < 0) {
             return null;
         } else {
-            return arr.get(i);
+            return list.get(i);
         }
     }
 
-    public Json remove(int index) {
+    public Json del(int index) {
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
         } else {
-            return arr.remove(i);
+            return list.remove(i);
         }
     }
 
     public Json update(int index, Json node) {
+        if (node == null) {
+            throw new Error("node cannot be null");
+        }
+
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
         } else {
-            return arr.set(i, node);
+            return list.set(i, node);
         }
     }
 
     public Json insert(int index, Json node) {
+        if (node == null) {
+            throw new Error("node cannot be null");
+        }
+
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
         } else {
-            Json old = arr.get(i);
-            arr.add(i, node);
+            Json old = list.get(i);
+            list.add(i, node);
             return old;
         }
     }
 
     public void append(Json node) {
-        arr.add(node);
+        if (node == null) {
+            throw new Error("node cannot be null");
+        }
+
+        list.add(node);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    // ---------------------------------------------------
+
+    public void clear() {
+        list.clear();
+    }
+
+    public int indexOf(Json node) {
+        if (node == null) {
+            throw new Error("node cannot be null");
+        }
+
+        return list.indexOf(node);
+    }
+
+    public int lastIndexOf(Json node) {
+        if (node == null) {
+            throw new Error("node cannot be null");
+        }
+
+        return list.lastIndexOf(node);
+    }
+
+    public Json[] toArray() {
+        return list.toArray(runtimeTyper);
     }
 
     // ===================================================
     // Protected
+
+    protected final LinkedList<Json> list = new LinkedList<>();
 
     @Override
     protected String getTypeName() {
@@ -68,37 +114,66 @@ public class JsonArr extends Json {
 
     @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
-        // TODO
+
+        boolean useIndents = indentSize != 0;
+
+        if (indentSize < 0) {
+            // negative indent size indicates that we are right after a key in an object
+            indentSize *= -1;
+        } else {
+            writeIndent(sbuf, indentSize, indentLevel);
+        }
+
+        sbuf.append('[');
+        if (useIndents) {
+            sbuf.append('\n');
+        }
+
+        boolean first = true;
+        for (Json val: list) {
+            if (first) {
+                first = false;
+            } else {
+                sbuf.append(",\n");
+            }
+            val.write(sbuf, indentSize, indentLevel + 1);
+        }
+
+        if (useIndents) {
+            sbuf.append('\n');
+        }
+        writeIndent(sbuf, indentSize, indentLevel);
+        sbuf.append(']');
     }
 
     @Override
-    protected Json getChild(String child) {
-        return get(getIndex(child));
+    protected Json getChild(String key) {
+        return get(getIndex(key));
     }
 
     @Override
-    protected Json removeChild(String child) {
-        return remove(getIndex(child));
+    protected Json delChild(String key) {
+        return del(getIndex(key));
     }
 
     @Override
-    protected Json updateChild(String child, Json node) {
-        return update(getIndex(child), node);
+    protected Json updateChild(String key, Json node) {
+        return update(getIndex(key), node);
     }
 
     @Override
-    protected Json insertChild(String child, Json node) {
-        return insert(getIndex(child), node);
+    protected Json insertChild(String key, Json node) {
+        return insert(getIndex(key), node);
     }
 
     // ===================================================
     // Private
 
-    private final LinkedList<Json> arr = new LinkedList<>();
+    private final Json[] runtimeTyper = new Json[0];
 
     private int adjustIndex(int index) {
 
-        int size = arr.size();
+        int size = list.size();
         if (index < -size || index >= size) {
             return -1;
         }

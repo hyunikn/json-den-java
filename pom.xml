@@ -10,7 +10,6 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-  <!-- <url>http://maven.apache.org</url> TODO: set later -->
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
