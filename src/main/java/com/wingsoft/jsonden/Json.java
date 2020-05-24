@@ -19,76 +19,61 @@ public abstract class Json {
     }
 
     // for JsonObj, JsonArr
-    public Json getx(String path) {
-        return reachAndDo(CrudCase.GET, path, null);
-    }
-    public Json removex(String path) {
-        return reachAndDo(CrudCase.REMOVE, path, null);
-    }
+    public Json getx(String path) { return reachAndDo(path, CrudCase.GET, null); }
+    public Json removex(String path) { return reachAndDo(path, CrudCase.REMOVE, null); }
 
     // for JsonObj
-    public Json setx(String path, Json json) {
-        return reachAndDo(CrudCase.SET, path, json);
-    }
+    public Json setx(String path, Json json) { return reachAndDo(path, CrudCase.SET, json); }
 
     // for JsonArr
-    public Json updatex(String path, Json json) {
-        return reachAndDo(CrudCase.UPDATE, path, json);
-    }
-    public Json insertx(String path, Json json) {
-        return reachAndDo(CrudCase.INSERT, path, json);
-    }
-    public Json appendx(String path, Json json) {
-        return reachAndDo(CrudCase.APPEND, path, json);
-    }
+    public Json updatex(String path, Json json) { return reachAndDo(path, CrudCase.UPDATE, json); }
+    public Json insertx(String path, Json json) { return reachAndDo(path, CrudCase.INSERT, json); }
+    public void appendx(String path, Json json) { reachAndDo(path, CrudCase.APPEND, json); }
 
     @Override
-    public String toString() {
-        return stringify(-1, 0); // -1: without indentation and delimiting whitespaces (that is, minified)
-    }
+    public String toString() { return stringify(-1, 0); } // -1: no indentation and whitespaces (that is, minified)
 
     // ===================================================
     // Protected
 
     protected enum CrudCase {
-        GET,
-        REMOVE,
-        SET,
-        UPDATE,
-        INSERT,
-        APPEND,
-        BOUND_CRUD_CASE;
+        GET(false),
+        REMOVE(false),
+        SET(true),
+        UPDATE(true),
+        INSERT(true),
+        APPEND(true),
+        BOUND_CRUD_CASE(false);
+
+        CrudCase(boolean needNode) {
+            this.needNode = needNode;
+        }
+
+        final boolean needNode;
     }
 
     protected Json() { }
-    protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
-    protected abstract String getTypeName();
 
-    protected Json getChild(String child) {
-        return throwNoChild(child, "get");
-    }
-    protected abstract Json removeChild(String child) {
-        return throwNoChild(child, "remove");
-    }
-    protected abstract Json setChild(String child, Json child) {
-        return throwNoChild(child, "set");
-    }
-    protected abstract Json updateChild(String child, Json child) {
-        return throwNoChild(child, "update");
-    }
-    protected abstract Json insertChild(String child, Json child) {
-        return throwNoChild(child, "insert");
-    }
-    protected abstract Json appendChild(Json child) {
-        return throwInapplicable("append");
-    }
+    // overriden by all
+    protected abstract String getTypeName();
+    protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
+
+    // overriden by JsonObj, JsonArr
+    protected Json getChild(String child) { return throwNoChild(child, "get"); }
+    protected Json removeChild(String child) { return throwNoChild(child, "remove"); }
+
+    // overriden by JsonObj
+    protected Json setChild(String child, Json node) { return throwNoChild(child, "set"); }
+
+    // overriden by JsonArr
+    protected Json updateChild(String child, Json node) { return throwNoChild(child, "update"); }
+    protected Json insertChild(String child, Json node) { return throwNoChild(child, "insert"); }
+    protected void append(Json node) { throwInapplicable("append"); }
 
     // --------------------------------------------------
     // Utility
 
-    protected static String excAsStr(String msg) {
-        throw new Error(msg);
-    }
+    protected static String excAsStr(String msg) { throw new Error(msg); }
 
     protected static void writeIndent(StringBuffer sbuf, int indentSize, int indentLevel) {
 
@@ -121,7 +106,7 @@ public abstract class Json {
     };
 
     private Json throwNoChild(String child, String op) {
-        throw new Error("failed to " + op + " a child node " + name + ": " +
+        throw new Error("failed to " + op + " a child node " + child + ": " +
                 getClass().getSimpleName() + " nodes do not have a child node");
     }
 
@@ -164,18 +149,14 @@ public abstract class Json {
         return getNodeAt(path, 0);
     }
 
-    private Json reachAndDo(CrudCase case_, String path, Json node) {
+    private Json reachAndDo(String path, CrudCase case_, Json node) {
 
         if (path == null) {
             throw new Error("path cannot be null");
         } else {
 
-            if (case_ == CrudCase.SET || case_ == CrudCase.UPDATE ||
-                case_ == CrudCase.INSERT || case_ == CurdCase.APPEND) {
-
-                if (node == null) {
-                    throw new Error("a null node");
-                }
+            if (case_.needNode && node == null) {
+                throw new Error("a null node");
             }
 
             String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
@@ -191,7 +172,8 @@ public abstract class Json {
                 case INSERT:
                     return getParent(segments).insertChild(segments[segments.length - 1], node);
                 case APPEND:
-                    return getNode(segments).appendChild(node);
+                    getNode(segments).append(node);
+                    return null;
                 default:
                     assert(false);
                     return null;

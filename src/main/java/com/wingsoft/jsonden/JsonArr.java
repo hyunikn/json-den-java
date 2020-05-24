@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import java.util.LinkedList;
+
 public class JsonArr extends Json {
 
     // ===================================================
@@ -11,20 +13,6 @@ public class JsonArr extends Json {
             return (JsonArr) parsed;
         } else {
             throw new Error("not parsed into a JsonArr but " + parsed.getClass().getSimpleName());
-        }
-    }
-
-    private adjustIndex(int index) {
-
-        int size = arr.size();
-        if (index < -size || index >= size) {
-            return -1;
-        }
-
-        if (index < 0) {
-            return index + size;
-        } else {
-            return index;
         }
     }
 
@@ -55,21 +43,28 @@ public class JsonArr extends Json {
         }
     }
 
-    public boolean insert(int index, Json node) {
+    public Json insert(int index, Json node) {
         int i = adjustIndex(index);
         if (i < 0) {
-            return false;
+            return null;
         } else {
+            Json old = arr.get(i);
             arr.add(i, node);
-            return true;
+            return old;
         }
     }
 
-    public Json append(Json node) {
+    public void append(Json node) {
+        arr.add(node);
     }
 
     // ===================================================
     // Protected
+
+    @Override
+    protected String getTypeName() {
+        return "array";
+    }
 
     @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
@@ -78,32 +73,22 @@ public class JsonArr extends Json {
 
     @Override
     protected Json getChild(String child) {
-        return crudCommonForArray(CrudCase.GET, child, null);
+        return get(getIndex(child));
     }
 
     @Override
     protected Json removeChild(String child) {
-        return crudCommonForArray(CrudCase.REMOVE, child, null);
+        return remove(getIndex(child));
     }
 
     @Override
     protected Json updateChild(String child, Json node) {
-        return crudCommonForArray(CrudCase.SET, child, child);
+        return update(getIndex(child), node);
     }
 
     @Override
     protected Json insertChild(String child, Json node) {
-        return crudCommonForArray(CrudCase.SET, child, child);
-    }
-
-    @Override
-    protected Json appendChild(Json node) {
-        return crudCommonForArray(CrudCase.SET, name, child);
-    }
-
-    @Override
-    protected String getTypeName() {
-        return "array";
+        return insert(getIndex(child), node);
     }
 
     // ===================================================
@@ -111,28 +96,28 @@ public class JsonArr extends Json {
 
     private final LinkedList<Json> arr = new LinkedList<>();
 
-    private Json crudCommonForArray(CrudCase case_, String name, Json newNode) {
+    private int adjustIndex(int index) {
 
-		assert name != null;
-
-		int index;
-        try {
-            index = Integer.parse(name);
-        } catch (NumberFormatException e) {
-            throw new Error(name + " is not an integer and cannot be an index to an array element");
+        int size = arr.size();
+        if (index < -size || index >= size) {
+            return -1;
         }
 
-        switch (case_) {
-            case GET:
-                return get(index);
-            case REMOVE:
-                return remove(index);
-            case SET:
-                return set(index, newNode);
-            default:
-                assert(false);
-                return null;
+        if (index < 0) {
+            return index + size;
+        } else {
+            return index;
         }
     }
 
+    private int getIndex(String name) {
+
+		assert name != null;
+
+        try {
+            return Integer.parseInt(name);
+        } catch (NumberFormatException e) {
+            throw new Error(name + " is not an integer and cannot be an index to an array element");
+        }
+    }
 }

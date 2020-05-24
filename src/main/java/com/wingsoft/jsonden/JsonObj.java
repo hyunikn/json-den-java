@@ -18,6 +18,11 @@ public class JsonObj extends Json {
     // Protected
 
     @Override
+    protected String getTypeName() {
+        return "object";
+    }
+
+    @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
         // TODO
     }
@@ -29,20 +34,15 @@ public class JsonObj extends Json {
     }
 
     @Override
-    protected Json setChild(String name, Json child) {
-        // TODO
-        return null;
-    }
-
-    @Override
     protected Json removeChild(String name) {
         // TODO
         return null;
     }
 
     @Override
-    protected String getTypeName() {
-        return "object";
+    protected Json setChild(String name, Json child) {
+        // TODO
+        return null;
     }
 
     // ===================================================
