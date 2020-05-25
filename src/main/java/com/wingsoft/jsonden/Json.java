@@ -56,7 +56,7 @@ public abstract class Json {
         return getX(path) != null;
     }
 
-    public String getLongestReachablePrefixOf(String path) {
+    public String getLongestReachablePrefix(String path) {
 
         if (path == null) {
             throw new Error("path cannot be null");
