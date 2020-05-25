@@ -3,6 +3,7 @@ package com.wingsoft.jsonden;
 import java.math.BigDecimal;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public abstract class Json {
@@ -23,7 +24,6 @@ public abstract class Json {
         return sbuf.toString();
     }
 
-    // for JsonObj, JsonArr
     public Json getX(String path) {
 
         if (path == null) {
@@ -48,6 +48,40 @@ public abstract class Json {
 
     @Override
     public abstract Object clone();
+
+    // --------------------------------------------------
+    // convenience methods
+
+    public boolean has(String path) {
+        return getX(path) != null;
+    }
+
+    public String getLongestReachablePrefixOf(String path) {
+
+        if (path == null) {
+            throw new Error("path cannot be null");
+        }
+
+        String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
+
+        int len = 0;
+        Json node = this;
+        for (String s: segments) {
+            node = node.getChild(s);
+            if (node == null) {
+                break;
+            } else {
+                len++;
+            }
+        }
+
+        if (len == 0) {
+            return null;
+        } else {
+            return String.join(".", Arrays.copyOf(segments, len));
+        }
+    }
+
 
     // --------------------------------------------------
     // for six individual JSON types
