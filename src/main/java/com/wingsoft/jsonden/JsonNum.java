@@ -32,6 +32,10 @@ public class JsonNum extends JsonSimple {
         super(Double.toString(val));
     }
 
+    public JsonNum(BigDecimal val) {
+        super(val.toPlainString());
+    }
+
     public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
@@ -40,6 +44,11 @@ public class JsonNum extends JsonSimple {
             throw new Error("not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
         }
     }
+
+    @Override
+    public boolean isNum() { return true; }
+    @Override
+    public JsonNum asNum() { return this; }
 
     @Override
     public byte asByte() {
@@ -101,6 +110,15 @@ public class JsonNum extends JsonSimple {
         return doubleVal;
     }
 
+    @Override
+    public BigDecimal asBigDecimal() {
+        if (bigDecimalVal == null) {
+            bigDecimalVal = new BigDecimal(text);
+        }
+
+        return bigDecimalVal;
+    }
+
    // ===================================================
     // Package
 
@@ -129,6 +147,8 @@ public class JsonNum extends JsonSimple {
 
     protected double doubleVal;
     protected boolean doubleCached;
+
+    protected BigDecimal bigDecimalVal;
 
     @Override
     protected String getTypeName() {

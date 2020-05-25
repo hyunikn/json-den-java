@@ -18,9 +18,12 @@ public class JsonStr extends JsonSimple {
         }
     }
 
-    public String asString() {
-        return text;
-    }
+    @Override
+    public boolean isStr() { return true; }
+    @Override
+    public JsonStr asStr() { return this; }
+    @Override
+    public String asString() { return text; }
 
     // ===================================================
     // Protected

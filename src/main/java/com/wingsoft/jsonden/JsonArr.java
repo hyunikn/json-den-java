@@ -98,9 +98,12 @@ public class JsonArr extends Json {
         return list.lastIndexOf(node);
     }
 
-    public Json[] toArray() {
-        return list.toArray(runtimeTyper);
-    }
+    @Override
+    public boolean isArr() { return true; }
+    @Override
+    public JsonArr asArr() { return this; }
+    @Override
+    public Json[] asArray() { return list.toArray(runtimeTyper); }
 
     // ===================================================
     // Protected
@@ -149,21 +152,6 @@ public class JsonArr extends Json {
     @Override
     protected Json getChild(String key) {
         return get(getIndex(key));
-    }
-
-    @Override
-    protected Json delChild(String key) {
-        return del(getIndex(key));
-    }
-
-    @Override
-    protected Json updateChild(String key, Json node) {
-        return update(getIndex(key), node);
-    }
-
-    @Override
-    protected Json insertChild(String key, Json node) {
-        return insert(getIndex(key), node);
     }
 
     // ===================================================

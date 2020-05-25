@@ -5,8 +5,8 @@ public class JsonNull extends JsonSimple {
     // ===================================================
     // Public
 
-    public JsonNull() {
-        super("null");
+    public static JsonNull getJsonNull() {
+        return singleton;
     }
 
     public static JsonNull parse(String s) {
@@ -19,9 +19,9 @@ public class JsonNull extends JsonSimple {
     }
 
     @Override
-    public boolean isNull() {
-        return true;
-    }
+    public boolean isNull() { return true; }
+    @Override
+    public JsonNull asNull() { return this; }
 
     // ===================================================
     // Protected
@@ -29,6 +29,15 @@ public class JsonNull extends JsonSimple {
     @Override
     protected String getTypeName() {
         return "null";
+    }
+
+    // ===================================================
+    // Private
+
+    private static JsonNull singleton = new JsonNull();
+
+    private JsonNull() {
+        super("null");
     }
 }
 

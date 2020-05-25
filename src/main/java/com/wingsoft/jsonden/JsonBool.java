@@ -19,6 +19,10 @@ public class JsonBool extends JsonSimple {
     }
 
     @Override
+    public boolean isBool() { return true; }
+    @Override
+    public JsonBool asBool() { return this; }
+    @Override
     public boolean asBoolean() {
         if (!cached) {
             val = Boolean.parseBoolean(text);

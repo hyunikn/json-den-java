@@ -21,31 +21,40 @@ public class JsonObj extends Json {
 
     public Json get(String key) {
         if (key == null) {
-            throw new Error("key name cannot be null");
+            throw new Error("key cannot be null");
         } else {
-            return getChild(key);
+            return map.get(key);
         }
     }
 
     public Json del(String key) {
         if (key == null) {
-            throw new Error("key name cannot be null");
+            throw new Error("key cannot be null");
         } else {
-            return delChild(key);
+            return map.remove(key);
         }
     }
 
     public Json set(String key, Json node) {
         if (key == null) {
-            throw new Error("key name cannot be null");
+            throw new Error("key cannot be null");
+        } else if (node == null) {
+            throw new Error("node cannot be null");
         } else {
-            return setChild(key, node);
+            return map.put(key, node);
         }
     }
 
     public LinkedHashSet<String> keySet() {
         return new LinkedHashSet<>(map.keySet());
     }
+
+    @Override
+    public boolean isObj() { return true; }
+    @Override
+    public JsonObj asObj() { return this; }
+    @Override
+    public LinkedHashMap<String, Json> asMap() { return new LinkedHashMap(map); }
 
     // ---------------------------------------------------
 
@@ -108,16 +117,6 @@ public class JsonObj extends Json {
     @Override
     protected Json getChild(String key) {
         return map.get(key);
-    }
-
-    @Override
-    protected Json delChild(String key) {
-        return map.remove(key);
-    }
-
-    @Override
-    protected Json setChild(String key, Json node) {
-        return map.put(key, node);
     }
 
     // ===================================================

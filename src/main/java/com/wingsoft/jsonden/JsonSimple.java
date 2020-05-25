@@ -27,6 +27,12 @@ public abstract class JsonSimple extends Json {
         sbuf.append(text);
     }
 
+    @Override
+    protected Json getChild(String key) {
+        throw new Error("failed to get a child node " + key + ": " +
+                getClass().getSimpleName() + " nodes do not have children nodes");
+    }
+
     // ===================================================
     // Private
 
