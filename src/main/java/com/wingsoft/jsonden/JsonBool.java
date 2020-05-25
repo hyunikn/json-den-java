@@ -35,13 +35,12 @@ public class JsonBool extends JsonSimple {
     // ===================================================
     // Protected
 
-    boolean val;
-    boolean cached;
+    protected boolean val;
+    protected boolean cached;
 
     @Override
     protected String getTypeName() {
         return "boolean";
     }
-
 }
 

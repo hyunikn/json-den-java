@@ -8,7 +8,13 @@ public class JsonObj extends Json {
     // ===================================================
     // Public
 
-    public JsonObj() {}
+    public JsonObj() {
+        map = new LinkedHashMap<>();
+    }
+
+    public JsonObj(LinkedHashMap<String, Json> map) {
+        this.map = new LinkedHashMap<>(map);
+    }
 
     public static JsonObj parse(String s) {
         Json parsed = Json.parse(s);

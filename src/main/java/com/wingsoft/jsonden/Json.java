@@ -63,6 +63,7 @@ public abstract class Json {
 
     public LinkedHashMap<String, Json> asMap() { return (LinkedHashMap<String, Json>) throwInapplicable("asMap"); }
     public Json[]       asArray()       { return (Json[]) throwInapplicable("asArray"); }
+    public List<Json>   asList()        { return (List<Json>) throwInapplicable("asList"); }
     public boolean      asBoolean()     { return (boolean) throwInapplicable("asBoolean"); }
     public byte         asByte()        { return (byte) throwInapplicable("asByte"); }
     public short        asShort()       { return (short) throwInapplicable("asShort"); }

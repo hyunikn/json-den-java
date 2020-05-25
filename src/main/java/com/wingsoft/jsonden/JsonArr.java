@@ -7,7 +7,20 @@ public class JsonArr extends Json {
     // ===================================================
     // Public
 
-    public JsonArr() {}
+    public JsonArr() {
+        list = new LinkedList<>();
+    }
+
+    public JsonArr(Json[] array) {
+        list = new LinkedList<>();
+        for (Json j: array) {
+            list.add(j);
+        }
+    }
+
+    public JsonArr(List<Json> list) {
+        list = new LinkedList<>(list);
+    }
 
     public static JsonArr parse(String s) {
         Json parsed = Json.parse(s);
@@ -104,11 +117,13 @@ public class JsonArr extends Json {
     public JsonArr asArr() { return this; }
     @Override
     public Json[] asArray() { return list.toArray(runtimeTyper); }
+    @Override
+    public List<Json> asList() { return new LinkedList(list) }
 
     // ===================================================
     // Protected
 
-    protected final LinkedList<Json> list = new LinkedList<>();
+    protected final LinkedList<Json> list;
 
     @Override
     protected String getTypeName() {

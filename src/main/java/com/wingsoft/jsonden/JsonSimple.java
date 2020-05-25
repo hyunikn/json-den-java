@@ -18,7 +18,7 @@ public abstract class JsonSimple extends Json {
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
 
         if (indentSize < 0) {
-            // negative indent size indicates that we are right after a key in an object
+            // negative indent size indicates that we are right after a key of an object
             indentSize *= -1;
         } else {
             writeIndent(sbuf, indentSize, indentLevel);
