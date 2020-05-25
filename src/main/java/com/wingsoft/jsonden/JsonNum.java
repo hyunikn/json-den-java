@@ -46,6 +46,16 @@ public class JsonNum extends JsonSimple {
         return that.asBigDecimal().equals(this.asBigDecimal());
     }
 
+    @Override
+    public int hashCode() {
+        if (!hashCached) {
+            hash = asBigDecimal().hashCode();
+            hashCached = true;
+        }
+
+        return hash;
+    }
+
     public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
@@ -167,6 +177,9 @@ public class JsonNum extends JsonSimple {
 
     // ===================================================
     // Private
+
+    private int hash;
+    private boolean hashCached = false;;
 
     static String parseNum(String s) {
         try {

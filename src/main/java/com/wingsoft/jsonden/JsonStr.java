@@ -19,6 +19,16 @@ public class JsonStr extends JsonSimple {
         return that.text.equals(this.text);
     }
 
+    @Override
+    public int hashCode() {
+        if (!hashCached) {
+            hash = text.hashCode();
+            hashCached = true;
+        }
+
+        return hash;
+    }
+
     public static JsonStr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
@@ -57,5 +67,12 @@ public class JsonStr extends JsonSimple {
         sbuf.append(text);
         sbuf.append('"');
     }
+
+    // ===================================================
+    // Private
+
+    private int hash;
+    private boolean hashCached = false;;
+
 }
 

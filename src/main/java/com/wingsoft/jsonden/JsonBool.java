@@ -5,18 +5,18 @@ public class JsonBool extends JsonSimple {
     // ===================================================
     // Public
 
-    public JsonBool(boolean val) {
-        super(Boolean.toString(val));
+    public static JsonBool getJsonBool(boolean val) {
+        return val ? trueVal : falseVal;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || o.getClass() != this.getClass()) {
-            return false;
-        }
+        return this == o;
+    }
 
-        JsonBool that = (JsonBool) o;
-        return that.text.equals(this.text);
+    @Override
+    public int hashCode() {
+        return hash;
     }
 
     public static JsonBool parse(String s) {
@@ -34,23 +34,31 @@ public class JsonBool extends JsonSimple {
     public JsonBool asBool() { return this; }
     @Override
     public boolean asBoolean() {
-        if (!cached) {
-            val = Boolean.parseBoolean(text);
-            cached = true;
-        }
-
         return val;
     }
 
     // ===================================================
     // Protected
 
-    protected boolean val;
-    protected boolean cached;
+    protected final boolean val;
 
     @Override
     protected String getTypeName() {
         return "boolean";
+    }
+
+    // ===================================================
+    // Private
+
+    private static final JsonBool trueVal = new JsonBool(true);
+    private static final JsonBool falseVal = new JsonBool(false);
+
+    private final int hash;
+
+    private JsonBool(boolean val) {
+        super(Boolean.toString(val));
+        this.val = val;
+        this.hash = val ? 31 : 13;   // Baskin Robbins number and its reverse
     }
 }
 

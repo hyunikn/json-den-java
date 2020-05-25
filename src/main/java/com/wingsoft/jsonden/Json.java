@@ -46,6 +46,9 @@ public abstract class Json {
     @Override
     public String toString() { return stringify(0, 0); }
 
+    @Override
+    public abstract Object clone();
+
     // --------------------------------------------------
     // for six individual JSON types
 

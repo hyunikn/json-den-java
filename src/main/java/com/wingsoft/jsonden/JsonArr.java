@@ -37,19 +37,21 @@ public class JsonArr extends Json {
         }
 
         JsonArr that = (JsonArr) o;
-        if (that.list.size() != this.list.size()) {
-            return false;
-        }
+        return that.list.equals(this.list);
+    }
 
-        for (int i = 0; i < this.list.size(); i++) {
-            Json val0 = that.list.get(i);
-            Json val1 = this.list.get(i);
-            if (!val0.equals(val1)) {
-                return false;
-            }
-        }
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
 
-        return true;
+    @Override
+    public Object clone() {
+        JsonArr that = new JsonArr();
+        for (Json elem: list) {
+            that.list.add((Json) elem.clone());  // deep copy
+        }
+        return that;
     }
 
     public static JsonArr parse(String s) {

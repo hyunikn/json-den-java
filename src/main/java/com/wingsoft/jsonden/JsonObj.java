@@ -26,19 +26,21 @@ public class JsonObj extends Json {
         }
 
         JsonObj that = (JsonObj) o;
-        if (!that.map.keySet().equals(this.map.keySet())) {
-            return false;
-        }
+        return that.map.equals(this.map);
+    }
 
-        for (String key: keySet()) {
-            Json val0 = that.map.get(key);
-            Json val1 = this.map.get(key);
-            if (!val0.equals(val1)) {
-                return false;
-            }
-        }
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 
-        return true;
+    @Override
+    public Object clone() {
+        JsonObj that = new JsonObj();
+        for (String key: map.keySet()) {
+            that.map.put(key, (Json) map.get(key).clone());    // deep copy
+        }
+        return that;
     }
 
     public static JsonObj parse(String s) {

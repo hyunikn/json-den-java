@@ -14,6 +14,11 @@ public class JsonNull extends JsonSimple {
         return this == o;
     }
 
+    @Override
+    public int hashCode() {
+        return 180; // my height in cm
+    }
+
     public static JsonNull parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNull) {
