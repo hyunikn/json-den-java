@@ -11,6 +11,9 @@ public abstract class JsonSimple extends Json {
     protected final String text;
 
     protected JsonSimple(String text) {
+        if (text == null) {
+            throw new Error("text of " + getClass().getSimpleName() + " values cannot be null");
+        }
         this.text = text;
     }
 

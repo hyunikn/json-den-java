@@ -13,7 +13,32 @@ public class JsonObj extends Json {
     }
 
     public JsonObj(LinkedHashMap<String, Json> map) {
+        if (map == null) {
+            throw new Error("source map cannot be null");
+        }
         this.map = new LinkedHashMap<>(map);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        JsonObj that = (JsonObj) o;
+        if (!that.map.keySet().equals(this.map.keySet())) {
+            return false;
+        }
+
+        for (String key: keySet()) {
+            Json val0 = that.map.get(key);
+            Json val1 = this.map.get(key);
+            if (!val0.equals(val1)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static JsonObj parse(String s) {
@@ -71,7 +96,7 @@ public class JsonObj extends Json {
     // ===================================================
     // Protected
 
-    protected final LinkedHashMap<String, Json> map = new LinkedHashMap<>();
+    protected final LinkedHashMap<String, Json> map;
 
     @Override
     protected String getTypeName() {

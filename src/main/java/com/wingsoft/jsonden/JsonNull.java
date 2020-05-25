@@ -6,10 +6,12 @@ public class JsonNull extends JsonSimple {
     // Public
 
     public static JsonNull getJsonNull() {
-        if (singleton == null) {
-            singleton = motherNull.createJsonNull();
-        }
         return singleton;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o;
     }
 
     public static JsonNull parse(String s) {
@@ -34,16 +36,10 @@ public class JsonNull extends JsonSimple {
         return "null";
     }
 
-    // overridable factory method
-    protected JsonNull createJsonNull() {
-        return new JsonNull();
-    }
-
     // ===================================================
     // Private
 
-    private static final JsonNull motherNull = new JsonNull();
-    private static JsonNull singleton;
+    private static JsonNull singleton = new JsonNull();
 
     private JsonNull() {
         super("null");

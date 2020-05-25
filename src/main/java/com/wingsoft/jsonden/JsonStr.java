@@ -9,6 +9,16 @@ public class JsonStr extends JsonSimple {
         super(str);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        JsonBool that = (JsonBool) o;
+        return that.text.equals(this.text);
+    }
+
     public static JsonStr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {

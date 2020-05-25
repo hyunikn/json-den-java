@@ -36,6 +36,16 @@ public class JsonNum extends JsonSimple {
         super(val.toPlainString());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        JsonNum that = (JsonNum) o;
+        return that.asBigDecimal().equals(this.asBigDecimal());
+    }
+
     public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {

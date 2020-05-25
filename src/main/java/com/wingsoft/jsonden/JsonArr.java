@@ -1,5 +1,6 @@
 package com.wingsoft.jsonden;
 
+import java.util.List;
 import java.util.LinkedList;
 
 public class JsonArr extends Json {
@@ -12,6 +13,10 @@ public class JsonArr extends Json {
     }
 
     public JsonArr(Json[] array) {
+        if (array == null) {
+            throw new Error("source array cannot be null");
+        }
+
         list = new LinkedList<>();
         for (Json j: array) {
             list.add(j);
@@ -19,7 +24,32 @@ public class JsonArr extends Json {
     }
 
     public JsonArr(List<Json> list) {
-        list = new LinkedList<>(list);
+        if (list == null) {
+            throw new Error("source list cannot be null");
+        }
+        this.list = new LinkedList<>(list);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        JsonArr that = (JsonArr) o;
+        if (that.list.size() != this.list.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < this.list.size(); i++) {
+            Json val0 = that.list.get(i);
+            Json val1 = this.list.get(i);
+            if (!val0.equals(val1)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static JsonArr parse(String s) {
@@ -118,7 +148,7 @@ public class JsonArr extends Json {
     @Override
     public Json[] asArray() { return list.toArray(runtimeTyper); }
     @Override
-    public List<Json> asList() { return new LinkedList(list) }
+    public List<Json> asList() { return new LinkedList(list); }
 
     // ===================================================
     // Protected

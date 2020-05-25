@@ -1,6 +1,8 @@
 package com.wingsoft.jsonden;
 
 import java.math.BigDecimal;
+
+import java.util.List;
 import java.util.LinkedHashMap;
 
 public abstract class Json {
