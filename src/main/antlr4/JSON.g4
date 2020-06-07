@@ -7,7 +7,7 @@
 grammar JSON;
 
 @header {
-package com.wingsoft.jsonden.parser;
+package com.wingsoft.jsonden.parser.antlrgen;
 }
 
 json

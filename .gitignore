@@ -3,4 +3,4 @@ target/
 *.swo
 
 // ANTLR4 generated files
-src/main/java/com/wingsoft/jsonden/parser/*
+src/main/java/com/wingsoft/jsonden/parser/antlrgen/*
