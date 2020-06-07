@@ -5,36 +5,44 @@
 
 // Derived from http://json.org
 grammar JsonParse;
-import JsonLex;
+options { tokenVocab = JsonLex; }
 
 @header {
 package com.wingsoft.jsonden.parser.antlrgen;
 }
 
 json
-   : value
-   ;
+    : valueWithComment
+    ;
 
 obj
-   : '{' pair (',' pair)* '}'
-   | '{' '}'
-   ;
+    : '{' pairWithComment (',' pairWithComment)* '}'
+    | '{' '}'
+    ;
+
+pairWithComment
+    : COMMENT_LINES? pair
+    ;
 
 pair
-   : STRING ':' value
-   ;
+    : STRING ':' value
+    ;
 
 arr
-   : '[' value (',' value)* ']'
-   | '[' ']'
-   ;
+    : '[' valueWithComment (',' valueWithComment)* ']'
+    | '[' ']'
+    ;
+
+valueWithComment
+    : COMMENT_LINES? value
+    ;
 
 value
-   : STRING
-   | NUMBER
-   | obj
-   | arr
-   | 'true'
-   | 'false'
-   | 'null'
-   ;
+    : STRING
+    | NUMBER
+    | obj
+    | arr
+    | 'true'
+    | 'false'
+    | 'null'
+    ;
