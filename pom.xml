@@ -29,6 +29,21 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>com.wingsoft.jsonden.Main</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-maven-plugin</artifactId>
         <version>${antlr.version}</version>
@@ -36,7 +51,6 @@
           <grammars>JSON.g4</grammars>
           <visitor>true</visitor>
           <listener>false</listener>
-<!--          <outputDirectory>${basedir}/src/main/java/com/wingsoft/jsonden/parser/antlrgen</outputDirectory> -->
         </configuration>
         <executions>
           <execution>

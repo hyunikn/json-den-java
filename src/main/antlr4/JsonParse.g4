@@ -1,10 +1,7 @@
 
-/** Taken from https://github.com/antlr/grammars-v4 */
+/** modified that in https://github.com/antlr/grammars-v4 */
 
-/** Taken from "The Definitive ANTLR 4 Reference" by Terence Parr */
-
-// Derived from http://json.org
-grammar JsonParse;
+parser grammar JsonParse;
 options { tokenVocab = JsonLex; }
 
 @header {
@@ -16,8 +13,8 @@ json
     ;
 
 obj
-    : '{' pairWithComment (',' pairWithComment)* '}'
-    | '{' '}'
+    : LBRACE pairWithComment (COMMA pairWithComment)* RBRACE
+    | LBRACE RBRACE
     ;
 
 pairWithComment
@@ -25,12 +22,12 @@ pairWithComment
     ;
 
 pair
-    : STRING ':' value
+    : STRING COLON value
     ;
 
 arr
-    : '[' valueWithComment (',' valueWithComment)* ']'
-    | '[' ']'
+    : LBRACKET valueWithComment (COMMA valueWithComment)* RBRACKET
+    | LBRACKET RBRACKET
     ;
 
 valueWithComment
@@ -40,9 +37,9 @@ valueWithComment
 value
     : STRING
     | NUMBER
+    | TRUE
+    | FALSE
+    | NULL
     | obj
     | arr
-    | 'true'
-    | 'false'
-    | 'null'
     ;

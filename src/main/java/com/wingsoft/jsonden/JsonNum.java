@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import java.io.IOException;
+
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
@@ -56,7 +58,7 @@ public class JsonNum extends JsonSimple {
         return hash;
     }
 
-    public static JsonNum parse(String s) {
+    public static JsonNum parse(String s) throws IOException {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;

@@ -3,6 +3,10 @@
 
 lexer grammar JsonLex;
 
+@header {
+package com.wingsoft.jsonden.parser.antlrgen;
+}
+
 STRING
     : '"' (ESC | SAFECODEPOINT)* '"'
     ;
@@ -39,12 +43,22 @@ fragment EXP
 
 // \- since - means "range" inside [...]
 
+LBRACE: '{';
+RBRACE: '}';
+LBRACKET: '[';
+RBRACKET: ']';
+COMMA: ',';
+COLON: ':';
+TRUE: 'true';
+FALSE: 'false';
+NULL: 'null';
+
 WS
     : [ \t\n\r] + -> skip
     ;
 
 PRESERVED_COMMENT_START
-    : '/**' -> pushMode(PRESERVED)
+    : '/**' -> pushMode(PRESERVED_COMMENT)
     ;
 
 DROPPED_BLOCK_COMMENT
@@ -57,7 +71,7 @@ DROPPED_LINE_COMMENT
 
 // ------------------------------------------------------
 
-mode PRESERVED;
+mode PRESERVED_COMMENT;
 
 // TODO: count depth
 PRESERVED_COMMENT_END

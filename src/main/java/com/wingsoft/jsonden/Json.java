@@ -1,5 +1,14 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.parser.antlrgen.JsonLex;
+import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
+
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
+
+import java.io.IOException;
+import java.io.StringReader;
+
 import java.math.BigDecimal;
 
 import java.util.List;
@@ -11,8 +20,11 @@ public abstract class Json {
     // ===================================================
     // Public
 
-    public static Json parse(String s) {
-        // TODO:
+    public static Json parse(String s) throws IOException {
+        JsonLex lexer = new JsonLex(new ANTLRInputStream(new StringReader(s)));
+        JsonParse parser = new JsonParse(new CommonTokenStream(lexer));
+        ParseTree tree = parser.json();
+        System.out.println(tree.toStringTree(parser));
         return null;
     }
 
@@ -24,7 +36,7 @@ public abstract class Json {
         return sbuf.toString();
     }
 
-    public Json getX(String path) {
+    public Json getx(String path) {
 
         if (path == null) {
             throw new Error("path cannot be null");
@@ -43,6 +55,14 @@ public abstract class Json {
         return node;
     }
 
+    public String[] getCommentLines() {
+        return commentLines;
+    }
+
+    public void setCommentLines(String[] commentLines) {
+        this.commentLines = commentLines;
+    }
+
     @Override
     public String toString() { return stringify(0, 0); }
 
@@ -53,7 +73,7 @@ public abstract class Json {
     // convenience methods
 
     public boolean has(String path) {
-        return getX(path) != null;
+        return getx(path) != null;
     }
 
     public String getLongestReachablePrefix(String path) {
@@ -113,8 +133,11 @@ public abstract class Json {
     public BigDecimal   asBigDecimal()  { return (BigDecimal) throwInapplicable("asBigDecimal"); }
     public String       asString()      { return (String) throwInapplicable("asString"); }
 
+
     // ===================================================
     // Protected
+
+    protected String[] commentLines;
 
     protected Json() { }
 
@@ -137,6 +160,7 @@ public abstract class Json {
             sbuf.append(indent);
         }
     }
+
 
     // ===================================================
     // Private

@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import java.io.IOException;
+
 public class JsonStr extends JsonSimple {
 
     // ===================================================
@@ -29,7 +31,7 @@ public class JsonStr extends JsonSimple {
         return hash;
     }
 
-    public static JsonStr parse(String s) {
+    public static JsonStr parse(String s) throws IOException {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
             return (JsonStr) parsed;

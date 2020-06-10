@@ -1,5 +1,8 @@
 package com.wingsoft.jsonden;
 
+import java.io.IOException;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -10,6 +13,7 @@ public class JsonObj extends Json {
 
     public JsonObj() {
         map = new LinkedHashMap<>();
+        commentMap = new HashMap<>();
     }
 
     public JsonObj(LinkedHashMap<String, Json> map) {
@@ -17,6 +21,7 @@ public class JsonObj extends Json {
             throw new Error("source map cannot be null");
         }
         this.map = new LinkedHashMap<>(map);
+        this.commentMap = new HashMap<>();
     }
 
     @Override
@@ -43,7 +48,7 @@ public class JsonObj extends Json {
         return that;
     }
 
-    public static JsonObj parse(String s) {
+    public static JsonObj parse(String s) throws IOException {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonObj) {
             return (JsonObj) parsed;
@@ -89,6 +94,14 @@ public class JsonObj extends Json {
     @Override
     public LinkedHashMap<String, Json> asMap() { return new LinkedHashMap(map); }
 
+    public String[] getCommentLines(String key) {
+        return commentMap.get(key);
+    }
+
+    public void setCommentLines(String key, String[] commentLines) {
+        commentMap.put(key, commentLines);
+    }
+
     // ---------------------------------------------------
 
     public void clear() {
@@ -99,6 +112,7 @@ public class JsonObj extends Json {
     // Protected
 
     protected final LinkedHashMap<String, Json> map;
+    protected final HashMap<String, String[]> commentMap;
 
     @Override
     protected String getTypeName() {
