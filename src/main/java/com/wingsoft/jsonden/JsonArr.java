@@ -173,6 +173,7 @@ public class JsonArr extends Json {
             // negative indent size indicates that we are right after a key in an object
             indentSize *= -1;
         } else {
+            writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -186,7 +187,11 @@ public class JsonArr extends Json {
             if (first) {
                 first = false;
             } else {
-                sbuf.append(",\n");
+                if (useIndents) {
+                    sbuf.append(",\n");
+                } else {
+                    sbuf.append(",");
+                }
             }
             val.write(sbuf, indentSize, indentLevel + 1);
         }

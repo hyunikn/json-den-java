@@ -10,6 +10,10 @@ public class JsonNum extends JsonSimple {
     // ===================================================
     // Public
 
+    public JsonNum(String text) {
+        super(text);
+    }
+
     public JsonNum(byte val) {
         super(Byte.toString(val));
     }
@@ -145,9 +149,6 @@ public class JsonNum extends JsonSimple {
     // Package
 
     // invoked internally for a checked text
-    JsonNum(String text) {
-        super(text);
-    }
 
     // ===================================================
     // Protected

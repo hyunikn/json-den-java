@@ -29,6 +29,7 @@ public abstract class JsonSimple extends Json {
             // negative indent size indicates that we are right after a key of an object
             indentSize *= -1;
         } else {
+            writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
 

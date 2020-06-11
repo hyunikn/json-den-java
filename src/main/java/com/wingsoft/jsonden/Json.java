@@ -2,6 +2,7 @@ package com.wingsoft.jsonden;
 
 import com.wingsoft.jsonden.parser.antlrgen.JsonLex;
 import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
+import com.wingsoft.jsonden.parser.ParseTreeVisitor;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -24,8 +25,8 @@ public abstract class Json {
         JsonLex lexer = new JsonLex(new ANTLRInputStream(new StringReader(s)));
         JsonParse parser = new JsonParse(new CommonTokenStream(lexer));
         ParseTree tree = parser.json();
-        System.out.println(tree.toStringTree(parser));
-        return null;
+        ParseTreeVisitor visitor = new ParseTreeVisitor();
+        return visitor.visit(tree);
     }
 
     public String stringify(int indentSize, int indentLevel) {
@@ -161,6 +162,30 @@ public abstract class Json {
         }
     }
 
+    protected static void writeComment(StringBuffer sbuf, String[] commentLines, int indentSize, int indentLevel) {
+
+        if (commentLines == null) {
+            return;
+        }
+
+        boolean useIndent = indentSize != 0;
+
+        writeIndent(sbuf, indentSize, indentLevel);
+        sbuf.append("/**\n");
+
+        for (String s: commentLines) {
+            writeIndent(sbuf, indentSize, indentLevel);
+            sbuf.append(s);
+            sbuf.append("\n");
+        }
+        writeIndent(sbuf, indentSize, indentLevel);
+        sbuf.append(" */");
+
+        if (useIndent) {
+            sbuf.append("\n");
+        }
+
+    }
 
     // ===================================================
     // Private

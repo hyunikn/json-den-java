@@ -9,29 +9,11 @@ package com.wingsoft.jsonden.parser.antlrgen;
 }
 
 json
-    : valueWithComment
+    : commentedValue
     ;
 
-obj
-    : LBRACE pairWithComment (COMMA pairWithComment)* RBRACE
-    | LBRACE RBRACE
-    ;
-
-pairWithComment
-    : COMMENT_LINES? pair
-    ;
-
-pair
-    : STRING COLON value
-    ;
-
-arr
-    : LBRACKET valueWithComment (COMMA valueWithComment)* RBRACKET
-    | LBRACKET RBRACKET
-    ;
-
-valueWithComment
-    : COMMENT_LINES? value
+commentedValue
+    : COMMENTS? value
     ;
 
 value
@@ -42,4 +24,22 @@ value
     | NULL
     | obj
     | arr
+    ;
+
+obj
+    : LBRACE commentedPair (COMMA commentedPair)* RBRACE
+    | LBRACE RBRACE
+    ;
+
+commentedPair
+    : COMMENTS? pair
+    ;
+
+pair
+    : STRING COLON value
+    ;
+
+arr
+    : LBRACKET commentedValue (COMMA commentedValue)* RBRACKET
+    | LBRACKET RBRACKET
     ;

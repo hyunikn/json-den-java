@@ -128,6 +128,7 @@ public class JsonObj extends Json {
             // negative indent size indicates that we are right after a key in an object
             indentSize *= -1;
         } else {
+            writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -142,8 +143,15 @@ public class JsonObj extends Json {
             if (first) {
                 first = false;
             } else {
-                sbuf.append(",\n");
+                if (useIndents) {
+                    sbuf.append(",\n");
+                } else {
+                    sbuf.append(",");
+                }
             }
+
+            writeComment(sbuf, commentMap.get(key), indentSize, indentLevel + 1);
+
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');
             sbuf.append(key);
