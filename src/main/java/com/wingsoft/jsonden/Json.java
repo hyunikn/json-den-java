@@ -37,6 +37,10 @@ public abstract class Json {
         return sbuf.toString();
     }
 
+    public String stringify(int indentSize) {
+        return stringify(indentSize, 0);
+    }
+
     public Json getx(String path) {
 
         if (path == null) {

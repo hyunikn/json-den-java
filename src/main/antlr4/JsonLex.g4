@@ -62,11 +62,11 @@ PRESERVED_COMMENT_START
     ;
 
 DROPPED_BLOCK_COMMENT
-    : '/*' .+ '*/' -> skip
+    : '/*' .*? '*/' -> skip
     ;
 
 DROPPED_LINE_COMMENT
-    : '//' .+ [\n] -> skip
+    : '//' .*? [\n] -> skip
     ;
 
 // ------------------------------------------------------
@@ -79,5 +79,5 @@ PRESERVED_COMMENT_END
     ;
 
 COMMENTS
-    : .+
+    : .*?
     ;
