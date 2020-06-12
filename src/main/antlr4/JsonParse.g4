@@ -13,7 +13,7 @@ json
     ;
 
 commentedValue
-    : COMMENTS? value
+    : COMMENT? value
     ;
 
 value
@@ -32,7 +32,7 @@ obj
     ;
 
 commentedPair
-    : COMMENTS? pair
+    : COMMENT? pair
     ;
 
 pair

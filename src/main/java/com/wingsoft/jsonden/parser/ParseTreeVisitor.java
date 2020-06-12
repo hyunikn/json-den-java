@@ -14,15 +14,22 @@ public class ParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return s.substring(1, len - 1);
     }
 
+    private String stripCommentMarks(String s) {
+        int len = s.length();
+        assert len >= 5;
+        return s.substring(3, len - 2);
+    }
+
     @Override public Json visitJson(JsonParse.JsonContext ctx) {
         return visit(ctx.commentedValue());
     }
 
     @Override public Json visitCommentedValue(JsonParse.CommentedValueContext ctx) {
         Json value = visitValue(ctx.value());
-        TerminalNode tn = ctx.COMMENTS();
+        TerminalNode tn = ctx.COMMENT();
         if (tn != null) {
-            value.setCommentLines(tn.getText().split("\n"));
+            String comment = stripCommentMarks(tn.getText());
+            value.setCommentLines(comment.split("\n"));
         }
         return value;
     }
@@ -58,10 +65,10 @@ public class ParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             Json val = visitValue(pc.value());
             jo.set(key, val);
 
-            TerminalNode tn = cp.COMMENTS();
+            TerminalNode tn = cp.COMMENT();
             if (tn != null) {
-                System.out.println("TEMP: " + tn.getText());
-                jo.setCommentLines(key, tn.getText().split("\n"));
+                String comment = stripCommentMarks(tn.getText());
+                jo.setCommentLines(key, comment.split("\n"));
             }
         }
 

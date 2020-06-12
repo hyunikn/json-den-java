@@ -57,27 +57,14 @@ WS
     : [ \t\n\r] + -> skip
     ;
 
-PRESERVED_COMMENT_START
-    : '/**' -> pushMode(PRESERVED_COMMENT)
+COMMENT
+    : '/**' ((~'*')* '*' ~'/')* (~'*')* '*/'
     ;
 
 DROPPED_BLOCK_COMMENT
-    : '/*' .*? '*/' -> skip
+    : '/*' ((~'*')* '*' ~'/')* (~'*')* '*/' -> skip
     ;
 
 DROPPED_LINE_COMMENT
-    : '//' .*? [\n] -> skip
-    ;
-
-// ------------------------------------------------------
-
-mode PRESERVED_COMMENT;
-
-// TODO: count depth
-PRESERVED_COMMENT_END
-    : '*/' -> popMode
-    ;
-
-COMMENTS
-    : .*?
+    : '//' .* [\n] -> skip
     ;

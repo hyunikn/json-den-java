@@ -5,8 +5,9 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] argv) throws IOException {
         Json parsed = Json.parse(
-                "{\"a\": 1, \"b\": 1.1, \"c\": \"a\", \"d\": true, \"e\": false, \"f\": [1,2,3]}");
-        System.out.println(parsed.stringify(2));
+                "{\"a\": 1, /** \"b\": 1.1,\n one two three\n hello mister monkey*/ \"c\": \"a\", \"d\": true, \"e\": false, \"f\": [1,2,3]}");
+        System.out.println(parsed.stringify(4));
+        System.out.println(parsed.stringify(4, 1));
         System.out.println(parsed.stringify(0));
     }
 }
