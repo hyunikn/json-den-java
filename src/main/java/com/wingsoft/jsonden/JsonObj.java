@@ -48,7 +48,7 @@ public class JsonObj extends Json {
         return that;
     }
 
-    public static JsonObj parse(String s) throws IOException {
+    public static JsonObj parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonObj) {
             return (JsonObj) parsed;

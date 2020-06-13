@@ -31,7 +31,7 @@ public class JsonStr extends JsonSimple {
         return hash;
     }
 
-    public static JsonStr parse(String s) throws IOException {
+    public static JsonStr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
             return (JsonStr) parsed;

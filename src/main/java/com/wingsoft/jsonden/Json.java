@@ -4,27 +4,58 @@ import com.wingsoft.jsonden.parser.antlrgen.JsonLex;
 import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
 import com.wingsoft.jsonden.parser.ParseTreeVisitor;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.misc.IntervalSet;
 
 import java.io.IOException;
 import java.io.StringReader;
 
 import java.math.BigDecimal;
 
+import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
+/**
+  * Super class of all classes representing JSON values
+  */
 public abstract class Json {
 
     // ===================================================
     // Public
 
-    public static Json parse(String s) throws IOException {
-        JsonLex lexer = new JsonLex(new ANTLRInputStream(new StringReader(s)));
+    /**
+      * parses given string into a Json object
+      * @param s the string to parse
+      * @return parse result if s is a legal JSON text, otherwise null
+      */
+    public static Json parse(String s) {
+        ANTLRInputStream ais;
+        try {
+            ais = new ANTLRInputStream(new StringReader(s));
+        } catch (IOException e ) {
+            throw new Error(e);
+        }
+        JsonLex lexer = new JsonLex(ais);
         JsonParse parser = new JsonParse(new CommonTokenStream(lexer));
-        ParseTree tree = parser.json();
+        parser.setErrorHandler(new DefaultErrorStrategy() {
+                    public void reportError(Parser p, RecognitionException e) { } // suppress console output
+                    public void recover(Parser p, RecognitionException e) { throw e; } // do not recover
+                });
+
+        ParseTree tree;
+        try {
+            tree = parser.json();
+        } catch (RecognitionException e) {
+            throw new ParseError(getDesc(e, parser));
+        }
+
         ParseTreeVisitor visitor = new ParseTreeVisitor();
         return visitor.visit(tree);
     }
@@ -193,6 +224,52 @@ public abstract class Json {
 
     // ===================================================
     // Private
+
+    private static String getDesc(RecognitionException cause, JsonParse parser) {
+
+        String caseStr;
+        if (cause instanceof FailedPredicateException) {
+            caseStr = "failed predicate";
+        } else if (cause instanceof InputMismatchException) {
+            caseStr = "input mismatch";
+        } else if (cause instanceof LexerNoViableAltException) {
+            caseStr = "ambiguous while parsing";
+        } else if (cause instanceof NoViableAltException) {
+            caseStr = "ambiguous while tokenizing";
+        } else {
+            caseStr = "failed recognition";
+        }
+
+        String ret;
+
+        Token token = cause.getOffendingToken();
+        if (token == null) {
+            ret = caseStr;
+        } else {
+            ret = String.format("%s at (%d,%d) \"%s\"",
+                    caseStr, token.getLine(), token.getCharPositionInLine(), token.getText());
+        }
+
+        IntervalSet expected = cause.getExpectedTokens();
+        if (expected != null) {
+
+            Set<Integer> literalIndexes = expected.toSet();
+
+            Set<String> set = new HashSet<>();
+            for (int i: literalIndexes){
+                String literal = parser.getLiteralName(i);
+                if (literal == null) {
+                    System.err.println("unlikely: token index out of bounds: " + expected.get(i));
+                } else {
+                    set.add(literal);
+                }
+            }
+
+            ret = ret + ", expected " + set;
+        }
+
+        return ret;
+    }
 
     private static final String[] indents = new String[] {
         null,

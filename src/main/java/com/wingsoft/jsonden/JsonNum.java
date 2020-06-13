@@ -62,7 +62,7 @@ public class JsonNum extends JsonSimple {
         return hash;
     }
 
-    public static JsonNum parse(String s) throws IOException {
+    public static JsonNum parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;

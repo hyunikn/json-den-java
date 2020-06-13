@@ -56,7 +56,7 @@ public class JsonArr extends Json {
         return that;
     }
 
-    public static JsonArr parse(String s) throws IOException {
+    public static JsonArr parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonArr) {
             return (JsonArr) parsed;

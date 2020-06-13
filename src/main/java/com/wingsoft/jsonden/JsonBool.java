@@ -21,7 +21,7 @@ public class JsonBool extends JsonSimple {
         return hash;
     }
 
-    public static JsonBool parse(String s) throws IOException {
+    public static JsonBool parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonBool) {
             return (JsonBool) parsed;

@@ -8,6 +8,12 @@ options { tokenVocab = JsonLex; }
 package com.wingsoft.jsonden.parser.antlrgen;
 }
 
+@members {
+    public String getLiteralName(int idx) {
+        return _LITERAL_NAMES.length > idx ? _LITERAL_NAMES[idx] : null;
+    }
+}
+
 json
     : commentedValue
     ;

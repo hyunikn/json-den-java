@@ -21,7 +21,7 @@ public class JsonNull extends JsonSimple {
         return 180; // my height in cm
     }
 
-    public static JsonNull parse(String s) throws IOException {
+    public static JsonNull parse(String s) {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNull) {
             return (JsonNull) parsed;
