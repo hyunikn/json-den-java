@@ -33,7 +33,8 @@ public abstract class Json {
     /**
       * parses given string into a Json object
       * @param s the string to parse
-      * @return parse result if s is a legal JSON text, otherwise null
+      * @return a Json object if s is a legal JSON text
+      * @throws com.wingsoft.jsonden.exception.ParseError
       */
     public static Json parse(String s) {
         ANTLRInputStream ais;
