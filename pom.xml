@@ -44,19 +44,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <configuration>
-          <show>public</show>
-          <nohelp>true</nohelp>
-          <excludePackageNames>com.wingsoft.jsonden.parser;com.wingsoft.jsonden.parser.antlrgen</excludePackageNames>
-        </configuration>
-      </plugin>
-      <!-- uncomment this only when the grammar files were modified:
-            Javadoc seems to always include auto-generated source files ignoring the excludePackageNames option,
-            which seems to be a bug.
-      <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-maven-plugin</artifactId>
         <version>${antlr.version}</version>
@@ -74,7 +61,6 @@
           </execution>
         </executions>
       </plugin>
-       -->
     </plugins>
   </build>
 </project>

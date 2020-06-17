@@ -31,7 +31,7 @@ public abstract class Json {
     // Public
 
     /**
-      * parses the given string into a Json object
+      * parses given string into a Json object
       * @param s the string to parse
       * @return a Json object if s is a legal JSON text
       */

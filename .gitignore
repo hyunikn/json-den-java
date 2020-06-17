@@ -1,3 +1,7 @@
 target/
 *.swp
 *.swo
+/apidocs/
+
+/* ANTLR generated files */
+/src/main/java/com/wingsoft/jsonden/parser/antlrgen/
