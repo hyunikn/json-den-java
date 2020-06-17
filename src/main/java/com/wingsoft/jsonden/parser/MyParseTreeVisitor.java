@@ -6,7 +6,7 @@ import com.wingsoft.jsonden.parser.antlrgen.JsonParseBaseVisitor;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class ParseTreeVisitor extends JsonParseBaseVisitor<Json> {
+public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
 
     private String stripQuoteMarks(String s) {
         int len = s.length();

@@ -2,7 +2,7 @@ package com.wingsoft.jsonden;
 
 import com.wingsoft.jsonden.parser.antlrgen.JsonLex;
 import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
-import com.wingsoft.jsonden.parser.ParseTreeVisitor;
+import com.wingsoft.jsonden.parser.MyParseTreeVisitor;
 
 import com.wingsoft.jsonden.exception.ParseError;
 
@@ -57,7 +57,7 @@ public abstract class Json {
             throw new ParseError(getDesc(e, parser));
         }
 
-        ParseTreeVisitor visitor = new ParseTreeVisitor();
+        MyParseTreeVisitor visitor = new MyParseTreeVisitor();
         return visitor.visit(tree);
     }
 
