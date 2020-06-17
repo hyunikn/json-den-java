@@ -51,11 +51,10 @@
           <show>public</show>
           <nohelp>true</nohelp>
           <excludePackageNames>com.wingsoft.jsonden.parser;com.wingsoft.jsonden.parser.antlrgen</excludePackageNames>
-          <!-- ??? why isn't com.wingsoft.jsonden.parser.antlrgen excluded? a bug of Javadoc? -->
         </configuration>
       </plugin>
       <!-- uncomment this only when the grammar files were modified:
-            Javadoc seems to always include auto-generated source files ignoring the excludePackageNames optioin,
+            Javadoc seems to always include auto-generated source files ignoring the excludePackageNames option,
             which seems to be a bug.
       <plugin>
         <groupId>org.antlr</groupId>
