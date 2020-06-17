@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import java.io.IOException;
 
 import java.util.List;
@@ -56,7 +58,7 @@ public class JsonArr extends Json {
         return that;
     }
 
-    public static JsonArr parse(String s) {
+    public static JsonArr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonArr) {
             return (JsonArr) parsed;

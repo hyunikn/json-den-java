@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import java.io.IOException;
 
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class JsonObj extends Json {
         return that;
     }
 
-    public static JsonObj parse(String s) {
+    public static JsonObj parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonObj) {
             return (JsonObj) parsed;

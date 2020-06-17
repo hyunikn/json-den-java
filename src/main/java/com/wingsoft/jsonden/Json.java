@@ -31,12 +31,11 @@ public abstract class Json {
     // Public
 
     /**
-      * parses given string into a Json object
+      * parses the given string into a Json object
       * @param s the string to parse
       * @return a Json object if s is a legal JSON text
-      * @throws com.wingsoft.jsonden.exception.ParseError
       */
-    public static Json parse(String s) {
+    public static Json parse(String s) throws ParseError {
         ANTLRInputStream ais;
         try {
             ais = new ANTLRInputStream(new StringReader(s));

@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import java.io.IOException;
 
 public class JsonBool extends JsonSimple {
@@ -21,7 +23,7 @@ public class JsonBool extends JsonSimple {
         return hash;
     }
 
-    public static JsonBool parse(String s) {
+    public static JsonBool parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonBool) {
             return (JsonBool) parsed;

@@ -1,6 +1,6 @@
 package com.wingsoft.jsonden;
 
-public abstract class JsonSimple extends Json {
+abstract class JsonSimple extends Json {
 
     // ===================================================
     // Public

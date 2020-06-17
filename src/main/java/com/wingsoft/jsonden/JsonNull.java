@@ -1,5 +1,7 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import java.io.IOException;
 
 public class JsonNull extends JsonSimple {
@@ -21,7 +23,7 @@ public class JsonNull extends JsonSimple {
         return 180; // my height in cm
     }
 
-    public static JsonNull parse(String s) {
+    public static JsonNull parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNull) {
             return (JsonNull) parsed;

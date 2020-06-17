@@ -1,6 +1,6 @@
 package com.wingsoft.jsonden.exception;
 
-public class ParseError extends Error {
+public class ParseError extends Exception {
     public ParseError(String msg) {
         super(msg);
     }
