@@ -8,7 +8,6 @@ import com.wingsoft.jsonden.exception.ParseError;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
 import java.io.IOException;
@@ -23,7 +22,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 /**
-  * Super class of all classes representing JSON values
+  * Superclass of all classes representing JSON values.
+  * A Json can keep a string array as its comment lines, which is printed together with its value when stringified.
   */
 public abstract class Json {
 
@@ -31,9 +31,11 @@ public abstract class Json {
     // Public
 
     /**
-      * parses given string into a Json object
-      * @param s the string to parse
-      * @return a Json object if s is a legal JSON text
+      * Parses given string into a Json.
+      * @param s string to parse
+      * @return a Json if s is a legal JSON text
+      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json value.
+      *   Invoking getMessage() of the thrown exception will yield a description of the problem.
       */
     public static Json parse(String s) throws ParseError {
         ANTLRInputStream ais;
@@ -60,6 +62,12 @@ public abstract class Json {
         return visitor.visit(tree);
     }
 
+    /**
+      * Produces a string which represents this Json with given indentation specification.
+      * @param indentSize size of one level of the indent. It must be between zero and eight inclusive.
+      *   Zero indentSize results in a minified JSON text.
+      * @param indentLevel starting level of the indent. It must be larger than or equal to zero.
+      */
     public String stringify(int indentSize, int indentLevel) {
 
         checkStringifyOptions(indentSize, indentLevel);
@@ -68,10 +76,28 @@ public abstract class Json {
         return sbuf.toString();
     }
 
+    /**
+      * Same as stringify(indentSize, 0)
+      */
     public String stringify(int indentSize) {
         return stringify(indentSize, 0);
     }
 
+    /**
+      * Same as stringify(0, 0)
+      */
+    @Override
+    public String toString() { return stringify(0, 0); }
+
+    /**
+      * Conveniently gets a Json located deep in the nested hierarchy of a Json structure.
+      * For example, one can use json.getx("how.deep.is.your.love") instead of
+      * json.get("how").get("deep").get("is").get("your").get("love") which is common in many
+      * JSON handling libraries (and the latter form is also possible in this library).
+      * @param path dot delimited segments of a path to a Json.
+      *   A segment is either a name of a JSON object member or an (integer) index of a JSON array element.
+      * @return the Json located at the path if present, otherwise null.
+      */
     public Json getx(String path) {
 
         if (path == null) {
@@ -91,16 +117,19 @@ public abstract class Json {
         return node;
     }
 
+    /**
+      * Gets comment lins.
+      */
     public String[] getCommentLines() {
         return commentLines;
     }
 
+    /**
+      * Sets comment lines.
+      */
     public void setCommentLines(String[] commentLines) {
         this.commentLines = commentLines;
     }
-
-    @Override
-    public String toString() { return stringify(0, 0); }
 
     @Override
     public abstract Object clone();
