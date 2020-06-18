@@ -77,14 +77,14 @@ public abstract class Json {
     }
 
     /**
-      * Same as stringify(indentSize, 0)
+      * Same as stringify(indentSize, 0). That is, stringifies from the indentation level zero.
       */
     public String stringify(int indentSize) {
         return stringify(indentSize, 0);
     }
 
     /**
-      * Same as stringify(0, 0)
+      * Same as stringify(0, 0). That is, stringifies into a minified JSON text.
       */
     @Override
     public String toString() { return stringify(0, 0); }
@@ -95,7 +95,7 @@ public abstract class Json {
       * json.get("how").get("deep").get("is").get("your").get("love") which is common in many
       * JSON handling libraries (and the latter form is also possible in this library).
       * @param path dot delimited segments of a path to a Json.
-      *   A segment is either a name of a JSON object member or an (integer) index of a JSON array element.
+      *   A segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return the Json located at the path if present, otherwise null.
       */
     public Json getx(String path) {
