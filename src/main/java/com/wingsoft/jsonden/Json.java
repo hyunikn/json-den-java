@@ -5,6 +5,7 @@ import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
 import com.wingsoft.jsonden.parser.MyParseTreeVisitor;
 
 import com.wingsoft.jsonden.exception.ParseError;
+import com.wingsoft.jsonden.exception.Inapplicable;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -97,11 +98,12 @@ public abstract class Json {
       * @param path dot delimited segments of a path to a Json.
       *   A segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return the Json located at the path if present, otherwise null.
+      * @throws java.lang.IllegalArgumentException when path is null
       */
-    public Json getx(String path) {
+    public Json getx(String path) throws IllegalArgumentException {
 
         if (path == null) {
-            throw new Error("path cannot be null");
+            throw new IllegalArgumentException("path cannot be null");
         }
 
         String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
@@ -131,20 +133,33 @@ public abstract class Json {
         this.commentLines = commentLines;
     }
 
+    /**
+      * Deep clone. Overriden by every concrete subclass
+      */
     @Override
     public abstract Object clone();
 
     // --------------------------------------------------
     // convenience methods
 
-    public boolean has(String path) {
+    /**
+      * Returns true if a descendant JSON node at given path, otherwise false.
+      * @param path same as in getx()
+      * @throws java.lang.IllegalArgumentException when path is null
+      */
+    public boolean has(String path) throws IllegalArgumentException {
         return getx(path) != null;
     }
 
-    public String getLongestReachablePrefix(String path) {
+    /**
+      * Returns the longest reachable prefix of given path.
+      * @param path same as in getx()
+      * @throws java.lang.IllegalArgumentException when path is null
+      */
+    public String getLongestReachablePrefix(String path) throws IllegalArgumentException {
 
         if (path == null) {
-            throw new Error("path cannot be null");
+            throw new IllegalArgumentException("path cannot be null");
         }
 
         String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
@@ -171,32 +186,141 @@ public abstract class Json {
     // --------------------------------------------------
     // for six individual JSON types
 
+    /**
+      * Returns true if this is a JsonObj, otherwise false.
+      */
     public boolean isObj()  { return false; }
+    /**
+      * Returns true if this is a JsonArr, otherwise false.
+      */
     public boolean isArr()  { return false; }
+    /**
+      * Returns true if this is a JsonBool, otherwise false.
+      */
     public boolean isBool() { return false; }
+    /**
+      * Returns true if this is a JsonNum, otherwise false.
+      */
     public boolean isNum()  { return false; }
+    /**
+      * Returns true if this is a JsonNull, otherwise false.
+      */
     public boolean isNull() { return false; }
+    /**
+      * Returns true if this is a JsonStr, otherwise false.
+      */
     public boolean isStr()  { return false; }
 
+
+    /**
+      * Returns itself if this is a JsonObj, otherwise null.
+      */
     public JsonObj  asObj()  { return null; }
+    /**
+      * Returns itself if this is a JsonArr, otherwise null.
+      */
     public JsonArr  asArr()  { return null; }
+    /**
+      * Returns itself if this is a JsonBool, otherwise null.
+      */
     public JsonBool asBool() { return null; }
+    /**
+      * Returns itself if this is a JsonNum, otherwise null.
+      */
     public JsonNum  asNum()  { return null; }
+    /**
+      * Returns itself if this is a JsonNull, otherwise null.
+      */
     public JsonNull asNull() { return null; }
+    /**
+      * Returns itself if this is a JsonStr, otherwise null.
+      */
     public JsonStr  asStr()  { return null; }
 
-    public LinkedHashMap<String, Json> asMap() { return (LinkedHashMap<String, Json>) throwInapplicable("asMap"); }
-    public Json[]       asArray()       { return (Json[]) throwInapplicable("asArray"); }
-    public List<Json>   asList()        { return (List<Json>) throwInapplicable("asList"); }
-    public boolean      asBoolean()     { return (boolean) throwInapplicable("asBoolean"); }
-    public byte         asByte()        { return (byte) throwInapplicable("asByte"); }
-    public short        asShort()       { return (short) throwInapplicable("asShort"); }
-    public int          asInt()         { return (int) throwInapplicable("asInt"); }
-    public long         asLong()        { return (long) throwInapplicable("asLong"); }
-    public float        asFloat()       { return (float) throwInapplicable("asFloat"); }
-    public double       asDouble()      { return (double) throwInapplicable("asDouble"); }
-    public BigDecimal   asBigDecimal()  { return (BigDecimal) throwInapplicable("asBigDecimal"); }
-    public String       asString()      { return (String) throwInapplicable("asString"); }
+    /**
+      * Calls its asMap() and returns the result if this is a JsonObj, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public LinkedHashMap<String, Json> asMap() throws Inapplicable {
+        return (LinkedHashMap<String, Json>) throwInapplicable("asMap");
+    }
+    /**
+      * Calls its asArray() and returns the result if this is a JsonArr, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public Json[] asArray() throws Inapplicable {
+        return (Json[]) throwInapplicable("asArray");
+    }
+    /**
+      * Calls its asList() and returns the result if this is a JsonArr, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public List<Json> asList() throws Inapplicable {
+        return (List<Json>) throwInapplicable("asList");
+    }
+    /**
+      * Calls its asBoolean() and returns the result if this is a JsonBool, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public boolean asBoolean() throws Inapplicable {
+        return (boolean) throwInapplicable("asBoolean");
+    }
+    /**
+      * Calls its asByte() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public byte asByte() throws Inapplicable {
+        return (byte) throwInapplicable("asByte");
+    }
+    /**
+      * Calls its asShort() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public short asShort() throws Inapplicable {
+        return (short) throwInapplicable("asShort");
+    }
+    /**
+      * Calls its asInt() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public int asInt() throws Inapplicable {
+        return (int) throwInapplicable("asInt");
+    }
+    /**
+      * Calls its asLong() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public long asLong() throws Inapplicable {
+        return (long) throwInapplicable("asLong");
+    }
+    /**
+      * Calls its asFloat() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public float asFloat() throws Inapplicable {
+        return (float) throwInapplicable("asFloat");
+    }
+    /**
+      * Calls its asDouble() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public double asDouble() throws Inapplicable {
+        return (double) throwInapplicable("asDouble");
+    }
+    /**
+      * Calls its asBigDecimal() and returns the result if this is a JsonNum, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public BigDecimal asBigDecimal() throws Inapplicable {
+        return (BigDecimal) throwInapplicable("asBigDecimal");
+    }
+    /**
+      * Calls its asString() and returns the result if this is a JsonStr, otherwise throws
+      * com.wingsoft.jsonden.exception.Inapplicable
+      */
+    public String asString() throws Inapplicable {
+        return (String) throwInapplicable("asString");
+    }
 
 
     // ===================================================
@@ -312,8 +436,8 @@ public abstract class Json {
         "        "
     };
 
-    private Object throwInapplicable(String op) {
-        throw new Error(op + " is not applicable to " + getClass().getSimpleName() + " nodes");
+    private Object throwInapplicable(String op) throws Inapplicable {
+        throw new Inapplicable(op + " is not applicable to " + getClass().getSimpleName() + " nodes");
     }
 
     private void checkStringifyOptions(int indentSize, int indentLevel) {
