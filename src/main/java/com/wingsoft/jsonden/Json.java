@@ -240,91 +240,91 @@ public abstract class Json {
 
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonObj JsonObj} this method returns
-      * the result of calling its asMap(), otherwise throws
+      * the result of calling its getMap(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public LinkedHashMap<String, Json> getMap() throws Inapplicable {
-        return (LinkedHashMap<String, Json>) throwInapplicable("asMap");
+        return (LinkedHashMap<String, Json>) throwInapplicable("getMap");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonArr JsonArr} this method returns
-      * the result of calling its asList(), otherwise throws
+      * the result of calling its getList(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public List<Json> getList() throws Inapplicable {
-        return (List<Json>) throwInapplicable("asList");
+        return (List<Json>) throwInapplicable("getList");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonBool JsonBool} this method returns
-      * the result of calling its asBoolean(), otherwise throws
+      * the result of calling its getBoolean(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public boolean getBoolean() throws Inapplicable {
-        return (boolean) throwInapplicable("asBoolean");
+        return (boolean) throwInapplicable("getBoolean");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asByte(), otherwise throws
+      * the result of calling its getByte(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public byte getByte() throws Inapplicable {
-        return (byte) throwInapplicable("asByte");
+        return (byte) throwInapplicable("getByte");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asShort(), otherwise throws
+      * the result of calling its getShort(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public short getShort() throws Inapplicable {
-        return (short) throwInapplicable("asShort");
+        return (short) throwInapplicable("getShort");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asInt(), otherwise throws
+      * the result of calling its getInt(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public int getInt() throws Inapplicable {
-        return (int) throwInapplicable("asInt");
+        return (int) throwInapplicable("getInt");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asLong(), otherwise throws
+      * the result of calling its getLong(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public long getLong() throws Inapplicable {
-        return (long) throwInapplicable("asLong");
+        return (long) throwInapplicable("getLong");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asFloat(), otherwise throws
+      * the result of calling its getFloat(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public float getFloat() throws Inapplicable {
-        return (float) throwInapplicable("asFloat");
+        return (float) throwInapplicable("getFloat");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asDouble(), otherwise throws
+      * the result of calling its getDouble(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public double getDouble() throws Inapplicable {
-        return (double) throwInapplicable("asDouble");
+        return (double) throwInapplicable("getDouble");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its asBigDecimal(), otherwise throws
+      * the result of calling its getBigDecimal(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public BigDecimal getBigDecimal() throws Inapplicable {
-        return (BigDecimal) throwInapplicable("asBigDecimal");
+        return (BigDecimal) throwInapplicable("getBigDecimal");
     }
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonStr JsonStr} this method returns
-      * the result of calling its asString(), otherwise throws
+      * the result of calling its getString(), otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public String getString() throws Inapplicable {
-        return (String) throwInapplicable("asString");
+        return (String) throwInapplicable("getString");
     }
 
 
