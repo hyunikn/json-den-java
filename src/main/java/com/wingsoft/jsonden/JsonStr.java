@@ -47,7 +47,7 @@ public class JsonStr extends JsonSimple {
     @Override
     public JsonStr asStr() { return this; }
     @Override
-    public String asString() { return text; }
+    public String getString() { return text; }
 
     // ===================================================
     // Protected

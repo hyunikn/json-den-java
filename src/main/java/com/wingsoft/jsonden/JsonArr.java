@@ -152,9 +152,7 @@ public class JsonArr extends Json {
     @Override
     public JsonArr asArr() { return this; }
     @Override
-    public Json[] asArray() { return list.toArray(runtimeTyper); }
-    @Override
-    public List<Json> asList() { return new LinkedList(list); }
+    public List<Json> getList() { return new LinkedList(list); }
 
     // ===================================================
     // Protected

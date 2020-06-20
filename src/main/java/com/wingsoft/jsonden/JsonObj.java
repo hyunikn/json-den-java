@@ -94,9 +94,9 @@ public class JsonObj extends Json {
     @Override
     public JsonObj asObj() { return this; }
     @Override
-    public LinkedHashMap<String, Json> asMap() { return new LinkedHashMap(map); }
+    public LinkedHashMap<String, Json> getMap() { return new LinkedHashMap(map); }
 
-    public String[] getCommentLines(String key) {
+    public String[] commentLines(String key) {
         return commentMap.get(key);
     }
 

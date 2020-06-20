@@ -37,7 +37,7 @@ public class JsonBool extends JsonSimple {
     @Override
     public JsonBool asBool() { return this; }
     @Override
-    public boolean asBoolean() {
+    public boolean getBoolean() {
         return val;
     }
 

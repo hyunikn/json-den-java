@@ -51,13 +51,13 @@ public class JsonNum extends JsonSimple {
         }
 
         JsonNum that = (JsonNum) o;
-        return that.asBigDecimal().equals(this.asBigDecimal());
+        return that.getBigDecimal().equals(this.getBigDecimal());
     }
 
     @Override
     public int hashCode() {
         if (!hashCached) {
-            hash = asBigDecimal().hashCode();
+            hash = getBigDecimal().hashCode();
             hashCached = true;
         }
 
@@ -79,7 +79,7 @@ public class JsonNum extends JsonSimple {
     public JsonNum asNum() { return this; }
 
     @Override
-    public byte asByte() {
+    public byte getByte() {
         if (!byteCached) {
             byteVal = Byte.parseByte(text);
             byteCached = true;
@@ -89,7 +89,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public short asShort() {
+    public short getShort() {
         if (!shortCached) {
             shortVal = Short.parseShort(text);
             shortCached = true;
@@ -99,7 +99,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public int asInt() {
+    public int getInt() {
         if (!intCached) {
             intVal = Integer.parseInt(text);
             intCached = true;
@@ -109,7 +109,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public long asLong() {
+    public long getLong() {
         if (!longCached) {
             longVal = Long.parseLong(text);
             longCached = true;
@@ -119,7 +119,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public float asFloat() {
+    public float getFloat() {
         if (!floatCached) {
             floatVal = Float.parseFloat(text);
             floatCached = true;
@@ -129,7 +129,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public double asDouble() {
+    public double getDouble() {
         if (!doubleCached) {
             doubleVal = Double.parseDouble(text);
             doubleCached = true;
@@ -139,7 +139,7 @@ public class JsonNum extends JsonSimple {
     }
 
     @Override
-    public BigDecimal asBigDecimal() {
+    public BigDecimal getBigDecimal() {
         if (bigDecimalVal == null) {
             bigDecimalVal = new BigDecimal(text);
         }
