@@ -63,7 +63,10 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             JsonParse.PairContext pc = cp.pair();
             String key = stripQuoteMarks(pc.STRING().getText());
             Json val = visitValue(pc.value());
-            jo.set(key, val);
+            Json old = jo.set(key, val);
+            if (old != null) {
+                throw new Error("a duplicate key '" + key + "'");
+            }
 
             TerminalNode tn = cp.COMMENT();
             if (tn != null) {

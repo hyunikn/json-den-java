@@ -7,26 +7,24 @@ import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
 
+/**
+  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON arrays.
+  */
 public class JsonArr extends Json {
 
     // ===================================================
     // Public
 
+    /**
+      * Constructs an empty {@code JsonArr}.
+      */
     public JsonArr() {
         list = new LinkedList<>();
     }
 
-    public JsonArr(Json[] array) {
-        if (array == null) {
-            throw new Error("source array cannot be null");
-        }
-
-        list = new LinkedList<>();
-        for (Json j: array) {
-            list.add(j);
-        }
-    }
-
+    /**
+      * Constructs a {@code JsonArr} from a list.
+      */
     public JsonArr(List<Json> list) {
         if (list == null) {
             throw new Error("source list cannot be null");
@@ -34,6 +32,9 @@ public class JsonArr extends Json {
         this.list = new LinkedList<>(list);
     }
 
+    /**
+      * Checks the value (not reference) equality
+      */
     @Override
     public boolean equals(Object o) {
         if (o == null || o.getClass() != this.getClass()) {
@@ -44,11 +45,17 @@ public class JsonArr extends Json {
         return that.list.equals(this.list);
     }
 
+    /**
+      * Gets a hash code.
+      */
     @Override
     public int hashCode() {
         return list.hashCode();
     }
 
+    /**
+      * Deep copy
+      */
     @Override
     public Object clone() {
         JsonArr that = new JsonArr();
@@ -58,6 +65,12 @@ public class JsonArr extends Json {
         return that;
     }
 
+    /**
+      * Parses the string into a {@code JsonArr}.
+      * @param s string to parse
+      * @return a JsonArr if s legally represent a JSON array.
+      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json array.
+      */
     public static JsonArr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonArr) {
@@ -67,6 +80,9 @@ public class JsonArr extends Json {
         }
     }
 
+    /**
+      * Gets the element {@code Json} at the index.
+      */
     public Json get(int index) {
         int i = adjustIndex(index);
         if (i < 0) {
@@ -76,7 +92,10 @@ public class JsonArr extends Json {
         }
     }
 
-    public Json del(int index) {
+    /**
+      * Deletes the element {@code Json} at the index.
+      */
+    public Json delete(int index) {
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
@@ -85,22 +104,28 @@ public class JsonArr extends Json {
         }
     }
 
-    public Json update(int index, Json node) {
-        if (node == null) {
-            throw new Error("node cannot be null");
+    /**
+      * Replaces the element {@code Json} at the index.
+      */
+    public Json replace(int index, Json elem) {
+        if (elem == null) {
+            throw new Error("elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
         } else {
-            return list.set(i, node);
+            return list.set(i, elem);
         }
     }
 
-    public Json insert(int index, Json node) {
-        if (node == null) {
-            throw new Error("node cannot be null");
+    /**
+      * Inserts an element {@code Json} at the index.
+      */
+    public Json insert(int index, Json elem) {
+        if (elem == null) {
+            throw new Error("elem cannot be null");
         }
 
         int i = adjustIndex(index);
@@ -108,49 +133,77 @@ public class JsonArr extends Json {
             return null;
         } else {
             Json old = list.get(i);
-            list.add(i, node);
+            list.add(i, elem);
             return old;
         }
     }
 
-    public void append(Json node) {
-        if (node == null) {
-            throw new Error("node cannot be null");
+    /**
+      * Appends an element {@code Json} at the end.
+      */
+    public void append(Json elem) {
+        if (elem == null) {
+            throw new Error("elem cannot be null");
         }
 
-        list.add(node);
+        list.add(elem);
     }
 
+    /**
+      * Gets the size of this {@code JsonArr}.
+      */
     public int size() {
         return list.size();
     }
 
     // ---------------------------------------------------
 
+    /**
+      * Erases all the elements.
+      */
     public void clear() {
         list.clear();
     }
 
-    public int indexOf(Json node) {
-        if (node == null) {
-            throw new Error("node cannot be null");
+    /**
+      * Gets the first index of the element
+      * @return the index if the element is present in this {@code JsonArr}, otherwise -1.
+      */
+    public int indexOf(Json elem) {
+        if (elem == null) {
+            throw new Error("elem cannot be null");
         }
 
-        return list.indexOf(node);
+        return list.indexOf(elem);
     }
 
-    public int lastIndexOf(Json node) {
-        if (node == null) {
-            throw new Error("node cannot be null");
+    /**
+      * Gets the last index of the element
+      * @return the index if the element is present in this {@code JsonArr}, otherwise -1.
+      */
+    public int lastIndexOf(Json elem) {
+        if (elem == null) {
+            throw new Error("elem cannot be null");
         }
 
-        return list.lastIndexOf(node);
+        return list.lastIndexOf(elem);
     }
 
+    /**
+      * Returns {@code true}, overriding {@code isArr} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public boolean isArr() { return true; }
+
+    /**
+      * Returns {@code this}, overriding {@code asArr} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public JsonArr asArr() { return this; }
+
+    /**
+      * Returns the elements as a list.
+      */
     @Override
     public List<Json> getList() { return new LinkedList(list); }
 

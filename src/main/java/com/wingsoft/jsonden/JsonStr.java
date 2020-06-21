@@ -33,12 +33,19 @@ public class JsonStr extends JsonSimple {
         return hash;
     }
 
+    /**
+      * Parses the string into a {@code JsonStr}.
+      * @param s string to parse
+      * @return a JsonStr if s legally represent a JSON string.
+      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json string.
+      */
     public static JsonStr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonStr) {
             return (JsonStr) parsed;
         } else {
-            throw new Error("not parsed into a JsonStr but " + parsed.getClass().getSimpleName());
+            throw new ParseError(ParseError.CASE_UNEXPECTED_JSON_TYPE,
+                    "not parsed into a JsonStr but " + parsed.getClass().getSimpleName());
         }
     }
 

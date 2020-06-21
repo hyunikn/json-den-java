@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 
 /**
   * Superclass of all classes representing JSON values.
-  * A Json can keep a string array as its comment lines, which is printed together with its value when stringified.
+  * A {@code Json} can keep a string array as its comment lines, which is printed together with its value when stringified.
   */
 public abstract class Json {
 
@@ -32,12 +32,10 @@ public abstract class Json {
     // Public
 
     /**
-      * Parses given string into a Json.
+      * Parses the string into a {@code Json}.
       * @param s string to parse
       * @return a Json if s is a legal JSON text
       * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json value.
-      *   Invoking getMessage() of the thrown {@link com.wingsoft.jsonden.exception.ParseError ParseError}
-      *   will yield a description of the problem.
       */
     public static Json parse(String s) throws ParseError {
         ANTLRInputStream ais;
@@ -57,7 +55,14 @@ public abstract class Json {
         try {
             tree = parser.json();
         } catch (RecognitionException e) {
-            throw new ParseError(getDesc(e, parser));
+            throw new ParseError(ParseError.CASE_WRONG_JSON_SYNTAX, getDesc(e, parser));
+        } catch (Error e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.startsWith("a duplicate key '")) {
+                throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
+            } else {
+                throw e;
+            }
         }
 
         MyParseTreeVisitor visitor = new MyParseTreeVisitor();
@@ -65,7 +70,7 @@ public abstract class Json {
     }
 
     /**
-      * Produces a string which represents this Json with given indentation specification.
+      * Produces a string which represents this {@code Json} with the indentation specification.
       * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
       *   Zero indentSize results in a minified JSON text.
       * @param indentLevel starting level of indentation. It must be larger than or equal to zero.
@@ -92,7 +97,7 @@ public abstract class Json {
     public String toString() { return stringify(0, 0); }
 
     /**
-      * Conveniently gets a Json located deep in the nested hierarchy of this Json.
+      * Conveniently gets a {@code Json} located deep in the nested hierarchy of this one.
       * For example, one can use {@code json.getx("how.deep.is.your.love")} instead of
       * {@code json.get("how").get("deep").get("is").get("your").get("love")} which is common in many
       * JSON handling libraries.
@@ -144,7 +149,7 @@ public abstract class Json {
     // convenience methods
 
     /**
-      * Returns whether a descendant JSON node exists at given path or not.
+      * Returns whether a descendant JSON node exists at the path or not.
       * @param path same as in getx()
       * @throws java.lang.IllegalArgumentException when path is null
       */
@@ -153,7 +158,7 @@ public abstract class Json {
     }
 
     /**
-      * Returns the longest reachable prefix of given path.
+      * Returns the longest reachable prefix of the path.
       * @param path same as in getx()
       * @throws java.lang.IllegalArgumentException when path is null
       */
@@ -191,142 +196,164 @@ public abstract class Json {
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonObj JsonObj} or not.
       */
     public boolean isObj()  { return false; }
+
     /**
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonArr JsonArr} or not.
       */
     public boolean isArr()  { return false; }
+
     /**
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonBool JsonBool} or not.
       */
     public boolean isBool() { return false; }
+
     /**
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} or not.
       */
     public boolean isNum()  { return false; }
+
     /**
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonNull JsonNull} or not.
       */
     public boolean isNull() { return false; }
+
     /**
       * Returns whether this is a {@link com.wingsoft.jsonden.JsonStr JsonStr} or not.
       */
     public boolean isStr()  { return false; }
 
+    //---------------------------------------------
 
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonObj JsonObj}, otherwise {@code null}.
       */
     public JsonObj  asObj()  { return null; }
+
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonArr JsonArr}, otherwise {@code null}.
       */
     public JsonArr  asArr()  { return null; }
+
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonBool JsonBool}, otherwise {@code null}.
       */
     public JsonBool asBool() { return null; }
+
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonNum JsonNum}, otherwise {@code null}.
       */
     public JsonNum  asNum()  { return null; }
+
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonNull JsonNull}, otherwise {@code null}.
       */
     public JsonNull asNull() { return null; }
+
     /**
       * Returns itself if this is a {@link com.wingsoft.jsonden.JsonStr JsonStr}, otherwise {@code null}.
       */
     public JsonStr  asStr()  { return null; }
 
+    //---------------------------------------------
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonObj JsonObj} this method returns
-      * the result of calling its getMap(), otherwise throws
+      * the result of calling its {@code getMap()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public LinkedHashMap<String, Json> getMap() throws Inapplicable {
         return (LinkedHashMap<String, Json>) throwInapplicable("getMap");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonArr JsonArr} this method returns
-      * the result of calling its getList(), otherwise throws
+      * the result of calling its {@code getList()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public List<Json> getList() throws Inapplicable {
         return (List<Json>) throwInapplicable("getList");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonBool JsonBool} this method returns
-      * the result of calling its getBoolean(), otherwise throws
+      * the result of calling its {@code getBoolean()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public boolean getBoolean() throws Inapplicable {
         return (boolean) throwInapplicable("getBoolean");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getByte(), otherwise throws
+      * the result of calling its {@code getByte()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public byte getByte() throws Inapplicable {
         return (byte) throwInapplicable("getByte");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getShort(), otherwise throws
+      * the result of calling its {@code getShort()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public short getShort() throws Inapplicable {
         return (short) throwInapplicable("getShort");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getInt(), otherwise throws
+      * the result of calling its {@code getInt()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public int getInt() throws Inapplicable {
         return (int) throwInapplicable("getInt");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getLong(), otherwise throws
+      * the result of calling its {@code getLong()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public long getLong() throws Inapplicable {
         return (long) throwInapplicable("getLong");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getFloat(), otherwise throws
+      * the result of calling its {@code getFloat()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public float getFloat() throws Inapplicable {
         return (float) throwInapplicable("getFloat");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getDouble(), otherwise throws
+      * the result of calling its {@code getDouble()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public double getDouble() throws Inapplicable {
         return (double) throwInapplicable("getDouble");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its getBigDecimal(), otherwise throws
+      * the result of calling its {@code getBigDecimal()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public BigDecimal getBigDecimal() throws Inapplicable {
         return (BigDecimal) throwInapplicable("getBigDecimal");
     }
+
     /**
       * If this is a {@link com.wingsoft.jsonden.JsonStr JsonStr} this method returns
-      * the result of calling its getString(), otherwise throws
+      * the result of calling its {@code getString()}, otherwise throws
       * {@link com.wingsoft.jsonden.exception.Inapplicable}
       */
     public String getString() throws Inapplicable {
         return (String) throwInapplicable("getString");
     }
-
 
     // ===================================================
     // Protected

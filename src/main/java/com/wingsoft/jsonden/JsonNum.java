@@ -64,12 +64,19 @@ public class JsonNum extends JsonSimple {
         return hash;
     }
 
+    /**
+      * Parses the string into a {@code JsonNum}.
+      * @param s string to parse
+      * @return a JsonNum if s legally represent a JSON number.
+      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json number.
+      */
     public static JsonNum parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
         if (parsed instanceof JsonNum) {
             return (JsonNum) parsed;
         } else {
-            throw new Error("not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
+            throw new ParseError(ParseError.CASE_UNEXPECTED_JSON_TYPE,
+                    "not parsed into a JsonNum but " + parsed.getClass().getSimpleName());
         }
     }
 
