@@ -6,7 +6,7 @@ import java.io.IOException;
 
 /**
   * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents the JSON null.
-  * There are no constructors of this class. Instead, only a lookup function {@code getJsonNull()} is provided
+  * There are no constructors of this class. Instead, only a lookup function is provided
   * which returns a ready-made singleton instance of {@code JsonNull}.
   */
 public class JsonNull extends JsonSimple {
@@ -17,7 +17,7 @@ public class JsonNull extends JsonSimple {
     /**
       * Gets the singleton instance of {@code JsonNull}.
       */
-    public static JsonNull getJsonNull() {
+    public static JsonNull lookup() {
         return singleton;
     }
 

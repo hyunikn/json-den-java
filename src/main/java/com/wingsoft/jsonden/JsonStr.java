@@ -25,7 +25,7 @@ public class JsonStr extends JsonSimple {
             return false;
         }
 
-        JsonBool that = (JsonBool) o;
+        JsonStr that = (JsonStr) o;
         return that.text.equals(this.text);
     }
 

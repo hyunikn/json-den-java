@@ -41,11 +41,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         } else if (ctx.NUMBER() != null) {
             return new JsonNum(ctx.NUMBER().getText());
         } else if (ctx.TRUE() != null) {
-            return JsonBool.getJsonBool(true);
+            return JsonBool.lookup(true);
         } else if (ctx.FALSE() != null) {
-            return JsonBool.getJsonBool(false);
+            return JsonBool.lookup(false);
         } else if (ctx.NULL() != null) {
-            return JsonNull.getJsonNull();
+            return JsonNull.lookup();
         } else if (ctx.obj() != null) {
             return visitObj(ctx.obj());
         } else if (ctx.arr() != null) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 /**
   * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON booleans.
-  * There are no constructors of this class. Instead, only a lookup function {@code getJsonBool()} is provided
+  * There are no constructors of this class. Instead, only a lookup function is provided
   * which returns one of ready-made doubleton instances of {@code JsonBool}.
   */
 public class JsonBool extends JsonSimple {
@@ -17,7 +17,7 @@ public class JsonBool extends JsonSimple {
     /**
       * Gets one of the two instances of {@code JsonBool} corresponding to the {@code boolean val}.
       */
-    public static JsonBool getJsonBool(boolean val) {
+    public static JsonBool lookup(boolean val) {
         return val ? trueVal : falseVal;
     }
 
