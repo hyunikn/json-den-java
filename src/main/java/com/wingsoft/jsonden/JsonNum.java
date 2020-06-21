@@ -7,11 +7,17 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
+/**
+  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON numbers.
+  */
 public class JsonNum extends JsonSimple {
 
     // ===================================================
     // Public
 
+    /**
+      * Constructs a {@code JsonNum} from a text representing a number.
+      */
     public JsonNum(String text) {
         super(text);
     }
@@ -44,6 +50,9 @@ public class JsonNum extends JsonSimple {
         super(val.toPlainString());
     }
 
+    /**
+      * Checks the value (not reference) equality.
+      */
     @Override
     public boolean equals(Object o) {
         if (o == null || o.getClass() != this.getClass()) {
@@ -54,6 +63,9 @@ public class JsonNum extends JsonSimple {
         return that.getBigDecimal().equals(this.getBigDecimal());
     }
 
+    /**
+      * Gets the hash code.
+      */
     @Override
     public int hashCode() {
         if (!hashCached) {
@@ -80,11 +92,21 @@ public class JsonNum extends JsonSimple {
         }
     }
 
+    /**
+      * Returns {@code true}, overriding {@code isNum()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public boolean isNum() { return true; }
+
+    /**
+      * Returns {@code this}, overriding {@code asNum()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public JsonNum asNum() { return this; }
 
+    /**
+      * Returns the value as a {@code byte}.
+      */
     @Override
     public byte getByte() {
         if (!byteCached) {
@@ -95,6 +117,9 @@ public class JsonNum extends JsonSimple {
         return byteVal;
     }
 
+    /**
+      * Returns the value as a {@code short}.
+      */
     @Override
     public short getShort() {
         if (!shortCached) {
@@ -105,6 +130,9 @@ public class JsonNum extends JsonSimple {
         return shortVal;
     }
 
+    /**
+      * Returns the value as an {@code int}.
+      */
     @Override
     public int getInt() {
         if (!intCached) {
@@ -115,6 +143,9 @@ public class JsonNum extends JsonSimple {
         return intVal;
     }
 
+    /**
+      * Returns the value as a {@code long}.
+      */
     @Override
     public long getLong() {
         if (!longCached) {
@@ -125,6 +156,9 @@ public class JsonNum extends JsonSimple {
         return longVal;
     }
 
+    /**
+      * Returns the value as a {@code float}.
+      */
     @Override
     public float getFloat() {
         if (!floatCached) {
@@ -135,6 +169,9 @@ public class JsonNum extends JsonSimple {
         return floatVal;
     }
 
+    /**
+      * Returns the value as a {@code double}.
+      */
     @Override
     public double getDouble() {
         if (!doubleCached) {
@@ -145,6 +182,9 @@ public class JsonNum extends JsonSimple {
         return doubleVal;
     }
 
+    /**
+      * Returns the value as a {@code BigDecimal}.
+      */
     @Override
     public BigDecimal getBigDecimal() {
         if (bigDecimalVal == null) {

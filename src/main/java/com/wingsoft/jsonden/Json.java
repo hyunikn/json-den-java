@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 /**
-  * Superclass of all classes representing JSON values.
-  * A {@code Json} can keep a string array as its comment lines, which is printed together with its value when stringified.
+  * Superclass of all JSON value classes.
+  * A {@code Json} can keep a string array for its comment lines, which is printed together with its value when stringified.
   */
 public abstract class Json {
 
@@ -70,7 +70,7 @@ public abstract class Json {
     }
 
     /**
-      * Produces a string which represents this {@code Json} with the indentation specification.
+      * Produces a string which represents this {@code Json} which conforms to the indentation specification.
       * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
       *   Zero indentSize results in a minified JSON text.
       * @param indentLevel starting level of indentation. It must be larger than or equal to zero.
@@ -97,7 +97,7 @@ public abstract class Json {
     public String toString() { return stringify(0, 0); }
 
     /**
-      * Conveniently gets a {@code Json} located deep in the nested hierarchy of this one.
+      * Conveniently gets a {@code Json} located deep in the nested structure of this one.
       * For example, one can use {@code json.getx("how.deep.is.your.love")} instead of
       * {@code json.get("how").get("deep").get("is").get("your").get("love")} which is common in many
       * JSON handling libraries.
@@ -126,14 +126,14 @@ public abstract class Json {
     }
 
     /**
-      * Gets comment lins.
+      * Gets the comment lines.
       */
     public String[] commentLines() {
         return commentLines;
     }
 
     /**
-      * Sets comment lines.
+      * Sets the comment lines.
       */
     public void setCommentLines(String[] commentLines) {
         this.commentLines = commentLines;

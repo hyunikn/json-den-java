@@ -5,8 +5,8 @@ import com.wingsoft.jsonden.exception.ParseError;
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON boolean.
-  * There are no constructors of this class, instead, only a lookup function {@code getJsonBool()}
+  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON booleans.
+  * There are no constructors of this class. Instead, only a lookup function {@code getJsonBool()} is provided
   * which returns one of ready-made doubleton instances of {@code JsonBool}.
   */
 public class JsonBool extends JsonSimple {
@@ -15,7 +15,7 @@ public class JsonBool extends JsonSimple {
     // Public
 
     /**
-      * Gets one of two instances of {@code JsonBool} matching the boolean {@code val}.
+      * Gets one of the two instances of {@code JsonBool} corresponding to the {@code boolean val}.
       */
     public static JsonBool getJsonBool(boolean val) {
         return val ? trueVal : falseVal;
@@ -54,13 +54,13 @@ public class JsonBool extends JsonSimple {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isBool} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isBool()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public boolean isBool() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asBool} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asBool()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public JsonBool asBool() { return this; }

@@ -1,9 +1,9 @@
 package com.wingsoft.jsonden.exception;
 
 /**
-  * Exception thrown when the parse() method of the {@link com.wingsoft.jsonden.Json Json}
+  * Thrown when the parse() method of {@link com.wingsoft.jsonden.Json Json}
   * class or one of its subclasses fails.
-  * Currently, there are two cases of this kind of failure:
+  * Currently, there are three cases of this kind of failure:
   * (1) wrong JSON syntax (2) unexpected JSON type (3) a duplicate key in a JSON object.
   * A public final field {@code errCase} indicates one of them.
   * Method {@code getMessage()} will return more detailed description of the error.

@@ -4,6 +4,9 @@ import com.wingsoft.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
+/**
+  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON strings.
+  */
 public class JsonStr extends JsonSimple {
 
     // ===================================================
@@ -13,6 +16,9 @@ public class JsonStr extends JsonSimple {
         super(str);
     }
 
+    /**
+      * Checks the value (not reference) equality.
+      */
     @Override
     public boolean equals(Object o) {
         if (o == null || o.getClass() != this.getClass()) {
@@ -23,6 +29,9 @@ public class JsonStr extends JsonSimple {
         return that.text.equals(this.text);
     }
 
+    /**
+      * Gets the hash code.
+      */
     @Override
     public int hashCode() {
         if (!hashCached) {
@@ -49,10 +58,21 @@ public class JsonStr extends JsonSimple {
         }
     }
 
+    /**
+      * Returns {@code true}, overriding {@code isStr()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public boolean isStr() { return true; }
+
+    /**
+      * Returns {@code this}, overriding {@code asStr()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public JsonStr asStr() { return this; }
+
+    /**
+      * Returns the value as a {@code String}.
+      */
     @Override
     public String getString() { return text; }
 

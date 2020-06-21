@@ -50,7 +50,7 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Gets a hash code.
+      * Gets the hash code.
       */
     @Override
     public int hashCode() {
@@ -86,7 +86,7 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Gets the member {@code Json} of the key.
+      * Gets the value of the key.
       */
     public Json get(String key) {
         if (key == null) {
@@ -97,7 +97,7 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Deletes the member {@code Json} of the key.
+      * Deletes the member of the key.
       */
     public Json delete(String key) {
         if (key == null) {
@@ -108,7 +108,7 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Sets the {@code Json} as the member of the key.
+      * Sets the value of the key.
       * @return the old Json of the key if any, otherwise {@code null}
       */
     public Json set(String key, Json value) {
@@ -130,13 +130,13 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isObj} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isObj()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public boolean isObj() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asObj} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asObj()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public JsonObj asObj() { return this; }

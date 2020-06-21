@@ -5,8 +5,8 @@ import com.wingsoft.jsonden.exception.ParseError;
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON null.
-  * There are no constructors of this class, instead, only a lookup function {@code getJsonNull()}
+  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents the JSON null.
+  * There are no constructors of this class. Instead, only a lookup function {@code getJsonNull()} is provided
   * which returns a ready-made singleton instance of {@code JsonNull}.
   */
 public class JsonNull extends JsonSimple {
@@ -15,7 +15,7 @@ public class JsonNull extends JsonSimple {
     // Public
 
     /**
-      * Gets a ready-made singleton instance of {@code JsonNull}.
+      * Gets the singleton instance of {@code JsonNull}.
       */
     public static JsonNull getJsonNull() {
         return singleton;
@@ -53,8 +53,15 @@ public class JsonNull extends JsonSimple {
         }
     }
 
+    /**
+      * Returns {@code true}, overriding {@code isNull()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public boolean isNull() { return true; }
+
+    /**
+      * Returns {@code this}, overriding {@code asNull()} of {@link com.wingsoft.jsonden.Json Json}.
+      */
     @Override
     public JsonNull asNull() { return this; }
 

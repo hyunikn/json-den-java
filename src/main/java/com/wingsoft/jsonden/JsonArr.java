@@ -46,7 +46,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Gets a hash code.
+      * Gets the hash code.
       */
     @Override
     public int hashCode() {
@@ -81,7 +81,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Gets the element {@code Json} at the index.
+      * Gets the element at the index.
       */
     public Json get(int index) {
         int i = adjustIndex(index);
@@ -93,7 +93,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Deletes the element {@code Json} at the index.
+      * Deletes the element at the index.
       */
     public Json delete(int index) {
         int i = adjustIndex(index);
@@ -105,7 +105,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Replaces the element {@code Json} at the index.
+      * Replaces the element at the index with the {@code Json elem}.
       */
     public Json replace(int index, Json elem) {
         if (elem == null) {
@@ -121,7 +121,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Inserts an element {@code Json} at the index.
+      * Inserts an element at the index.
       */
     public Json insert(int index, Json elem) {
         if (elem == null) {
@@ -139,7 +139,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Appends an element {@code Json} at the end.
+      * Appends an element at the end.
       */
     public void append(Json elem) {
         if (elem == null) {
@@ -178,7 +178,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Gets the last index of the element
+      * Gets the last index of the element.
       * @return the index if the element is present in this {@code JsonArr}, otherwise -1.
       */
     public int lastIndexOf(Json elem) {
@@ -190,13 +190,13 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isArr} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isArr()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public boolean isArr() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asArr} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asArr()} of {@link com.wingsoft.jsonden.Json Json}.
       */
     @Override
     public JsonArr asArr() { return this; }
