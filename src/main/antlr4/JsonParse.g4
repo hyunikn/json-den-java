@@ -33,7 +33,7 @@ value
     ;
 
 obj
-    : LBRACE commentedPair (COMMA commentedPair)* RBRACE
+    : LBRACE commentedPair (COMMA commentedPair)*? RBRACE
     | LBRACE RBRACE
     ;
 
@@ -46,6 +46,6 @@ pair
     ;
 
 arr
-    : LBRACKET commentedValue (COMMA commentedValue)* RBRACKET
+    : LBRACKET commentedValue (COMMA commentedValue)*? RBRACKET
     | LBRACKET RBRACKET
     ;

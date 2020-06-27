@@ -6,12 +6,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class MainTest {
+public class JsonTest {
 
     /*
     @BeforeClass
     public static void before() {
-        String s = Util.readJSON("obj.json");
+        String s = Util.readFile("obj.json");
         System.out.println(s);
     }
      */
@@ -61,35 +61,62 @@ public class MainTest {
 
     @Test
     public void parseAndStringify() throws ParseError {
-        String text = Util.readJSON("obj.json");
-        Json json = Json.parse(text);
+        String obj = Util.readFile("obj.json");
+        Json json = Json.parse(obj);
         assertTrue(json.isObj());
-        System.out.println(json.stringify(8));
-        System.out.println(json.stringify(4, 1));
-        System.out.println(json.toString());
+        assertEquals(json.stringify(8), Util.readFile("r8_obj.json"));
+        assertEquals(json.stringify(4, 1), Util.readFile("r41_obj.json"));
+        assertEquals(json.toString(), Util.readFile("r00_obj.json"));
     }
 
     @Test(expected=ParseError.class)
     public void parseError0() throws ParseError {
-        String text = Util.readJSON("wrong.json");
+        String text = Util.readFile("wrong.json");
         try {
             Json json = Json.parse(text);
         } catch (ParseError e) {
-            System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            assertEquals(
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
+                    Util.readFile("r_wrong.msg"));
+            throw e;
+        }
+    }
+
+    @Test(expected=ParseError.class)
+    public void parseError1() throws ParseError {
+        String text = Util.readFile("obj.json");
+        try {
+            Json json = JsonArr.parse(text);
+        } catch (ParseError e) {
+            assertEquals(
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
+                    Util.readFile("r_err1.msg"));
+            throw e;
+        }
+    }
+
+    @Test(expected=ParseError.class)
+    public void parseError2() throws ParseError {
+        String text = Util.readFile("dupkeys.json");
+        try {
+            Json json = Json.parse(text);
+        } catch (ParseError e) {
+            //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            assertEquals(
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
+                    Util.readFile("r_err2.msg"));
             throw e;
         }
     }
 
     @Test
-    public void parseError1() {
-    }
-
-    @Test
-    public void parseError2() {
-    }
-
-    @Test
-    public void commentLines() {
+    public void commentLines() throws ParseError {
+        String text = Util.readFile("comment.json");
+        Json json = Json.parse(text);
+        //System.out.println(json.stringify(4));
+        //System.out.println(json.stringify(0));
+        assertEquals(json.stringify(4), Util.readFile("r4_comment.json"));
+        assertEquals(json.stringify(0), Util.readFile("r0_comment.json"));
     }
 
     @Test

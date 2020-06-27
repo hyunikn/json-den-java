@@ -76,7 +76,8 @@ public class JsonArr extends Json {
         if (parsed instanceof JsonArr) {
             return (JsonArr) parsed;
         } else {
-            throw new Error("not parsed into a JsonArr but " + parsed.getClass().getSimpleName());
+            throw new ParseError(ParseError.CASE_UNEXPECTED_JSON_TYPE,
+                    "not parsed into a JsonArr but " + parsed.getClass().getSimpleName());
         }
     }
 

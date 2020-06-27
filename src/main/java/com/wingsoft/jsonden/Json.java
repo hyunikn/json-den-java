@@ -40,7 +40,7 @@ public abstract class Json {
     public static Json parse(String s) throws ParseError {
         ANTLRInputStream ais;
         try {
-            ais = new ANTLRInputStream(new StringReader(s));
+            ais = new ANTLRInputStream(new StringReader('\r' + s)); // \r: detecting preserved comment requires it.
         } catch (IOException e ) {
             throw new Error(e);
         }
@@ -56,17 +56,19 @@ public abstract class Json {
             tree = parser.json();
         } catch (RecognitionException e) {
             throw new ParseError(ParseError.CASE_WRONG_JSON_SYNTAX, getDesc(e, parser));
+        }
+
+        MyParseTreeVisitor visitor = new MyParseTreeVisitor();
+        try {
+            return visitor.visit(tree);
         } catch (Error e) {
             String msg = e.getMessage();
-            if (msg != null && msg.startsWith("a duplicate key '")) {
+            if (msg != null && msg.startsWith("a duplicate key")) {
                 throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
             } else {
                 throw e;
             }
         }
-
-        MyParseTreeVisitor visitor = new MyParseTreeVisitor();
-        return visitor.visit(tree);
     }
 
     /**

@@ -9,10 +9,10 @@ public class Util {
 
     private static final String RESOURCE_DIR = "src/test/resource/";
 
-    public static String readJSON(String fileName) {
+    public static String readFile(String fileName) {
         File f = new File(RESOURCE_DIR + fileName);
         if (f.isFile()) {
-            byte[] buf = new byte[(int)f.length()];
+            byte[] buf = new byte[(int) f.length() - 1];    // -1: vim auto-saves a newline character.
             try {
                 new FileInputStream(f).read(buf);
             } catch (Throwable e) {

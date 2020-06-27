@@ -53,18 +53,18 @@ TRUE: 'true';
 FALSE: 'false';
 NULL: 'null';
 
-WS
-    : [ \t\n\r] + -> skip
-    ;
-
 COMMENT
-    : '/**' ((~'*')* '*' ~'/')* (~'*')* '*/'
+    : [\n\r\f] ' '*? '/**' .*? '*/'
     ;
 
 DROPPED_BLOCK_COMMENT
-    : '/*' ((~'*')* '*' ~'/')* (~'*')* '*/' -> skip
+    : '/*' .*? '*/' -> skip
     ;
 
 DROPPED_LINE_COMMENT
-    : '//' .* [\n] -> skip
+    : '//' .*? [\n] -> skip
+    ;
+
+WS
+    : [ \t\n\r] -> skip
     ;

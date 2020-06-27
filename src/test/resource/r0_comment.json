@@ -1,0 +1,24 @@
+/**
+the outermost obj
+  one,
+  two,
+  three
+ */{/**
+  obj o
+ */"o":{"n":1.1,"m":1.2},/**
+boolean bt
+ */"bt":true,/**
+array a
+ */"a":[1.1,1.2],/**
+  boolean bf
+ */"bf":false,/**
+  null
+ */"null":null,/**
+  number i
+ */"i":33,/**
+  number f
+ */"f":33.33,/**
+  number fe
+ */"fe":33.33e10,/**
+  string s
+ */"s":"abcde"}
