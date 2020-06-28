@@ -62,10 +62,23 @@ public class JsonObj extends Json {
       */
     @Override
     public Object clone() {
-        JsonObj clone = new JsonObj();
+        String[] cl;
+        JsonObj clone = new JsonObj();  // What if Json.clone() or just clone() where clone uses This constructor?
+                                        // Shoud This constructor call its parent's (and hence all its aoncestors')
+                                        // automatically?
         for (String key: map.keySet()) {
             clone.map.put(key, (Json) map.get(key).clone());    // deep copy
+            cl = this.commentLines(key);
+            if (cl != null) {
+                clone.setCommentLines(key, cl);
+            }
         }
+
+        cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
         return clone;
     }
 
@@ -157,8 +170,10 @@ public class JsonObj extends Json {
     /**
       * Sets the comment lines of the member of the key.
       */
-    public void setCommentLines(String key, String[] commentLines) {
-        commentMap.put(key, commentLines);
+    public void setCommentLines(String key, String[] cl) {
+        if (cl != null) {
+            commentMap.put(key, cl);
+        }
     }
 
     // ---------------------------------------------------

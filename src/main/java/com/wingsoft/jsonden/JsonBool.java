@@ -6,27 +6,29 @@ import java.io.IOException;
 
 /**
   * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON booleans.
-  * There are no constructors of this class. Instead, only a lookup function is provided
-  * which returns one of ready-made doubleton instances of {@code JsonBool}.
   */
 public class JsonBool extends JsonSimple {
 
     // ===================================================
     // Public
 
-    /**
-      * Gets one of the two instances of {@code JsonBool} corresponding to the {@code boolean val}.
-      */
-    public static JsonBool lookup(boolean val) {
-        return val ? trueVal : falseVal;
+    public JsonBool(boolean val) {
+        super(Boolean.toString(val));
+        this.val = val;
+        this.hash = val ? 31 : 13;   // Baskin Robbins number and its reverse
     }
 
     /**
-      * Checks the value (and reference) equality.
+      * Checks the value (not reference) equality.
       */
     @Override
     public boolean equals(Object o) {
-        return this == o;
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        JsonBool that = (JsonBool) o;
+        return that.val == this.val;
     }
 
     /**
@@ -35,6 +37,20 @@ public class JsonBool extends JsonSimple {
     @Override
     public int hashCode() {
         return hash;
+    }
+
+    /**
+      * Deep copy
+      */
+    public Object clone() {
+        JsonBool clone = new JsonBool(this.val);
+
+        String[] cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
+        return clone;
     }
 
     /**
@@ -86,15 +102,6 @@ public class JsonBool extends JsonSimple {
     // ===================================================
     // Private
 
-    private static final JsonBool trueVal = new JsonBool(true);
-    private static final JsonBool falseVal = new JsonBool(false);
-
     private final int hash;
-
-    private JsonBool(boolean val) {
-        super(Boolean.toString(val));
-        this.val = val;
-        this.hash = val ? 31 : 13;   // Baskin Robbins number and its reverse
-    }
 }
 

@@ -58,11 +58,17 @@ public class JsonArr extends Json {
       */
     @Override
     public Object clone() {
-        JsonArr that = new JsonArr();
+        JsonArr clone = new JsonArr();
         for (Json elem: list) {
-            that.list.add((Json) elem.clone());  // deep copy
+            clone.list.add((Json) elem.clone());  // deep copy
         }
-        return that;
+
+        String[] cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
+        return clone;
     }
 
     /**

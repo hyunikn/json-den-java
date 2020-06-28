@@ -43,6 +43,20 @@ public class JsonStr extends JsonSimple {
     }
 
     /**
+      * Deep copy
+      */
+    public Object clone() {
+        JsonStr clone = new JsonStr(this.text);
+
+        String[] cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
+        return clone;
+    }
+
+    /**
       * Parses the string into a {@code JsonStr}.
       * @param s string to parse
       * @return a JsonStr if s legally represent a JSON string.

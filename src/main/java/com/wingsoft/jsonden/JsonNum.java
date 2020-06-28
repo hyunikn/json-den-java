@@ -77,6 +77,20 @@ public class JsonNum extends JsonSimple {
     }
 
     /**
+      * Deep copy
+      */
+    public Object clone() {
+        JsonNum clone = new JsonNum(this.text);
+
+        String[] cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
+        return clone;
+    }
+
+    /**
       * Parses the string into a {@code JsonNum}.
       * @param s string to parse
       * @return a JsonNum if s legally represent a JSON number.

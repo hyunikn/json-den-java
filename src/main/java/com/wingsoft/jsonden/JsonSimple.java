@@ -18,11 +18,6 @@ abstract class JsonSimple extends Json {
     }
 
     @Override
-    public Object clone() {
-        return this;    // they are all immutable
-    }
-
-    @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
 
         if (indentSize < 0) {

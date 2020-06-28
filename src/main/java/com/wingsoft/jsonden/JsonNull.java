@@ -6,27 +6,22 @@ import java.io.IOException;
 
 /**
   * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents the JSON null.
-  * There are no constructors of this class. Instead, only a lookup function is provided
-  * which returns a ready-made singleton instance of {@code JsonNull}.
   */
 public class JsonNull extends JsonSimple {
 
     // ===================================================
     // Public
 
-    /**
-      * Gets the singleton instance of {@code JsonNull}.
-      */
-    public static JsonNull lookup() {
-        return singleton;
+    public JsonNull() {
+        super("null");
     }
 
     /**
-      * Checks the value (and reference) equality.
+      * Checks the value (not reference) equality.
       */
     @Override
     public boolean equals(Object o) {
-        return this == o;
+        return (o != null && o.getClass() == this.getClass());
     }
 
     /**
@@ -35,6 +30,20 @@ public class JsonNull extends JsonSimple {
     @Override
     public int hashCode() {
         return 180; // my height in cm
+    }
+
+    /**
+      * Deep copy
+      */
+    public Object clone() {
+        JsonNull clone = new JsonNull();
+
+        String[] cl = this.commentLines();
+        if (cl != null) {
+            clone.setCommentLines(cl);
+        }
+
+        return clone;
     }
 
     /**
@@ -76,10 +85,5 @@ public class JsonNull extends JsonSimple {
     // ===================================================
     // Private
 
-    private static JsonNull singleton = new JsonNull();
-
-    private JsonNull() {
-        super("null");
-    }
 }
 
