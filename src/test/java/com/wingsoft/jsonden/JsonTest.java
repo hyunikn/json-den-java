@@ -64,9 +64,9 @@ public class JsonTest {
         String obj = Util.readFile("obj.json");
         Json json = Json.parse(obj);
         assertTrue(json.isObj());
-        assertEquals(json.stringify(8), Util.readFile("r8_obj.json"));
-        assertEquals(json.stringify(4, 1), Util.readFile("r41_obj.json"));
-        assertEquals(json.toString(), Util.readFile("r00_obj.json"));
+        assertEquals(Util.readFile("r8_obj.json"), json.stringify(8));
+        assertEquals(Util.readFile("r41_obj.json"), json.stringify(4, 1));
+        assertEquals(Util.readFile("r00_obj.json"), json.toString());
     }
 
     @Test(expected=ParseError.class)
@@ -76,8 +76,8 @@ public class JsonTest {
             Json json = Json.parse(text);
         } catch (ParseError e) {
             assertEquals(
-                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
-                    Util.readFile("r_wrong.msg"));
+                    Util.readFile("r_wrong.msg"),
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
     }
@@ -89,8 +89,8 @@ public class JsonTest {
             Json json = JsonArr.parse(text);
         } catch (ParseError e) {
             assertEquals(
-                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
-                    Util.readFile("r_err1.msg"));
+                    Util.readFile("r_err1.msg"),
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
     }
@@ -103,8 +103,8 @@ public class JsonTest {
         } catch (ParseError e) {
             //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
             assertEquals(
-                    String.format("parse error %d: %s", e.errCase, e.getMessage()),
-                    Util.readFile("r_err2.msg"));
+                    Util.readFile("r_err2.msg"),
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
     }
@@ -114,9 +114,9 @@ public class JsonTest {
         String text = Util.readFile("comment.json");
         Json json = Json.parse(text);
         //System.out.println(json.stringify(4));
-        //System.out.println(json.stringify(0));
-        assertEquals(json.stringify(4), Util.readFile("r4_comment.json"));
-        assertEquals(json.stringify(0), Util.readFile("r0_comment.json"));
+        System.out.println(json.stringify(0));
+        assertEquals(Util.readFile("r4_comment.json"), json.stringify(4));
+        assertEquals(Util.readFile("r0_comment.json"), json.stringify(0));
     }
 
     @Test

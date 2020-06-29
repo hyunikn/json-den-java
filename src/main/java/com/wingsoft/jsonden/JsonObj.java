@@ -22,7 +22,6 @@ public class JsonObj extends Json {
       */
     public JsonObj() {
         map = new LinkedHashMap<>();
-        commentMap = new HashMap<>();
     }
 
     /**
@@ -33,7 +32,6 @@ public class JsonObj extends Json {
             throw new Error("source map cannot be null");
         }
         this.map = new LinkedHashMap<>(map);
-        this.commentMap = new HashMap<>();
     }
 
     /**
@@ -67,11 +65,15 @@ public class JsonObj extends Json {
                                         // Shoud This constructor call its parent's (and hence all its aoncestors')
                                         // automatically?
         for (String key: map.keySet()) {
-            clone.map.put(key, (Json) map.get(key).clone());    // deep copy
-            cl = this.commentLines(key);
+            Json val = map.get(key);
+            Json valClone = (Json) val.clone();
+
+            cl = val.commentLines();
             if (cl != null) {
-                clone.setCommentLines(key, cl);
+                valClone.setCommentLines(cl);
             }
+
+            clone.map.put(key, valClone);    // deep copy
         }
 
         cl = this.commentLines();
@@ -160,22 +162,6 @@ public class JsonObj extends Json {
     @Override
     public LinkedHashMap<String, Json> getMap() { return new LinkedHashMap(map); }
 
-    /**
-      * Gets the comment lines of the member of the key.
-      */
-    public String[] commentLines(String key) {
-        return commentMap.get(key);
-    }
-
-    /**
-      * Sets the comment lines of the member of the key.
-      */
-    public void setCommentLines(String key, String[] cl) {
-        if (cl != null) {
-            commentMap.put(key, cl);
-        }
-    }
-
     // ---------------------------------------------------
 
     /**
@@ -189,7 +175,6 @@ public class JsonObj extends Json {
     // Protected
 
     protected final LinkedHashMap<String, Json> map;
-    protected final HashMap<String, String[]> commentMap;
 
     @Override
     protected String getTypeName() {
@@ -201,9 +186,9 @@ public class JsonObj extends Json {
 
         boolean useIndents = indentSize != 0;
 
-        if (indentSize < 0) {
+        if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
-            indentSize *= -1;
+            indentLevel *= -1;
         } else {
             writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
@@ -227,7 +212,7 @@ public class JsonObj extends Json {
                 }
             }
 
-            writeComment(sbuf, commentMap.get(key), indentSize, indentLevel + 1);
+            writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
 
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');
@@ -236,7 +221,7 @@ public class JsonObj extends Json {
             if (useIndents) {
                 sbuf.append(' ');
             }
-            val.write(sbuf, - indentSize, indentLevel + 1);
+            val.write(sbuf, indentSize, -(indentLevel + 1));
         }
 
         if (useIndents) {

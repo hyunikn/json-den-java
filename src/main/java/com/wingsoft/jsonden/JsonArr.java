@@ -229,9 +229,9 @@ public class JsonArr extends Json {
 
         boolean useIndents = indentSize != 0;
 
-        if (indentSize < 0) {
+        if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
-            indentSize *= -1;
+            indentLevel *= -1;
         } else {
             writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);

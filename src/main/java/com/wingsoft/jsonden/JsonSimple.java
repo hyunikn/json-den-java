@@ -20,9 +20,9 @@ abstract class JsonSimple extends Json {
     @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
 
-        if (indentSize < 0) {
+        if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key of an object
-            indentSize *= -1;
+            indentLevel *= -1;
         } else {
             writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);

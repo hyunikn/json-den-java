@@ -126,7 +126,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             if (tn != null) {
                 List<String> lineList = getCommentLineList(tn);
                 if (lineList.size() > 0) {
-                    jo.setCommentLines(key, lineList.toArray(RTT));
+                    val.setCommentLines(lineList.toArray(RTT));
                 }
             }
         }
