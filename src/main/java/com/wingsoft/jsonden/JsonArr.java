@@ -27,7 +27,7 @@ public class JsonArr extends Json {
       */
     public JsonArr(List<Json> list) {
         if (list == null) {
-            throw new Error("source list cannot be null");
+            throw new IllegalArgumentException("source list cannot be null");
         }
         this.list = new LinkedList<>(list);
     }
@@ -116,7 +116,7 @@ public class JsonArr extends Json {
       */
     public Json replace(int index, Json elem) {
         if (elem == null) {
-            throw new Error("elem cannot be null");
+            throw new IllegalArgumentException("elem cannot be null");
         }
 
         int i = adjustIndex(index);
@@ -132,12 +132,12 @@ public class JsonArr extends Json {
       */
     public void insert(int index, Json elem) {
         if (elem == null) {
-            throw new Error("elem cannot be null");
+            throw new IllegalArgumentException("elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
-            throw new Error("no element at the index " + index);
+            throw new IllegalArgumentException("no element at the index " + index);
         } else {
             list.add(i, elem);
         }
@@ -148,7 +148,7 @@ public class JsonArr extends Json {
       */
     public void append(Json elem) {
         if (elem == null) {
-            throw new Error("elem cannot be null");
+            throw new IllegalArgumentException("elem cannot be null");
         }
 
         list.add(elem);
@@ -176,7 +176,7 @@ public class JsonArr extends Json {
       */
     public int indexOf(Json elem) {
         if (elem == null) {
-            throw new Error("elem cannot be null");
+            throw new IllegalArgumentException("elem cannot be null");
         }
 
         return list.indexOf(elem);
@@ -188,7 +188,7 @@ public class JsonArr extends Json {
       */
     public int lastIndexOf(Json elem) {
         if (elem == null) {
-            throw new Error("elem cannot be null");
+            throw new IllegalArgumentException("elem cannot be null");
         }
 
         return list.lastIndexOf(elem);
@@ -292,7 +292,7 @@ public class JsonArr extends Json {
         try {
             return Integer.parseInt(name);
         } catch (NumberFormatException e) {
-            throw new Error(name + " is not an integer and cannot be an index to an array element");
+            throw new IllegalArgumentException(name + " is not an integer and cannot be an index to an array element");
         }
     }
 }

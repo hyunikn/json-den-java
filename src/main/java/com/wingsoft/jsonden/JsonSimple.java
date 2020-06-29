@@ -12,7 +12,7 @@ abstract class JsonSimple extends Json {
 
     protected JsonSimple(String text) {
         if (text == null) {
-            throw new Error("text of " + getClass().getSimpleName() + " values cannot be null");
+            throw new IllegalArgumentException("text of " + getClass().getSimpleName() + " values cannot be null");
         }
         this.text = text;
     }

@@ -63,11 +63,14 @@ public abstract class Json {
             return visitor.visit(tree);
         } catch (Error e) {
             String msg = e.getMessage();
-            if (msg != null && msg.startsWith("a duplicate key")) {
-                throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
-            } else {
-                throw e;
+            if (msg != null) {
+                if (msg.startsWith("a duplicate key")) {
+                    throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
+                } else if (msg.startsWith("insufficient leading white spaces in a comment line at")) {
+                    throw new ParseError(ParseError.CASE_INSUFFICIENT_INDENT, msg);
+                }
             }
+            throw e;
         }
     }
 
@@ -476,14 +479,14 @@ public abstract class Json {
 
     private void checkStringifyOptions(int indentSize, int indentLevel) {
         if (indentSize > 8) {
-            throw new Error("indentSize cannot be larger than eight");
+            throw new IllegalArgumentException("indentSize cannot be larger than eight");
         }
         if (indentSize < 0) {
-            throw new Error("indentSize cannot be a negative integer");
+            throw new IllegalArgumentException("indentSize cannot be a negative integer");
         }
 
         if (indentLevel < 0) {
-            throw new Error("indentLevel cannot be a negative integer");
+            throw new IllegalArgumentException("indentLevel cannot be a negative integer");
         }
     }
 }

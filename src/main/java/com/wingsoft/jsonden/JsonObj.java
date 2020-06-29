@@ -29,7 +29,7 @@ public class JsonObj extends Json {
       */
     public JsonObj(LinkedHashMap<String, Json> map) {
         if (map == null) {
-            throw new Error("source map cannot be null");
+            throw new IllegalArgumentException("source map cannot be null");
         }
         this.map = new LinkedHashMap<>(map);
     }

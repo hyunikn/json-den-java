@@ -251,7 +251,8 @@ public class JsonNum extends JsonSimple {
         try {
             new BigDecimal(s);
         } catch (NumberFormatException e) {
-            throw new Error("the argument string '" + s + "' does not represent a valid JSON number");
+            throw new IllegalArgumentException("the argument string '" + s +
+                    "' does not represent a valid JSON number");
         }
 
         return s;
