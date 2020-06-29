@@ -130,18 +130,16 @@ public class JsonArr extends Json {
     /**
       * Inserts an element at the index.
       */
-    public Json insert(int index, Json elem) {
+    public void insert(int index, Json elem) {
         if (elem == null) {
             throw new Error("elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
-            return null;
+            throw new Error("no element at the index " + index);
         } else {
-            Json old = list.get(i);
             list.add(i, elem);
-            return old;
         }
     }
 

@@ -64,9 +64,9 @@ public class JsonTest {
         String obj = Util.readFile("obj.json");
         Json json = Json.parse(obj);
         assertTrue(json.isObj());
-        assertEquals(Util.readFile("r8_obj.json"), json.stringify(8));
-        assertEquals(Util.readFile("r41_obj.json"), json.stringify(4, 1));
-        assertEquals(Util.readFile("r00_obj.json"), json.toString());
+        assertEquals(Util.readFile("results/_8_obj.json"), json.stringify(8));
+        assertEquals(Util.readFile("results/_41_obj.json"), json.stringify(4, 1));
+        assertEquals(Util.readFile("results/_00_obj.json"), json.toString());
     }
 
     @Test(expected=ParseError.class)
@@ -76,7 +76,7 @@ public class JsonTest {
             Json json = Json.parse(text);
         } catch (ParseError e) {
             assertEquals(
-                    Util.readFile("r_wrong.msg"),
+                    Util.readFile("results/_wrong.msg"),
                     String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
@@ -89,7 +89,7 @@ public class JsonTest {
             Json json = JsonArr.parse(text);
         } catch (ParseError e) {
             assertEquals(
-                    Util.readFile("r_err1.msg"),
+                    Util.readFile("results/_err1.msg"),
                     String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
@@ -103,7 +103,7 @@ public class JsonTest {
         } catch (ParseError e) {
             //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
             assertEquals(
-                    Util.readFile("r_err2.msg"),
+                    Util.readFile("results/_err2.msg"),
                     String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
@@ -114,20 +114,90 @@ public class JsonTest {
         String text = Util.readFile("comment.json");
         Json json = Json.parse(text);
         //System.out.println(json.stringify(4));
-        System.out.println(json.stringify(0));
-        assertEquals(Util.readFile("r4_comment.json"), json.stringify(4));
-        assertEquals(Util.readFile("r0_comment.json"), json.stringify(0));
+        //System.out.println(json.stringify(0));
+        assertEquals(Util.readFile("results/_4_comment.json"), json.stringify(4));
+        assertEquals(Util.readFile("results/_0_comment.json"), json.stringify(0));
     }
 
     @Test
-    public void testClone() {
+    public void testClone() throws ParseError {
+        Json o = Json.parse(Util.readFile("obj.json"));
+        Json a = Json.parse(Util.readFile("arr.json"));
+        Json bt = Json.parse(Util.readFile("bool-true.json"));
+        Json bf = Json.parse(Util.readFile("bool-false.json"));
+        Json nl = Json.parse(Util.readFile("null.json"));
+        Json nmi = Json.parse(Util.readFile("num-int.json"));
+        Json nmf = Json.parse(Util.readFile("num-float.json"));
+        Json nme = Json.parse(Util.readFile("num-exp.json"));
+        Json s = Json.parse(Util.readFile("str.json"));
+
+        assertEquals(o, o.clone());
+        assertEquals(a, a.clone());
+        assertEquals(bt, bt.clone());
+        assertEquals(bf, bf.clone());
+        assertEquals(nl, nl.clone());
+        assertEquals(nmi, nmi.clone());
+        assertEquals(nmf, nmf.clone());
+        assertEquals(nme, nme.clone());
+        assertEquals(s, s.clone());
+
+        assertEquals(o.hashCode(), o.clone().hashCode());
+        assertEquals(a.hashCode(), a.clone().hashCode());
+        assertEquals(bt.hashCode(), bt.clone().hashCode());
+        assertEquals(bf.hashCode(), bf.clone().hashCode());
+        assertEquals(nl.hashCode(), nl.clone().hashCode());
+        assertEquals(nmi.hashCode(), nmi.clone().hashCode());
+        assertEquals(nmf.hashCode(), nmf.clone().hashCode());
+        assertEquals(nme.hashCode(), nme.clone().hashCode());
+        assertEquals(s.hashCode(), s.clone().hashCode());
+
+        assertEquals(o.stringify(0), ((Json) o.clone()).stringify(0));
+        assertEquals(a.stringify(0), ((Json) a.clone()).stringify(0));
+        assertEquals(bt.stringify(0), ((Json) bt.clone()).stringify(0));
+        assertEquals(bf.stringify(0), ((Json) bf.clone()).stringify(0));
+        assertEquals(nl.stringify(0), ((Json) nl.clone()).stringify(0));
+        assertEquals(nmi.stringify(0), ((Json) nmi.clone()).stringify(0));
+        assertEquals(nmf.stringify(0), ((Json) nmf.clone()).stringify(0));
+        assertEquals(nme.stringify(0), ((Json) nme.clone()).stringify(0));
+        assertEquals(s.stringify(0), ((Json) s.clone()).stringify(0));
+
+        assertEquals(o.stringify(4), ((Json) o.clone()).stringify(4));
+        assertEquals(a.stringify(4), ((Json) a.clone()).stringify(4));
+        assertEquals(bt.stringify(4), ((Json) bt.clone()).stringify(4));
+        assertEquals(bf.stringify(4), ((Json) bf.clone()).stringify(4));
+        assertEquals(nl.stringify(4), ((Json) nl.clone()).stringify(4));
+        assertEquals(nmi.stringify(4), ((Json) nmi.clone()).stringify(4));
+        assertEquals(nmf.stringify(4), ((Json) nmf.clone()).stringify(4));
+        assertEquals(nme.stringify(4), ((Json) nme.clone()).stringify(4));
+        assertEquals(s.stringify(4), ((Json) s.clone()).stringify(4));
+
+        assertEquals(o.stringify(4,1), ((Json) o.clone()).stringify(4,1));
+        assertEquals(a.stringify(4,1), ((Json) a.clone()).stringify(4,1));
+        assertEquals(bt.stringify(4,1), ((Json) bt.clone()).stringify(4,1));
+        assertEquals(bf.stringify(4,1), ((Json) bf.clone()).stringify(4,1));
+        assertEquals(nl.stringify(4,1), ((Json) nl.clone()).stringify(4,1));
+        assertEquals(nmi.stringify(4,1), ((Json) nmi.clone()).stringify(4,1));
+        assertEquals(nmf.stringify(4,1), ((Json) nmf.clone()).stringify(4,1));
+        assertEquals(nme.stringify(4,1), ((Json) nme.clone()).stringify(4,1));
+        assertEquals(s.stringify(4,1), ((Json) s.clone()).stringify(4,1));
     }
 
     @Test
-    public void has() {
+    public void getx() throws ParseError {
+        Json nested = Json.parse(Util.readFile("nested.json"));
+        assertEquals(new JsonStr("merong"), nested.getx("0.a.0.b.c"));
     }
 
     @Test
-    public void longestReachablePrefix() {
+    public void has() throws ParseError {
+        Json nested = Json.parse(Util.readFile("nested.json"));
+        assertTrue(nested.has("0.a.0.b.c"));
+        assertFalse(nested.has("0.a.1.b.c"));
+    }
+
+    @Test
+    public void longestReachablePrefix() throws ParseError {
+        Json nested = Json.parse(Util.readFile("nested.json"));
+        assertEquals("0.a.0", nested.longestReachablePrefix("0.a.0.d.e"));
     }
 }
