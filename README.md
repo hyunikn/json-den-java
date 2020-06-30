@@ -8,7 +8,7 @@ Its distinctive features include
     so that it can preserve and report the original row and column offsets of tokens on syntax errors.
 2. It preserves comment blocks of a special form: it maintains and prints them while stringifying JSON values.
     Enclose comment blocks you want to preserve with `/**` and `*/`.
-3. It provides a convenient 'getx' method which queries subnodes located deep in hierarchical structures.
+3. It provides a convenient `getx` method which queries subnodes located deep in hierarchical structures.
     For example, you can use `json.getx("how.deep.is.your.love")` instead of
     `json.get("how").get("deep").get("is").get("your").get("love")`.
 4. Equals method checks the value equality (not the reference equality).
