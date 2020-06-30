@@ -14,6 +14,8 @@ Its distinctive features include
     It considers hierarchical structures of JSON values.
 5. Clone method deeply copies JSON values.
 
+Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
+
 Json-den-java is under the BSD-2 license.
 
 '
