@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class ArrTest {
 
     @Test
-    public void arrFromToList() throws ParseError {
+    public void test() throws ParseError {
         JsonArr empty0 = new JsonArr();
         JsonArr empty1 = JsonArr.parse("[]");
         assertEquals(empty0, empty1);
@@ -31,16 +31,16 @@ public class ArrTest {
         assertEquals(new JsonArr(Arrays.asList(new JsonNum(2), new JsonNum(2), new JsonNum(2))), arr0.get(1));
         assertEquals(JsonArr.parse("[ 2, 2, 2 ]"), arr0.delete(1));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], [ 3, 3, 3 ] ]"), arr0);
-        assertEquals(JsonArr.parse("[ 3, 3, 3 ]"), arr0.replace(1, new JsonStr("merong")));
-        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], \"merong\" ]"), arr0);
+        assertEquals(JsonArr.parse("[ 3, 3, 3 ]"), arr0.replace(1, new JsonStr("hello")));
+        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], \"hello\" ]"), arr0);
         arr0.insert(1, new JsonNum(3));
-        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"merong\" ]"), arr0);
+        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\" ]"), arr0);
         arr0.append(new JsonNull());
-        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"merong\", null ]"), arr0);
+        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null ]"), arr0);
         arr0.append(new JsonBool(true));
-        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"merong\", null, true ]"), arr0);
+        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null, true ]"), arr0);
         arr0.append(new JsonBool(false));
-        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"merong\", null, true, false ]"), arr0);
+        assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null, true, false ]"), arr0);
 
         assertEquals(6, arr0.size());
         arr0.clear();

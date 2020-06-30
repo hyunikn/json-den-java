@@ -1,27 +1,20 @@
 package com.wingsoft.jsonden;
 
+import com.wingsoft.jsonden.exception.ParseError;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class NullTest {
 
     @Test
-    public void lookup() {
-    }
-
-    @Test
-    public void equalsAndHashCode() {
-    }
-
-    @Test
-    public void testClone() {
-    }
-
-    @Test
-    public void parse() {
-    }
-
-    @Test
-    public void isAndAs() {
+    public void test() throws ParseError {
+        JsonNull nul = new JsonNull();
+        assertEquals(nul, JsonNull.parse("null"));
+        assertEquals(nul.hashCode(), JsonNull.parse("null").hashCode());
+        assertEquals(nul.clone(), JsonNull.parse("null").clone());
+        assertEquals(nul, nul.clone());
+        assertTrue(nul.isNull());
+        assertEquals(nul, nul.asNull());
     }
 }
