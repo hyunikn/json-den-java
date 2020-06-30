@@ -11,7 +11,7 @@ Its distinctive features include
 3. It provides a convenient `getx` method which queries subnodes located deep in hierarchical structures.
     For example, you can use `json.getx("how.deep.is.your.love")` instead of commonly used
     `json.get("how").get("deep").get("is").get("your").get("love")`.
-4. `equals` method checks the value equality (not the reference equality).
+4. `equals` method checks the value equality, not the reference equality.
     It considers hierarchical structures of JSON values.
 5. `clone` method deeply copies JSON values.
 
