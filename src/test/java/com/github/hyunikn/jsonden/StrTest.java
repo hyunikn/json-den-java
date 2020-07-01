@@ -1,6 +1,6 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

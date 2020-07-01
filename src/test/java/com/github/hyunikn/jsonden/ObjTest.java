@@ -1,6 +1,6 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -52,37 +52,5 @@ public class ObjTest {
         assertTrue(obj2.isObj());
         obj0.clear();
         assertEquals(empty0, obj0);
-    }
-
-    @Test
-    public void equalsAndHashCode() {
-    }
-
-    @Test
-    public void testClone() {
-    }
-
-    @Test
-    public void parse() {
-    }
-
-    @Test
-    public void getDelSet() {
-    }
-
-    @Test
-    public void keySet() {
-    }
-
-    @Test
-    public void isAndAs() {
-    }
-
-    @Test
-    public void commentLines() {
-    }
-
-    @Test
-    public void clear() {
     }
 }

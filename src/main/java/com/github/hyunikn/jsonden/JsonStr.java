@@ -1,11 +1,11 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON strings.
+  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON strings.
   */
 public class JsonStr extends JsonSimple {
 
@@ -60,7 +60,7 @@ public class JsonStr extends JsonSimple {
       * Parses the string into a {@code JsonStr}.
       * @param s string to parse
       * @return a JsonStr if s legally represent a JSON string.
-      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json string.
+      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json string.
       */
     public static JsonStr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -73,13 +73,13 @@ public class JsonStr extends JsonSimple {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isStr()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isStr()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isStr() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asStr()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asStr()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonStr asStr() { return this; }

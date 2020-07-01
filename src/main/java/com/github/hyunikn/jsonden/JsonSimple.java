@@ -1,4 +1,4 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
 abstract class JsonSimple extends Json {
 

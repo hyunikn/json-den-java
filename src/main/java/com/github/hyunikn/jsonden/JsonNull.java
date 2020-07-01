@@ -1,11 +1,11 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents the JSON null.
+  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents the JSON null.
   */
 public class JsonNull extends JsonSimple {
 
@@ -50,7 +50,7 @@ public class JsonNull extends JsonSimple {
       * Parses the string into a {@code JsonNull}.
       * @param s string to parse
       * @return a JsonNull if s legally represent a JSON null.
-      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json null.
+      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json null.
       */
     public static JsonNull parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -63,13 +63,13 @@ public class JsonNull extends JsonSimple {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isNull()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isNull()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isNull() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asNull()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asNull()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonNull asNull() { return this; }

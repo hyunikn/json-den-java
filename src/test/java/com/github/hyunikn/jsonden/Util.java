@@ -1,4 +1,4 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
 import java.io.File;
 import java.io.FileInputStream;

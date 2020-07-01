@@ -1,8 +1,8 @@
-package com.wingsoft.jsonden.parser;
+package com.github.hyunikn.jsonden.parser;
 
-import com.wingsoft.jsonden.*;
-import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
-import com.wingsoft.jsonden.parser.antlrgen.JsonParseBaseVisitor;
+import com.github.hyunikn.jsonden.*;
+import com.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
+import com.github.hyunikn.jsonden.parser.antlrgen.JsonParseBaseVisitor;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;

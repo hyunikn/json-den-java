@@ -1,6 +1,6 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON arrays.
+  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON arrays.
   */
 public class JsonArr extends Json {
 
@@ -75,7 +75,7 @@ public class JsonArr extends Json {
       * Parses the string into a {@code JsonArr}.
       * @param s string to parse
       * @return a JsonArr if s legally represent a JSON array.
-      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json array.
+      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json array.
       */
     public static JsonArr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -195,13 +195,13 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isArr()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isArr()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isArr() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asArr()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asArr()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonArr asArr() { return this; }

@@ -1,11 +1,11 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.parser.antlrgen.JsonLex;
-import com.wingsoft.jsonden.parser.antlrgen.JsonParse;
-import com.wingsoft.jsonden.parser.MyParseTreeVisitor;
+import com.github.hyunikn.jsonden.parser.antlrgen.JsonLex;
+import com.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
+import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
-import com.wingsoft.jsonden.exception.ParseError;
-import com.wingsoft.jsonden.exception.Inapplicable;
+import com.github.hyunikn.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.Inapplicable;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -35,7 +35,7 @@ public abstract class Json {
       * Parses the string into a {@code Json}.
       * @param s string to parse
       * @return a Json if s is a legal JSON text
-      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json value.
+      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json value.
       */
     public static Json parse(String s) throws ParseError {
         ANTLRInputStream ais;
@@ -198,163 +198,163 @@ public abstract class Json {
     // for six individual JSON types
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonObj JsonObj} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} or not.
       */
     public boolean isObj()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonArr JsonArr} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} or not.
       */
     public boolean isArr()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonBool JsonBool} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} or not.
       */
     public boolean isBool() { return false; }
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} or not.
       */
     public boolean isNum()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonNull JsonNull} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonNull JsonNull} or not.
       */
     public boolean isNull() { return false; }
 
     /**
-      * Returns whether this is a {@link com.wingsoft.jsonden.JsonStr JsonStr} or not.
+      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} or not.
       */
     public boolean isStr()  { return false; }
 
     //---------------------------------------------
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonObj JsonObj}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj}, otherwise {@code null}.
       */
     public JsonObj  asObj()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonArr JsonArr}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr}, otherwise {@code null}.
       */
     public JsonArr  asArr()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonBool JsonBool}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool}, otherwise {@code null}.
       */
     public JsonBool asBool() { return null; }
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonNum JsonNum}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum}, otherwise {@code null}.
       */
     public JsonNum  asNum()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonNull JsonNull}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonNull JsonNull}, otherwise {@code null}.
       */
     public JsonNull asNull() { return null; }
 
     /**
-      * Returns itself if this is a {@link com.wingsoft.jsonden.JsonStr JsonStr}, otherwise {@code null}.
+      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr}, otherwise {@code null}.
       */
     public JsonStr  asStr()  { return null; }
 
     //---------------------------------------------
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonObj JsonObj} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} this method returns
       * the result of calling its {@code getMap()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public LinkedHashMap<String, Json> getMap() throws Inapplicable {
         return (LinkedHashMap<String, Json>) throwInapplicable("getMap");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonArr JsonArr} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} this method returns
       * the result of calling its {@code getList()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public List<Json> getList() throws Inapplicable {
         return (List<Json>) throwInapplicable("getList");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonBool JsonBool} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} this method returns
       * the result of calling its {@code getBoolean()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public boolean getBoolean() throws Inapplicable {
         return (boolean) throwInapplicable("getBoolean");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getByte()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public byte getByte() throws Inapplicable {
         return (byte) throwInapplicable("getByte");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getShort()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public short getShort() throws Inapplicable {
         return (short) throwInapplicable("getShort");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getInt()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public int getInt() throws Inapplicable {
         return (int) throwInapplicable("getInt");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getLong()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public long getLong() throws Inapplicable {
         return (long) throwInapplicable("getLong");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getFloat()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public float getFloat() throws Inapplicable {
         return (float) throwInapplicable("getFloat");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getDouble()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public double getDouble() throws Inapplicable {
         return (double) throwInapplicable("getDouble");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonNum JsonNum} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
       * the result of calling its {@code getBigDecimal()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public BigDecimal getBigDecimal() throws Inapplicable {
         return (BigDecimal) throwInapplicable("getBigDecimal");
     }
 
     /**
-      * If this is a {@link com.wingsoft.jsonden.JsonStr JsonStr} this method returns
+      * If this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} this method returns
       * the result of calling its {@code getString()}, otherwise throws
-      * {@link com.wingsoft.jsonden.exception.Inapplicable}
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
       */
     public String getString() throws Inapplicable {
         return (String) throwInapplicable("getString");

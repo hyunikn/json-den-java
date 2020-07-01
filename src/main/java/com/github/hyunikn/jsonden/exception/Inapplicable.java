@@ -1,4 +1,4 @@
-package com.wingsoft.jsonden.exception;
+package com.github.hyunikn.jsonden.exception;
 
 /**
   * Thrown when value conversion methods are invoked on an object of a wrong run-time type.

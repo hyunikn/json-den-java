@@ -4,4 +4,4 @@ target/
 /apidocs/
 
 /* ANTLR generated files */
-/src/main/java/com/wingsoft/jsonden/parser/antlrgen/
+/src/main/java/com/github/hyunikn/jsonden/parser/antlrgen/

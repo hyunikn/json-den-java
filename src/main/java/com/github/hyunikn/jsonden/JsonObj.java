@@ -1,6 +1,6 @@
-package com.wingsoft.jsonden;
+package com.github.hyunikn.jsonden;
 
-import com.wingsoft.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
-  * A subclass of {@link com.wingsoft.jsonden.Json Json} which represents JSON objects.
+  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON objects.
   * It remembers the order of member addition, and prints them in that order when stringified.
   */
 public class JsonObj extends Json {
@@ -88,7 +88,7 @@ public class JsonObj extends Json {
       * Parses the string into a {@code JsonObj}.
       * @param s string to parse
       * @return a JsonObj if s legally represent a JSON object.
-      * @throws com.wingsoft.jsonden.exception.ParseError when s does not legally represent a Json object.
+      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json object.
       */
     public static JsonObj parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -145,13 +145,13 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isObj()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isObj()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isObj() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asObj()} of {@link com.wingsoft.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asObj()} of {@link com.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonObj asObj() { return this; }
