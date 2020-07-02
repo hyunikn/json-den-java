@@ -75,31 +75,23 @@ public abstract class Json {
     }
 
     /**
-      * Produces a string which represents this {@code Json} which conforms to the indentation specification.
+      * Produces a string which represents this {@code Json}.
       * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
       *   Zero indentSize results in a minified JSON text.
-      * @param indentLevel starting level of indentation. It must be larger than or equal to zero.
-      */
-    public String stringify(int indentSize, int indentLevel) {
-
-        checkStringifyOptions(indentSize, indentLevel);
-        StringBuffer sbuf = new StringBuffer();
-        write(sbuf, indentSize, indentLevel);
-        return sbuf.toString();
-    }
-
-    /**
-      * Same as {@code stringify(indentSize, 0)}. That is, stringifies from indentation level zero.
       */
     public String stringify(int indentSize) {
-        return stringify(indentSize, 0);
+
+        checkStringifyOptions(indentSize);
+        StringBuffer sbuf = new StringBuffer();
+        write(sbuf, indentSize, 0);
+        return sbuf.toString();
     }
 
     /**
       * Same as {@code stringify(0, 0)}. That is, stringifies into a minified JSON text.
       */
     @Override
-    public String toString() { return stringify(0, 0); }
+    public String toString() { return stringify(0); }
 
     /**
       * Conveniently gets a {@code Json} located deep in the nested structure of this one.
@@ -477,16 +469,12 @@ public abstract class Json {
         throw new Inapplicable(op + " is not applicable to " + getClass().getSimpleName() + " nodes");
     }
 
-    private void checkStringifyOptions(int indentSize, int indentLevel) {
+    private void checkStringifyOptions(int indentSize) {
         if (indentSize > 8) {
             throw new IllegalArgumentException("indentSize cannot be larger than eight");
         }
         if (indentSize < 0) {
             throw new IllegalArgumentException("indentSize cannot be a negative integer");
-        }
-
-        if (indentLevel < 0) {
-            throw new IllegalArgumentException("indentLevel cannot be a negative integer");
         }
     }
 }

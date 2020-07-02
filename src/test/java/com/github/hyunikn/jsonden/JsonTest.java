@@ -65,8 +65,8 @@ public class JsonTest {
         Json json = Json.parse(obj);
         assertTrue(json.isObj());
         assertEquals(Util.readFile("results/_8_obj.json"), json.stringify(8));
-        assertEquals(Util.readFile("results/_41_obj.json"), json.stringify(4, 1));
-        assertEquals(Util.readFile("results/_00_obj.json"), json.toString());
+        assertEquals(Util.readFile("results/_4_obj.json"), json.stringify(4));
+        assertEquals(Util.readFile("results/_0_obj.json"), json.toString());
     }
 
     @Test(expected=ParseError.class)
@@ -171,15 +171,15 @@ public class JsonTest {
         assertEquals(nme.stringify(4), ((Json) nme.clone()).stringify(4));
         assertEquals(s.stringify(4), ((Json) s.clone()).stringify(4));
 
-        assertEquals(o.stringify(4,1), ((Json) o.clone()).stringify(4,1));
-        assertEquals(a.stringify(4,1), ((Json) a.clone()).stringify(4,1));
-        assertEquals(bt.stringify(4,1), ((Json) bt.clone()).stringify(4,1));
-        assertEquals(bf.stringify(4,1), ((Json) bf.clone()).stringify(4,1));
-        assertEquals(nl.stringify(4,1), ((Json) nl.clone()).stringify(4,1));
-        assertEquals(nmi.stringify(4,1), ((Json) nmi.clone()).stringify(4,1));
-        assertEquals(nmf.stringify(4,1), ((Json) nmf.clone()).stringify(4,1));
-        assertEquals(nme.stringify(4,1), ((Json) nme.clone()).stringify(4,1));
-        assertEquals(s.stringify(4,1), ((Json) s.clone()).stringify(4,1));
+        assertEquals(o.stringify(4), ((Json) o.clone()).stringify(4));
+        assertEquals(a.stringify(4), ((Json) a.clone()).stringify(4));
+        assertEquals(bt.stringify(4), ((Json) bt.clone()).stringify(4));
+        assertEquals(bf.stringify(4), ((Json) bf.clone()).stringify(4));
+        assertEquals(nl.stringify(4), ((Json) nl.clone()).stringify(4));
+        assertEquals(nmi.stringify(4), ((Json) nmi.clone()).stringify(4));
+        assertEquals(nmf.stringify(4), ((Json) nmf.clone()).stringify(4));
+        assertEquals(nme.stringify(4), ((Json) nme.clone()).stringify(4));
+        assertEquals(s.stringify(4), ((Json) s.clone()).stringify(4));
     }
 
     @Test
