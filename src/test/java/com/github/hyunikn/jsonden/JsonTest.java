@@ -98,7 +98,7 @@ public class JsonTest {
 
     @Test(expected=ParseError.class)
     public void parseError2() throws ParseError {
-        String text = Util.readFile("dupkeys.json");
+        String text = Util.readFile("parse-err2.json");
         try {
             Json json = Json.parse(text);
         } catch (ParseError e) {
@@ -112,7 +112,7 @@ public class JsonTest {
 
     @Test(expected=ParseError.class)
     public void parseError3() throws ParseError {
-        String text = Util.readFile("parse_err3.json");
+        String text = Util.readFile("parse-err3.json");
         try {
             Json json = Json.parse(text);
         } catch (ParseError e) {
@@ -126,7 +126,7 @@ public class JsonTest {
 
     @Test(expected=ParseError.class)
     public void parseError4() throws ParseError {
-        String text = Util.readFile("dot-in-key.json");
+        String text = Util.readFile("parse-err4.json");
         try {
             Json json = Json.parse(text);
         } catch (ParseError e) {
