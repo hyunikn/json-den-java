@@ -66,8 +66,10 @@ public abstract class Json {
             if (msg != null) {
                 if (msg.startsWith("a duplicate key")) {
                     throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
-                } else if (msg.startsWith("insufficient leading white spaces in a comment line at")) {
+                } else if (msg.startsWith("insufficient leading white spaces of a comment line at")) {
                     throw new ParseError(ParseError.CASE_INSUFFICIENT_INDENT, msg);
+                } else if (msg.startsWith("Json-den does not allow dot")) {
+                    throw new ParseError(ParseError.CASE_DOT_IN_MEMBER_KEY, msg);
                 }
             }
             throw e;

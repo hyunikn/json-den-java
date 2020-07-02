@@ -29,6 +29,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return s.substring(i + 3, len - 2);
     }
 
+    private String getLocation(TerminalNode tn) {
+        Token tk = tn.getSymbol();
+        return String.format("(%d,%d)", tk.getLine(), tk.getCharPositionInLine());
+    }
+
     @Override public Json visitJson(JsonParse.JsonContext ctx) {
         return visit(ctx.commentedValue());
     }
@@ -59,11 +64,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
                         lineList.add("");
                     }
                 } else {
-                    throw new Error("insufficient leading white spaces in a comment line at " + (row + i));
+                    throw new Error("insufficient leading white spaces of a comment line at " + (row + i));
                 }
             } else {
                 if (line.substring(0, col).trim().length() > 0) {
-                    throw new Error("insufficient leading white spaces in a comment line at " + (row + i));
+                    throw new Error("insufficient leading white spaces of a comment line at " + (row + i));
                 }
 
                 String cutLine = ("." + (line.substring(col))).trim();
@@ -116,10 +121,15 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
 
             JsonParse.PairContext pc = cp.pair();
             String key = stripQuoteMarks(pc.STRING().getText());
+            if (key.indexOf('.') >= 0) {
+                throw new Error("Json-den does not allow dot(.) characters in JSON object member keys: '" +
+                        key + "' at " + getLocation(pc.STRING()));
+            }
+
             Json val = visitValue(pc.value());
             Json old = jo.set(key, val);
             if (old != null) {
-                throw new Error("a duplicate key '" + key + "'");
+                throw new Error("a duplicate key '" + key + "' at " + getLocation(pc.STRING()));
             }
 
             TerminalNode tn = cp.COMMENT();

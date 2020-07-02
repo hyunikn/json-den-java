@@ -129,6 +129,8 @@ public class JsonObj extends Json {
     public Json set(String key, Json value) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
+        } else if (key.indexOf('.') >= 0) {
+            throw new IllegalArgumentException("Json-den does not allow dot(.) characters in JSON object member keys");
         } else if (value == null) {
             throw new IllegalArgumentException("value cannot be null");
         } else {

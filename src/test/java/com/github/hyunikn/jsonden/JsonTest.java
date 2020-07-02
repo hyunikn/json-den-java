@@ -88,8 +88,9 @@ public class JsonTest {
         try {
             Json json = JsonArr.parse(text);
         } catch (ParseError e) {
+            //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
             assertEquals(
-                    Util.readFile("results/_err1.msg"),
+                    Util.readFile("results/_parse_err1.msg"),
                     String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
@@ -103,7 +104,35 @@ public class JsonTest {
         } catch (ParseError e) {
             //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
             assertEquals(
-                    Util.readFile("results/_err2.msg"),
+                    Util.readFile("results/_parse_err2.msg"),
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            throw e;
+        }
+    }
+
+    @Test(expected=ParseError.class)
+    public void parseError3() throws ParseError {
+        String text = Util.readFile("parse_err3.json");
+        try {
+            Json json = Json.parse(text);
+        } catch (ParseError e) {
+            //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            assertEquals(
+                    Util.readFile("results/_parse_err3.msg"),
+                    String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            throw e;
+        }
+    }
+
+    @Test(expected=ParseError.class)
+    public void parseError4() throws ParseError {
+        String text = Util.readFile("dot-in-key.json");
+        try {
+            Json json = Json.parse(text);
+        } catch (ParseError e) {
+            //System.out.println(String.format("parse error %d: %s", e.errCase, e.getMessage()));
+            assertEquals(
+                    Util.readFile("results/_parse_err4.msg"),
                     String.format("parse error %d: %s", e.errCase, e.getMessage()));
             throw e;
         }
