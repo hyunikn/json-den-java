@@ -9,10 +9,12 @@ Its distinctive features include
 2. Its parser directly handles line and block comments instead of the common approach,
     minifying JSON texts before parsing,
     so that it can preserve and report the original row and column offsets of tokens on syntax errors.
-3. It provides convenient methods which query and update subnodes located deep in hierarchical structures
+3. It provides convenient methods which query and update JSON nodes located deep in hierarchical structures
     with a single dot delimited path.
     For example, you can use `json.getx("how.deep.is.your.love")` instead of the commonly used form
     `json.get("how").get("deep").get("is").get("your").get("love")`.
+    Those methods are `setx` for JSON objects, `insertx`, `replacex` and `appendx` for JSON arrays,
+    and `getx`, `clearx`, `deletex` and `removex` for both.
 
 Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
 
