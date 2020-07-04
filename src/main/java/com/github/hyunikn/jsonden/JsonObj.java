@@ -119,7 +119,7 @@ public class JsonObj extends Json {
       */
     public JsonObj delete(String key) {
         if (key == null) {
-            throw new IllegalArgumentException("key cannot be null");
+            throw new IllegalArgumentException("failed to delete: key cannot be null");
         } else {
             map.remove(key);
             return this;
@@ -132,7 +132,7 @@ public class JsonObj extends Json {
       */
     public Json remove(String key) {
         if (key == null) {
-            throw new IllegalArgumentException("key cannot be null");
+            throw new IllegalArgumentException("failed to remove: key cannot be null");
         } else {
             return map.remove(key);
         }
@@ -145,11 +145,12 @@ public class JsonObj extends Json {
       */
     public Json set(String key, Json value) {
         if (key == null) {
-            throw new IllegalArgumentException("key cannot be null");
+            throw new IllegalArgumentException("failed to set: key cannot be null");
         } else if (key.indexOf('.') >= 0) {
-            throw new IllegalArgumentException("Json-den does not allow dot(.) characters in JSON object member keys");
+            throw new IllegalArgumentException("failed to set: " +
+                    "Json-den does not allow dot(.) characters in JSON object member keys");
         } else if (value == null) {
-            throw new IllegalArgumentException("value cannot be null");
+            throw new IllegalArgumentException("failed to set: value cannot be null");
         } else {
             map.put(key, value);
             return this;
@@ -158,7 +159,7 @@ public class JsonObj extends Json {
 
     /**
       * Gets the set of keys.
-      * Iterating the set yields the keys in the order of addition (see LinkedHashSet).
+      * Iterating the set yields the keys in the order of addition (see {@link java.util.LinkedHashSet LinkedHashSet}).
       */
     public LinkedHashSet<String> keySet() {
         return new LinkedHashSet<>(map.keySet());

@@ -141,12 +141,12 @@ public class JsonArr extends Json {
       */
     public JsonArr replace(int index, Json elem) {
         if (elem == null) {
-            throw new IllegalArgumentException("elem cannot be null");
+            throw new IllegalArgumentException("failed to replace: elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
-            throw new IllegalArgumentException("no element at the index " + index);
+            throw new IllegalArgumentException("failed to replace: no element at the index " + index);
         } else {
             list.set(i, elem);
             return this;
@@ -161,12 +161,12 @@ public class JsonArr extends Json {
       */
     public JsonArr insert(int index, Json elem) {
         if (elem == null) {
-            throw new IllegalArgumentException("elem cannot be null");
+            throw new IllegalArgumentException("failed to insert: elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
-            throw new IllegalArgumentException("no element at the index " + index);
+            throw new IllegalArgumentException("failed to insert: no element at the index " + index);
         } else {
             list.add(i, elem);
             return this;
@@ -179,7 +179,7 @@ public class JsonArr extends Json {
       */
     public JsonArr append(Json elem) {
         if (elem == null) {
-            throw new IllegalArgumentException("elem cannot be null");
+            throw new IllegalArgumentException("failed to append: elem cannot be null");
         }
 
         list.add(elem);
