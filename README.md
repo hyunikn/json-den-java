@@ -13,8 +13,10 @@ Its distinctive features include
     with a single dot delimited path.
     For example, you can use `json.getx("how.deep.is.your.love")` instead of the commonly used form
     `json.get("how").get("deep").get("is").get("your").get("love")`.
-    Those methods are `setx` for JSON objects, `insertx`, `replacex` and `appendx` for JSON arrays,
-    and `getx`, `clearx`, `deletex` and `removex` for both.
+    Those methods are
+    1. `setx` for JSON objects
+    2. `insertx`, `replacex` and `appendx` for JSON arrays
+    3. `getx`, `clearx`, `deletex` and `removex` for both.
 
 Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
 
