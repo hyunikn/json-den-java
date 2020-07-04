@@ -6,10 +6,10 @@ Its distinctive features include
 
 1. Method `equals` checks the value equality, not the reference equality, and method `clone` deeply copies JSON values.
     They properly handle hierarchical structures of JSON values.
-2. Its parsing rule directly handles line and block comments without minifying JSON texts before parsing,
+2. Its parsing rule directly handles line and block comments instead of minifying JSON texts before parsing,
     so that it can preserve and report the original row and column offsets of tokens on syntax errors.
 3. It provides a convenient `getx` method which queries subnodes located deep in hierarchical structures.
-    For example, you can use `json.getx("how.deep.is.your.love")` instead of commonly used
+    For example, you can use `json.getx("how.deep.is.your.love")` instead of the commonly used form
     `json.get("how").get("deep").get("is").get("your").get("love")`.
 
 Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
