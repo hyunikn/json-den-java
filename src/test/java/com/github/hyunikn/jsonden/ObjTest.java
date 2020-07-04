@@ -38,8 +38,8 @@ public class ObjTest {
         assertEquals(obj0.hashCode(), obj1.hashCode());
         assertEquals(obj0.clone(), obj1.clone());
 
-        assertEquals(JsonArr.parse("[ 1, 1, 1 ]"), obj0.delete("a"));
-        assertEquals(null, obj0.delete("a"));
+        assertEquals(JsonArr.parse("[ 1, 1, 1 ]"), obj0.remove("a"));
+        assertEquals(null, obj0.remove("a"));
         assertEquals(empty1, obj0.get("o"));
         assertEquals(empty1, obj0.get("o"));
         obj0.set("a", arr);

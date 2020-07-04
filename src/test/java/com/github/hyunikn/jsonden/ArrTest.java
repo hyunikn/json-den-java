@@ -29,9 +29,10 @@ public class ArrTest {
         assertEquals(arr0.clone(), arr1.clone());
 
         assertEquals(new JsonArr(Arrays.asList(new JsonNum(2), new JsonNum(2), new JsonNum(2))), arr0.get(1));
-        assertEquals(JsonArr.parse("[ 2, 2, 2 ]"), arr0.delete(1));
+        assertEquals(JsonArr.parse("[ 2, 2, 2 ]"), arr0.remove(1));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], [ 3, 3, 3 ] ]"), arr0);
-        assertEquals(JsonArr.parse("[ 3, 3, 3 ]"), arr0.replace(1, new JsonStr("hello")));
+        assertEquals(JsonArr.parse("[ 3, 3, 3 ]"), arr0.get(1));
+        arr0.replace(1, new JsonStr("hello"));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], \"hello\" ]"), arr0);
         arr0.insert(1, new JsonNum(3));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\" ]"), arr0);

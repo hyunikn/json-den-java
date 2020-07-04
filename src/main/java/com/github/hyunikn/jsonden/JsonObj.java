@@ -26,6 +26,7 @@ public class JsonObj extends Json {
 
     /**
       * Constructs a {@code JsonObj} from a map.
+      * @param map must not be null.
       */
     public JsonObj(LinkedHashMap<String, Json> map) {
         if (map == null) {
@@ -102,6 +103,7 @@ public class JsonObj extends Json {
 
     /**
       * Gets the value of the key.
+      * @param key must not be null.
       */
     public Json get(String key) {
         if (key == null) {
@@ -112,9 +114,23 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Deletes the member of the key.
+      * Deletes the member of the key and returns this JsonObj for method chaining.
+      * @param key must not be null.
       */
-    public Json delete(String key) {
+    public JsonObj delete(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key cannot be null");
+        } else {
+            map.remove(key);
+            return this;
+        }
+    }
+
+    /**
+      * Removes the member of the key and returns its value, or returns null if there is no member with the key.
+      * @param key must not be null.
+      */
+    public Json remove(String key) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         } else {
@@ -123,8 +139,9 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Sets the value of the key.
-      * @return the old Json of the key if any, otherwise {@code null}
+      * Sets the value of the key and returns this JsonObj for method chaining.
+      * @param key must not be null and must not have a dot (.) character in it.
+      * @param value must not be null
       */
     public Json set(String key, Json value) {
         if (key == null) {
@@ -134,7 +151,8 @@ public class JsonObj extends Json {
         } else if (value == null) {
             throw new IllegalArgumentException("value cannot be null");
         } else {
-            return map.put(key, value);
+            map.put(key, value);
+            return this;
         }
     }
 
@@ -167,10 +185,11 @@ public class JsonObj extends Json {
     // ---------------------------------------------------
 
     /**
-      * Erases all the members.
+      * Erases all the members and returns this JsonObj for method chaining.
       */
-    public void clear() {
+    public JsonObj clear() {
         map.clear();
+        return this;
     }
 
     // ===================================================

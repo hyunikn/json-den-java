@@ -127,10 +127,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             }
 
             Json val = visitValue(pc.value());
-            Json old = jo.set(key, val);
+            Json old = jo.get(key);
             if (old != null) {
                 throw new Error("a duplicate key '" + key + "' at " + getLocation(pc.STRING()));
             }
+            jo.set(key, val);
 
             TerminalNode tn = cp.COMMENT();
             if (tn != null) {

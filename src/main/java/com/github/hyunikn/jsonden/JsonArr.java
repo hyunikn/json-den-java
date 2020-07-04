@@ -24,6 +24,7 @@ public class JsonArr extends Json {
 
     /**
       * Constructs a {@code JsonArr} from a list.
+      * @param list must not be null.
       */
     public JsonArr(List<Json> list) {
         if (list == null) {
@@ -89,6 +90,9 @@ public class JsonArr extends Json {
 
     /**
       * Gets the element at the index.
+      * @param index This method returns a non-null value if the index is one of -n, -n+1, ..., 0, 1, ..., n-1
+      * where n is the size of this JsonArr. -1 indicates the last element, -2 the second last, and so on like
+      * in Python list.
       */
     public Json get(int index) {
         int i = adjustIndex(index);
@@ -100,9 +104,27 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Deletes the element at the index.
+      * Deletes the element at the index and returns this JsonArr for method chaining.
+      * @param index This method deletes nothing if the index is not one of -n, -n+1, ..., 0, 1, ..., n-1
+      * where n is the size of this JsonArr. -1 indicates the last element, -2 the second last, and so on like
+      * in Python list.
       */
-    public Json delete(int index) {
+    public JsonArr delete(int index) {
+        int i = adjustIndex(index);
+        if (i >= 0) {
+            list.remove(i);
+        }
+
+        return this;
+    }
+
+    /**
+      * Removes the element at the index and returns it, or returns null if there is no element at the index.
+      * @param index This method removes nothing and returns null if
+      * the index is not one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
+      * -1 indicates the last element, -2 the second last, and so on like in Python list.
+      */
+    public Json remove(int index) {
         int i = adjustIndex(index);
         if (i < 0) {
             return null;
@@ -113,24 +135,31 @@ public class JsonArr extends Json {
 
     /**
       * Replaces the element at the index with the {@code Json elem}.
+      * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
+      * -1 indicates the last element, -2 the second last, and so on like in Python list.
+      * @param elem must not be null.
       */
-    public Json replace(int index, Json elem) {
+    public JsonArr replace(int index, Json elem) {
         if (elem == null) {
             throw new IllegalArgumentException("elem cannot be null");
         }
 
         int i = adjustIndex(index);
         if (i < 0) {
-            return null;
+            throw new IllegalArgumentException("no element at the index " + index);
         } else {
-            return list.set(i, elem);
+            list.set(i, elem);
+            return this;
         }
     }
 
     /**
-      * Inserts an element at the index.
+      * Inserts an element at the index and returns this JsonArr for method chaining.
+      * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
+      * -1 indicates the last element, -2 the second last, and so on like in Python list.
+      * @param elem must not be null.
       */
-    public void insert(int index, Json elem) {
+    public JsonArr insert(int index, Json elem) {
         if (elem == null) {
             throw new IllegalArgumentException("elem cannot be null");
         }
@@ -140,18 +169,21 @@ public class JsonArr extends Json {
             throw new IllegalArgumentException("no element at the index " + index);
         } else {
             list.add(i, elem);
+            return this;
         }
     }
 
     /**
-      * Appends an element at the end.
+      * Appends an element at the end and returns this JsonArr for method chaining.
+      * @param elem must not be null.
       */
-    public void append(Json elem) {
+    public JsonArr append(Json elem) {
         if (elem == null) {
             throw new IllegalArgumentException("elem cannot be null");
         }
 
         list.add(elem);
+        return this;
     }
 
     /**
@@ -164,14 +196,16 @@ public class JsonArr extends Json {
     // ---------------------------------------------------
 
     /**
-      * Erases all the elements.
+      * Erases all the elements and returns this JsonArr for method chaining.
       */
-    public void clear() {
+    public JsonArr clear() {
         list.clear();
+        return this;
     }
 
     /**
       * Gets the first index of the element
+      * @param elem must not be null.
       * @return the index if the element is present in this {@code JsonArr}, otherwise -1.
       */
     public int indexOf(Json elem) {
@@ -184,6 +218,7 @@ public class JsonArr extends Json {
 
     /**
       * Gets the last index of the element.
+      * @param elem must not be null.
       * @return the index if the element is present in this {@code JsonArr}, otherwise -1.
       */
     public int lastIndexOf(Json elem) {
