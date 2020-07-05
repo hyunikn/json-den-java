@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
 import java.io.IOException;
 import java.io.StringReader;
 
+import java.math.BigInteger;
 import java.math.BigDecimal;
 
 import java.util.Set;
@@ -731,6 +732,15 @@ public abstract class Json {
       */
     public double getDouble() throws Inapplicable {
         return (double) throwInapplicable("getDouble");
+    }
+
+    /**
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
+      * the result of calling its {@code getBigInteger()}, otherwise throws
+      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      */
+    public BigInteger getBigInteger() throws Inapplicable {
+        return (BigInteger) throwInapplicable("getBigInteger");
     }
 
     /**

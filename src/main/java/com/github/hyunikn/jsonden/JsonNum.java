@@ -46,6 +46,10 @@ public class JsonNum extends JsonSimple {
         super(Double.toString(val));
     }
 
+    public JsonNum(BigInteger val) {
+        super(val.toString());
+    }
+
     public JsonNum(BigDecimal val) {
         super(val.toPlainString());
     }
@@ -197,6 +201,18 @@ public class JsonNum extends JsonSimple {
     }
 
     /**
+      * Returns the value as a {@code BigInteger}.
+      */
+    @Override
+    public BigInteger getBigInteger() {
+        if (bigIntegerVal == null) {
+            bigIntegerVal = new BigInteger(text);
+        }
+
+        return bigIntegerVal;
+    }
+
+    /**
       * Returns the value as a {@code BigDecimal}.
       */
     @Override
@@ -233,6 +249,8 @@ public class JsonNum extends JsonSimple {
 
     protected double doubleVal;
     protected boolean doubleCached;
+
+    protected BigInteger bigIntegerVal;
 
     protected BigDecimal bigDecimalVal;
 
