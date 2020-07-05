@@ -127,8 +127,9 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Removes the member of the key and returns its value, or returns null if there is no member with the key.
+      * Removes the member of the key and returns its value.
       * @param key must not be null.
+      * @return the removed value of the key, or null if no such value.
       */
     public Json remove(String key) {
         if (key == null) {

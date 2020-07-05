@@ -119,10 +119,11 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Removes the element at the index and returns it, or returns null if there is no element at the index.
+      * Removes the element at the index and returns it.
       * @param index This method removes nothing and returns null if
       * the index is not one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
       * -1 indicates the last element, -2 the second last, and so on like in Python list.
+      * @return the removed value of the index, or null if no such value.
       */
     public Json remove(int index) {
         int i = adjustIndex(index);

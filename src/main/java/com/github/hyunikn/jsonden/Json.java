@@ -25,7 +25,8 @@ import java.util.LinkedHashMap;
 
 /**
   * Superclass of all JSON value classes.
-  * A {@code Json} can keep a string array for its comment lines, which is printed together with its value when stringified.
+  * A {@code Json} can keep a string array for its comment lines,
+  * which is printed together with its value when stringified.
   */
 public abstract class Json {
 
@@ -96,11 +97,34 @@ public abstract class Json {
     @Override
     public String toString() { return stringify(0); }
 
+    /**
+      * Gets the comment lines.
+      */
+    public String[] commentLines() {
+        return commentLines;
+    }
+
+    /**
+      * Sets the comment lines.
+      */
+    public void setCommentLines(String[] commentLines) {
+        this.commentLines = commentLines;
+    }
+
+    /**
+      * Deep clone.
+      */
+    @Override
+    public abstract Object clone();
+
+    // --------------------------------------------------
+    // convenience methods
+
     // ---------------------------------------------------------------------
     // series of ...x methods
 
     /**
-      * Gets a {@code Json} located deep in the nested structure of this one.
+      * Gets a {@code Json} located deep in the nested structure.
       * For example, one can use {@code json.getx("a.b.c.d.e")} instead of
       * {@code json.get("a").get("b").get("c").get("d").get("e")} which is common in many
       * JSON libraries.
@@ -128,14 +152,15 @@ public abstract class Json {
     }
 
     /**
-      * Clears a {@code JsonObj} or {@code JsonArr} located deep in the nested structure of this one.
+      * Clears a {@code JsonObj} or {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.clearx("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d.e")).clear()} if a JsonObj is at the path, or to
-      * {@code ((JsonArr) json.getx("a.b.c.d.e")).clear()} if a JsonArr is at the path.
+      * {@code ((JsonObj) json.getx("a.b.c.d.e")).clear()} if a {@code JsonObj} is at the path, or to
+      * {@code ((JsonArr) json.getx("a.b.c.d.e")).clear()} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when neither a JsonObj nor a JsonArr is at the path.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when neither a {@code JsonObj} nor a {@code JsonArr}
+      * is at the path.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
       */
     public Json clearx(String path) throws Inapplicable, UnreachablePath {
@@ -149,9 +174,9 @@ public abstract class Json {
             throw new UnreachablePath(path + " unreachable");
         } else {
             if (subnode.isObj()) {
-                ((JsonObj) subnode).clear();
+                subnode.asObj().clear();
             } else if (subnode.isArr()) {
-                ((JsonArr) subnode).clear();
+                subnode.asArr().clear();
             } else {
                 throw new Inapplicable("clear is not applicable to a " + subnode.getClass().getSimpleName());
             }
@@ -161,14 +186,16 @@ public abstract class Json {
     }
 
     /**
-      * Deletes a {@code Json} located deep in the nested structure of this one.
+      * Deletes a {@code Json} located deep in the nested structure.
       * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).delete("e")} if a JsonObj is at the parent path "a.b.c.d".
-      * The behavior is similar when the parent of the target node is a JsonArr.
+      * {@code ((JsonObj) json.getx("a.b.c.d")).delete("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
+      * The behavior is similar when the parent of the target node is a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither a JsonObj nor a JsonArr.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither
+      * a {@code JsonObj} nor a {@code
+      * JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
     public Json deletex(String path) throws Inapplicable, UnreachablePath {
@@ -192,7 +219,7 @@ public abstract class Json {
         }
 
         if (parent.isObj()) {
-            ((JsonObj) parent).delete(divided[1]);
+            parent.asObj().delete(divided[1]);
         } else if (parent.isArr()) {
             int idx;
             try {
@@ -202,7 +229,7 @@ public abstract class Json {
                         "the last path segment must be an integer, which is not in " + path);
             }
 
-            ((JsonArr) parent).delete(idx);
+            parent.asArr().delete(idx);
         } else {
             throw new Inapplicable("delete is not applicable to a " + parent.getClass().getSimpleName());
         }
@@ -211,14 +238,16 @@ public abstract class Json {
     }
 
     /**
-      * Removes a {@code Json} located deep in the nested structure of this one.
+      * Removes a {@code Json} located deep in the nested structure.
       * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).remove("e")} if a JsonObj is at the parent path "a.b.c.d".
-      * The behavior is similar when the parent of the target node is a JsonArr.
+      * {@code ((JsonObj) json.getx("a.b.c.d")).remove("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
+      * The behavior is similar when the parent of the target node is a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return the removed Json, or null if none is removed.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither a JsonObj nor a JsonArr.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither
+      * a {@code JsonObj} nor a {@code
+      * JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
     public Json removex(String path) throws Inapplicable, UnreachablePath {
@@ -242,7 +271,7 @@ public abstract class Json {
         }
 
         if (parent.isObj()) {
-            return ((JsonObj) parent).remove(divided[1]);
+            return parent.asObj().remove(divided[1]);
         } else if (parent.isArr()) {
             int idx;
             try {
@@ -252,20 +281,20 @@ public abstract class Json {
                         "the last path segment must be an integer, which is not in " + path);
             }
 
-            return ((JsonArr) parent).remove(idx);
+            return parent.asArr().remove(idx);
         } else {
             throw new Inapplicable("remove is not applicable to a " + parent.getClass().getSimpleName());
         }
     }
 
     /**
-      * Sets a {@code Json} into a {@code JsonObj} deep in the nested structure of this one.
+      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure.
       * For example, {@code json.setx("a.b.c.d.e", val)} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).set("e", val)} if a JsonObj is at the parent path "a.b.c.d".
+      * {@code ((JsonObj) json.getx("a.b.c.d")).set("e", val)} if a {@code JsonObj} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a JsonObj.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
     public Json setx(String path, Json val) throws Inapplicable, UnreachablePath {
@@ -289,7 +318,7 @@ public abstract class Json {
         }
 
         if (parent.isObj()) {
-            ((JsonObj) parent).set(divided[1], val);
+            parent.asObj().set(divided[1], val);
         } else {
             throw new Inapplicable("set is not applicable to a " + parent.getClass().getSimpleName());
         }
@@ -298,13 +327,13 @@ public abstract class Json {
     }
 
     /**
-      * Replaces a {@code Json} into a {@code JsonArr} deep in the nested structure of this one.
+      * Replaces a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.replacex("a.b.c.d.0", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d")).replace("0", val)} if a JsonArr is at the parent path "a.b.c.d".
+      * {@code ((JsonArr) json.getx("a.b.c.d")).replace("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a JsonArr.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
     public Json replacex(String path, Json val) throws Inapplicable, UnreachablePath {
@@ -336,7 +365,7 @@ public abstract class Json {
                         "the last path segment must be an integer, which is not in " + path);
             }
 
-            ((JsonArr) parent).replace(idx, val);
+            parent.asArr().replace(idx, val);
         } else {
             throw new Inapplicable("replace is not applicable to a " + parent.getClass().getSimpleName());
         }
@@ -345,13 +374,13 @@ public abstract class Json {
     }
 
     /**
-      * Inserts a {@code Json} into a {@code JsonArr} deep in the nested structure of this one.
+      * Inserts a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.insertx("a.b.c.d.0", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d")).insert("0", val)} if a JsonArr is at the parent path "a.b.c.d".
+      * {@code ((JsonArr) json.getx("a.b.c.d")).insert("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a JsonArr.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
     public Json insertx(String path, Json val) throws Inapplicable, UnreachablePath {
@@ -383,7 +412,7 @@ public abstract class Json {
                         "the last path segment must be an integer, which is not in " + path);
             }
 
-            ((JsonArr) parent).insert(idx, val);
+            parent.asArr().insert(idx, val);
         } else {
             throw new Inapplicable("insert is not applicable to a " + parent.getClass().getSimpleName());
         }
@@ -392,13 +421,13 @@ public abstract class Json {
     }
 
     /**
-      * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure of this one.
+      * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.appendx("a.b.c.d.e", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d.e")).append(val)} if a JsonArr is at the path.
+      * {@code ((JsonArr) json.getx("a.b.c.d.e")).append(val)} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a JsonArr is not at the path.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
       */
     public Json appendx(String path, Json val) throws Inapplicable, UnreachablePath {
@@ -412,7 +441,7 @@ public abstract class Json {
             throw new UnreachablePath(path + " unreachable");
         } else {
             if (subnode.isArr()) {
-                ((JsonArr) subnode).append(val);
+                subnode.asArr().append(val);
             } else {
                 throw new Inapplicable("append is not applicable to a " + subnode.getClass().getSimpleName());
             }
@@ -424,28 +453,96 @@ public abstract class Json {
     // series of ...x methods
     // ---------------------------------------------------------------------
 
+    // ---------------------------------------------------------------------
+    // setxp and appendxp methods
+
     /**
-      * Gets the comment lines.
+      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure
+      * creating parent nodes as needed.
+      * Its behavior is similar to {@link com.github.hyunikn.jsonden.Json#setx setx}
+      * except that it creates necessary parent nodes if they are absent,
+      * which is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option,
+      * while {@link com.github.hyunikn.jsonden.Json#setx setx} throws
+      * {@link com.github.hyunikn.jsonden.exception.UnreachablePath UnreachablePath} on absent parent nodes.
+      * For example, {@code json.setxp("a.b.c.d.e", val)} behaves the same as {@code json.setx("a.b.c.d.e", val)}
+      * if the path {@code "a.b.c.d"} is reachable from {@code json}. Otherwise, it creates absent parent nodes
+      * and then does the set.
+      * Each of the created parent nodes until the last one is either a {@code JsonArr} or a {@code JsonObj}
+      * depending on whether
+      * the next path segment represent an integer (array element index) or not,
+      * and the last created parent is always a {@code JsonObj}.
+      * @param path dot delimited segments of a path to a Json.
+      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
+      * @return this Json object for method chaining
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
+      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
-    public String[] commentLines() {
-        return commentLines;
+    public Json setxp(String path, Json val) throws Inapplicable, UnreachablePath {
+
+        if (path == null) {
+            throw new IllegalArgumentException("path cannot be null");
+        }
+
+        String[] divided = Util.dividePath(path);
+        assert divided != null;
+        String parentPath = divided[0];
+
+        Json parent;
+        if (parentPath == null) {
+            parent = this;
+        } else {
+            parent = getxp(parentPath, TYPE_OBJECT);
+        }
+
+        if (parent.isObj()) {
+            parent.asObj().set(divided[1], val);
+        } else {
+            throw new Inapplicable("setp is not applicable to a " + parent.getClass().getSimpleName());
+        }
+
+        return this;
     }
 
     /**
-      * Sets the comment lines.
+      * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure
+      * creating parent nodes as needed.
+      * Its behavior is similar to {@link com.github.hyunikn.jsonden.Json#appendx appendx}
+      * except that it creates necessary parent nodes if they are absent,
+      * which is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option,
+      * while {@link com.github.hyunikn.jsonden.Json#appendx appendx} throws
+      * {@link com.github.hyunikn.jsonden.exception.UnreachablePath UnreachablePath} on absent parent nodes.
+      * For example, {@code json.appendxp("a.b.c.d.e", val)} behaves the same as {@code json.appendx("a.b.c.d.e", val)}
+      * if the path {@code "a.b.c.d.e"} is reachable from {@code json}. Otherwise, it creates absent parent nodes
+      * and then does the append.
+      * Each of the created parent nodes until the last one is either a {@code JsonArr} or a {@code JsonObj}
+      * depending on whether
+      * the next path segment represent an integer (array element index) or not,
+      * and the last created parent is always a {@code JsonArr}.
+      * @param path dot delimited segments of a path to a Json.
+      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
+      * @return this Json object for method chaining
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
+      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
-    public void setCommentLines(String[] commentLines) {
-        this.commentLines = commentLines;
+    public Json appendxp(String path, Json val) throws Inapplicable, UnreachablePath {
+
+        if (path == null) {
+            throw new IllegalArgumentException("path cannot be null");
+        }
+
+        Json subnode = getxp(path, TYPE_ARRAY);
+        assert subnode != null;
+        if (subnode.isArr()) {
+            subnode.asArr().append(val);
+        } else {
+            throw new Inapplicable("append is not applicable to a " + subnode.getClass().getSimpleName());
+        }
+
+        return this;
     }
 
-    /**
-      * Deep clone.
-      */
-    @Override
-    public abstract Object clone();
-
-    // --------------------------------------------------
-    // convenience methods
+    // setxp and appendxp methods
+    // ---------------------------------------------------------------------
 
     /**
       * Returns whether a descendant JSON node exists at the path or not.
@@ -657,6 +754,13 @@ public abstract class Json {
     // ===================================================
     // Protected
 
+    protected static final int TYPE_OBJECT  = 0;
+    protected static final int TYPE_ARRAY   = 1;
+    protected static final int TYPE_BOOLEAN = 2;
+    protected static final int TYPE_NULL    = 3;
+    protected static final int TYPE_NUMBER  = 4;
+    protected static final int TYPE_STRING  = 5;
+
     protected String[] commentLines;
 
     protected Json() { }
@@ -668,6 +772,55 @@ public abstract class Json {
 
     // --------------------------------------------------
     // Utility
+
+    protected Json getxp(String path, int typeOfLastNode) throws UnreachablePath {
+
+        assert (path != null);
+
+        String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
+        int len = segments.length;
+
+        Json childNode = null;
+        Json parentNode = this;
+        int i = 0;
+        for (String s: segments) {
+            childNode = parentNode.getChild(s);
+            if (childNode == null) {
+                if (parentNode instanceof JsonSimple) {
+                    throw new UnreachablePath("cannot create a subnode at " +
+                            String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                            " because its parent is a terminal node whose type is " +
+                            parentNode.getClass().getSimpleName());
+                }
+
+                try {
+                    return createMissingNodes(parentNode, segments, i, typeOfLastNode); // returns the target node.
+                } catch (Throwable e) {
+
+                    // revert a possible side effect, that is, remove the possibly added child.
+                    if (parentNode.isObj()) {
+                        parentNode.asObj().remove(s);
+                    } else if (parentNode.isArr()) {
+                        try {
+                            int idx = Integer.parseInt(s);
+                            parentNode.asArr().remove(idx);
+                        } catch (NumberFormatException ee) {
+                            // do nothing
+                        }
+                    } else {
+                        assert false;
+                    }
+                    throw e;
+                }
+            } else {
+                i++;
+                parentNode = childNode;
+            }
+        }
+
+        assert childNode != null;
+        return childNode;
+    }
 
     protected static void writeIndent(StringBuffer sbuf, int indentSize, int indentLevel) {
 
@@ -708,6 +861,72 @@ public abstract class Json {
 
     // ===================================================
     // Private
+
+    private Json createMissingNodes(Json lastReachable, String[] segments,
+            int idxOfFirstMissing, int typeOfLastNode) throws UnreachablePath {
+
+        Json childNode = null;
+        int len = segments.length;
+
+        Json parentNode = lastReachable;
+        for (int i = idxOfFirstMissing; i < len; i++) {
+            String segment = segments[i];
+
+            if (i == len - 1) {
+                // the last to create
+                switch (typeOfLastNode) {
+                    case TYPE_OBJECT:
+                        childNode = new JsonObj();
+                    case TYPE_ARRAY:
+                        childNode = new JsonArr();
+                    default:
+                        assert false;   // unreachable
+                        childNode = null;   // just to make the compiler happy
+                }
+            } else {
+                String nextSegment = segments[i + 1];
+                boolean isNextInt;
+                try {
+                    if (Integer.parseInt(nextSegment) != 0) {
+                        throw new UnreachablePath("an array node to create at " +
+                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                                " cannot have an element at the non-zero index " + nextSegment);
+                    }
+                    isNextInt = true;
+                } catch (NumberFormatException e) {
+                    isNextInt = false;
+                }
+
+                childNode = isNextInt ? new JsonArr() : new JsonObj();
+            }
+
+            if (parentNode.isObj()) {
+                parentNode.asObj().set(segment, childNode);
+            } else if (parentNode.isArr()) {
+                if (parentNode == lastReachable) {
+                    try {
+                        int idx = Integer.parseInt(segment);
+                        if (idx != parentNode.asArr().size()) {
+                            throw new UnreachablePath("cannot create a node at " +
+                                    String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                                    " because its parent array node has elements fewer than " + idx);
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new UnreachablePath("cannot create a node at " +
+                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                                " because its parent is an array node and the last path segment " + segment +
+                                " is not an integer");
+                    }
+                }
+                parentNode.asArr().append(childNode);
+            } else {
+                assert false; // unreachable
+            }
+        }
+
+        assert childNode != null;
+        return childNode;
+    }
 
     private static String getDesc(RecognitionException cause, JsonParse parser) {
 
