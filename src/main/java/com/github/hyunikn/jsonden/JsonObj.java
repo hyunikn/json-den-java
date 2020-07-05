@@ -4,6 +4,9 @@ import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
+import java.math.BigInteger;
+import java.math.BigDecimal;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -114,8 +117,9 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Deletes the member of the key and returns this JsonObj for method chaining.
+      * Deletes the member of the key.
       * @param key must not be null.
+      * @return this {@code JsonObj} for method chaining
       */
     public JsonObj delete(String key) {
         if (key == null) {
@@ -140,9 +144,10 @@ public class JsonObj extends Json {
     }
 
     /**
-      * Sets the value of the key and returns this JsonObj for method chaining.
+      * Sets the value of the key.
       * @param key must not be null and must not have a dot (.) character in it.
-      * @param value must not be null
+      * @param elem if {@code elem} is null then it is understood as a JsonNull.
+      * @return this {@code JsonObj} for method chaining
       */
     public JsonObj set(String key, Json value) {
         if (key == null) {
@@ -150,12 +155,54 @@ public class JsonObj extends Json {
         } else if (key.indexOf('.') >= 0) {
             throw new IllegalArgumentException("failed to set: " +
                     "Json-den does not allow dot(.) characters in JSON object member keys");
-        } else if (value == null) {
-            throw new IllegalArgumentException("failed to set: value cannot be null");
-        } else {
-            map.put(key, value);
-            return this;
         }
+
+        if (value == null) {
+            value = new JsonNull();
+        }
+
+        map.put(key, value);
+        return this;
+    }
+    /** short for {@code set(key, new JsonBool(b))} */
+    public JsonObj set(String key, boolean b) {
+        return set(key, new JsonBool(b));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, byte n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, short n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, int n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, long n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, float n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, double n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, BigInteger n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonNum(n))} */
+    public JsonObj set(String key, BigDecimal n) {
+        return set(key, new JsonNum(n));
+    }
+    /** short for {@code set(key, new JsonStr(s))} */
+    public JsonObj set(String key, String s) {
+        return set(key, new JsonStr(s));
     }
 
     /**
@@ -187,7 +234,8 @@ public class JsonObj extends Json {
     // ---------------------------------------------------
 
     /**
-      * Erases all the members and returns this JsonObj for method chaining.
+      * Erases all the members.
+      * @return this {@code JsonObj} for method chaining
       */
     public JsonObj clear() {
         map.clear();

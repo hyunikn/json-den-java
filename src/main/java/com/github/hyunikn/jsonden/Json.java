@@ -159,7 +159,7 @@ public abstract class Json {
       * {@code json.getx("a.b.c.d.e").asArr().clear()} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when neither a {@code JsonObj} nor a {@code JsonArr}
       * is at the path.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
@@ -193,7 +193,7 @@ public abstract class Json {
       * The behavior is similar when the parent of the target node is a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither
       * a {@code JsonObj} nor a {@code
       * JsonArr}.
@@ -294,7 +294,8 @@ public abstract class Json {
       * {@code json.getx("a.b.c.d").asObj().set("e", val)} if a {@code JsonObj} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @param val if {@code val} is null then it is understood as a JsonNull.
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
@@ -326,6 +327,46 @@ public abstract class Json {
 
         return this;
     }
+    /** short for {@code setx(path, new JsonBool(b))} */
+    public Json setx(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonBool(b));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, byte n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, short n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, int n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, long n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, float n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, double n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public Json setx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonStr(s))} */
+    public Json setx(String path, String s) throws Inapplicable, UnreachablePath {
+        return setx(path, new JsonStr(s));
+    }
 
     /**
       * Replaces a {@code Json} into a {@code JsonArr} located deep in the nested structure.
@@ -333,7 +374,7 @@ public abstract class Json {
       * {@code json.getx("a.b.c.d").asArr().replace("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
@@ -380,7 +421,7 @@ public abstract class Json {
       * {@code json.getx("a.b.c.d").asArr().insert("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
       */
@@ -427,7 +468,7 @@ public abstract class Json {
       * {@code json.getx("a.b.c.d.e").asArr().append(val)} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
       */
@@ -474,7 +515,7 @@ public abstract class Json {
       * and the last created parent is always a {@code JsonObj}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
@@ -521,7 +562,7 @@ public abstract class Json {
       * and the last created parent is always a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this Json object for method chaining
+      * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */

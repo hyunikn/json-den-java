@@ -4,6 +4,9 @@ import com.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
+import java.math.BigInteger;
+import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.LinkedList;
 
@@ -104,10 +107,11 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Deletes the element at the index and returns this JsonArr for method chaining.
+      * Deletes the element at the index.
       * @param index This method deletes nothing if the index is not one of -n, -n+1, ..., 0, 1, ..., n-1
       * where n is the size of this JsonArr. -1 indicates the last element, -2 the second last, and so on like
       * in Python list.
+      * @return this {@code JsonArr} for method chaining
       */
     public JsonArr delete(int index) {
         int i = adjustIndex(index);
@@ -138,53 +142,180 @@ public class JsonArr extends Json {
       * Replaces the element at the index with the {@code Json elem}.
       * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
       * -1 indicates the last element, -2 the second last, and so on like in Python list.
-      * @param elem must not be null.
+      * @param elem if {@code elem} is null then it is understood as a JsonNull.
       */
     public JsonArr replace(int index, Json elem) {
-        if (elem == null) {
-            throw new IllegalArgumentException("failed to replace: elem cannot be null");
-        }
 
         int i = adjustIndex(index);
         if (i < 0) {
             throw new IllegalArgumentException("failed to replace: no element at the index " + index);
         } else {
+
+            if (elem == null) {
+                elem = new JsonNull();
+            }
+
             list.set(i, elem);
             return this;
         }
     }
+    /** short for {@code replace(index, new JsonBool(b))} */
+    public JsonArr replace(int index, boolean b) {
+        return replace(index, new JsonBool(b));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, byte n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, short n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, int n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, long n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, float n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, double n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, BigInteger n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonNum(n))} */
+    public JsonArr replace(int index, BigDecimal n) {
+        return replace(index, new JsonNum(n));
+    }
+    /** short for {@code replace(index, new JsonStr(s))} */
+    public JsonArr replace(int index, String s) {
+        return replace(index, new JsonStr(s));
+    }
 
     /**
-      * Inserts an element at the index and returns this JsonArr for method chaining.
+      * Inserts an element at the index.
       * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
       * -1 indicates the last element, -2 the second last, and so on like in Python list.
-      * @param elem must not be null.
+      * @param elem if {@code elem} is null then it is understood as a JsonNull.
+      * @return this {@code JsonArr} for method chaining
       */
     public JsonArr insert(int index, Json elem) {
-        if (elem == null) {
-            throw new IllegalArgumentException("failed to insert: elem cannot be null");
-        }
 
         int i = adjustIndex(index);
         if (i < 0) {
             throw new IllegalArgumentException("failed to insert: no element at the index " + index);
         } else {
+
+            if (elem == null) {
+                elem = new JsonNull();
+            }
+
             list.add(i, elem);
             return this;
         }
     }
+    /** short for {@code insert(index, new JsonBool(b))} */
+    public JsonArr insert(int index, boolean b) {
+        return insert(index, new JsonBool(b));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, byte n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, short n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, int n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, long n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, float n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, double n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, BigInteger n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonNum(n))} */
+    public JsonArr insert(int index, BigDecimal n) {
+        return insert(index, new JsonNum(n));
+    }
+    /** short for {@code insert(index, new JsonStr(s))} */
+    public JsonArr insert(int index, String s) {
+        return insert(index, new JsonStr(s));
+    }
 
     /**
-      * Appends an element at the end and returns this JsonArr for method chaining.
-      * @param elem must not be null.
+      * Appends an element at the end.
+      * @param elem if {@code elem} is null then it is understood as a JsonNull.
+      * @return this {@code JsonArr} for method chaining
       */
     public JsonArr append(Json elem) {
+
         if (elem == null) {
-            throw new IllegalArgumentException("failed to append: elem cannot be null");
+            elem = new JsonNull();
         }
 
         list.add(elem);
         return this;
+    }
+    /** short for {@code append(new JsonBool(b))} */
+    public JsonArr append(boolean b) {
+        return append(new JsonBool(b));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(byte n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(short n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(int n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(long n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(float n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(double n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(BigInteger n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonNum(n))} */
+    public JsonArr append(BigDecimal n) {
+        return append(new JsonNum(n));
+    }
+    /** short for {@code append(new JsonStr(s))} */
+    public JsonArr append(String s) {
+        return append(new JsonStr(s));
     }
 
     /**
@@ -197,7 +328,8 @@ public class JsonArr extends Json {
     // ---------------------------------------------------
 
     /**
-      * Erases all the elements and returns this JsonArr for method chaining.
+      * Erases all the elements.
+      * @return this {@code JsonArr} for method chaining
       */
     public JsonArr clear() {
         list.clear();
