@@ -1,6 +1,8 @@
 package com.github.hyunikn.jsonden;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.Inapplicable;
+import com.github.hyunikn.jsonden.exception.UnreachablePath;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -228,5 +230,126 @@ public class JsonTest {
     public void longestReachablePrefix() throws ParseError {
         Json nested = Json.parse(Util.readFile("nested.json"));
         assertEquals("0.a.0", nested.longestReachablePrefix("0.a.0.d.e"));
+    }
+
+    @Test
+    public void xMethods() throws ParseError, Inapplicable, UnreachablePath {
+        Json r, test = Json.parse(Util.readFile("x_methods.json"));
+
+        r = ((Json) test.clone()).clearx("how.deep.is.your.love");
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_clearx.json")), r);
+
+        r = ((Json) test.clone()).deletex("how.deep.is.your.love");
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_deletex.json")), r);
+
+        r = (Json) test.clone();
+        r.removex("how.deep.is.your.love");
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_deletex.json")), r);
+
+        r = ((Json) test.clone()).setx("how.deep.is.your.love", 1000);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_setx.json")), r);
+
+        r = ((Json) test.clone()).replacex("how.deep.is.your.love.1", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_replacex.json")), r);
+
+        r = ((Json) test.clone()).insertx("how.deep.is.your.love.1", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_insertx.json")), r);
+
+        r = ((Json) test.clone()).appendx("how.deep.is.your.love", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_appendx.json")), r);
+    }
+
+    @Test
+    public void xpMethods() throws ParseError, Inapplicable, UnreachablePath {
+        Json r, emptyObj = new JsonObj(), emptyArr = new JsonArr();
+
+        r = ((Json) emptyObj.clone()).setxp("a.0.b.0.c.0", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_setxp1.json")), r);
+
+        r = ((Json) emptyArr.clone()).setxp("0.a.0.b.0.c.0", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_setxp2.json")), r);
+
+        r = ((Json) emptyObj.clone()).appendxp("a.0.b.0.c", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_appendxp1.json")), r);
+
+        r = ((Json) emptyArr.clone()).appendxp("0.a.0.b.0.c", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_appendxp2.json")), r);
+
+        r = ((Json) emptyObj.clone()).appendxp("a.0.b.0.c.0", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_appendxp3.json")), r);
+
+        r = ((Json) emptyArr.clone()).appendxp("0.a.0.b.0.c.0", true);
+        //System.out.println(r.toString());
+        assertEquals(Json.parse(Util.readFile("results/_appendxp4.json")), r);
+    }
+
+    @Test(expected=UnreachablePath.class)
+    public void clearxUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().clearx("a.b.c.d");
+    }
+    @Test(expected=UnreachablePath.class)
+    public void deletexUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().deletex("a.b.c.d");
+    }
+    @Test(expected=UnreachablePath.class)
+    public void removexUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().removex("a.b.c.d");
+    }
+    @Test(expected=UnreachablePath.class)
+    public void setxUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setx("a.b.c.d", (Json) null);
+    }
+    @Test(expected=UnreachablePath.class)
+    public void replacexUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().replacex("a.b.c.d.0", (Json) null);
+    }
+    @Test(expected=UnreachablePath.class)
+    public void insertxUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().insertx("a.b.c.d.0", (Json) null);
+    }
+    @Test(expected=UnreachablePath.class)
+    public void appendxUnreachable() throws Inapplicable, UnreachablePath {
+        new JsonObj().appendx("a.b.c.d", (Json) null);
+    }
+
+    @Test(expected=Inapplicable.class)
+    public void clearxInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c.d", true).clearx("a.b.c.d");
+    }
+    @Test(expected=Inapplicable.class)
+    public void deletexInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c", true).deletex("a.b.c.d");
+    }
+    @Test(expected=Inapplicable.class)
+    public void removexInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c", true).removex("a.b.c.d");
+    }
+    @Test(expected=Inapplicable.class)
+    public void setxInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().appendxp("a.b.c", true).setx("a.b.c.d", (Json) null);
+    }
+    @Test(expected=Inapplicable.class)
+    public void replacexInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c.d.e", true).replacex("a.b.c.d.0", (Json) null);
+    }
+    @Test(expected=Inapplicable.class)
+    public void insertxInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c.d.e", true).insertx("a.b.c.d.0", (Json) null);
+    }
+    @Test(expected=Inapplicable.class)
+    public void appendxInapplicable() throws Inapplicable, UnreachablePath {
+        new JsonObj().setxp("a.b.c.d.e", true).appendx("a.b.c.d", (Json) null);
     }
 }

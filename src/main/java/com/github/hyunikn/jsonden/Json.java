@@ -205,7 +205,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -257,7 +257,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -305,7 +305,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -384,7 +384,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -414,6 +414,47 @@ public abstract class Json {
 
         return this;
     }
+    /** short for {@code replacex(path, new JsonBool(b))} */
+    public Json replacex(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonBool(b));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, byte n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, short n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, int n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, long n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, float n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, double n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonNum(n))} */
+    public Json replacex(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonNum(n));
+    }
+    /** short for {@code replacex(path, new JsonStr(s))} */
+    public Json replacex(String path, String s) throws Inapplicable, UnreachablePath {
+        return replacex(path, new JsonStr(s));
+    }
+
 
     /**
       * Inserts a {@code Json} into a {@code JsonArr} located deep in the nested structure.
@@ -431,7 +472,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -461,6 +502,47 @@ public abstract class Json {
 
         return this;
     }
+    /** short for {@code insertx(path, new JsonBool(b))} */
+    public Json insertx(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonBool(b));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, byte n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, short n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, int n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, long n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, float n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, double n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonNum(n))} */
+    public Json insertx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonNum(n));
+    }
+    /** short for {@code insertx(path, new JsonStr(s))} */
+    public Json insertx(String path, String s) throws Inapplicable, UnreachablePath {
+        return insertx(path, new JsonStr(s));
+    }
+
 
     /**
       * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure.
@@ -491,6 +573,47 @@ public abstract class Json {
 
         return this;
     }
+    /** short for {@code appendx(path, new JsonBool(b))} */
+    public Json appendx(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonBool(b));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, byte n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, short n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, int n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, long n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, float n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, double n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonNum(n))} */
+    public Json appendx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonNum(n));
+    }
+    /** short for {@code appendx(path, new JsonStr(s))} */
+    public Json appendx(String path, String s) throws Inapplicable, UnreachablePath {
+        return appendx(path, new JsonStr(s));
+    }
+
 
     // series of ...x methods
     // ---------------------------------------------------------------------
@@ -525,7 +648,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = Util.dividePath(path);
+        String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
 
@@ -539,11 +662,52 @@ public abstract class Json {
         if (parent.isObj()) {
             parent.asObj().set(divided[1], val);
         } else {
-            throw new Inapplicable("setp is not applicable to a " + parent.getClass().getSimpleName());
+            throw new Inapplicable("setxp is not applicable to a " + parent.getClass().getSimpleName());
         }
 
         return this;
     }
+    /** short for {@code setxp(path, new JsonBool(b))} */
+    public Json setxp(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonBool(b));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, byte n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, short n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, int n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, long n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, float n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, double n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonNum(n))} */
+    public Json setxp(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonNum(n));
+    }
+    /** short for {@code setxp(path, new JsonStr(s))} */
+    public Json setxp(String path, String s) throws Inapplicable, UnreachablePath {
+        return setxp(path, new JsonStr(s));
+    }
+
 
     /**
       * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure
@@ -582,6 +746,47 @@ public abstract class Json {
 
         return this;
     }
+    /** short for {@code appendxp(path, new JsonBool(b))} */
+    public Json appendxp(String path, boolean b) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonBool(b));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, byte n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, short n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, int n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, long n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, float n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, double n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonNum(n))} */
+    public Json appendxp(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonNum(n));
+    }
+    /** short for {@code appendxp(path, new JsonStr(s))} */
+    public Json appendxp(String path, String s) throws Inapplicable, UnreachablePath {
+        return appendxp(path, new JsonStr(s));
+    }
+
 
     // setxp and appendxp methods
     // ---------------------------------------------------------------------
@@ -802,6 +1007,24 @@ public abstract class Json {
         return (String) throwInapplicable("getString");
     }
 
+    /** Divides the path into parent and child parts.
+      * Parent part is null if the path has only one segment.
+      * @return two element String array whose first element is the parent part, and the second is the child part.
+      */
+    public static String[] dividePath(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        int idx = path.lastIndexOf('.');
+        if (idx < 0) {
+            return new String[]{ null, path };    // no parent part.
+        } else {
+            return new String[]{ path.substring(0, idx), path.substring(idx + 1) };
+        }
+    }
+
+
     // ===================================================
     // Protected
 
@@ -928,8 +1151,10 @@ public abstract class Json {
                 switch (typeOfLastNode) {
                     case TYPE_OBJECT:
                         childNode = new JsonObj();
+                        break;
                     case TYPE_ARRAY:
                         childNode = new JsonArr();
+                        break;
                     default:
                         assert false;   // unreachable
                         childNode = null;   // just to make the compiler happy
@@ -973,6 +1198,8 @@ public abstract class Json {
             } else {
                 assert false; // unreachable
             }
+
+            parentNode = childNode;
         }
 
         assert childNode != null;
