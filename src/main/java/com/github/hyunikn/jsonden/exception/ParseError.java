@@ -1,15 +1,15 @@
 package com.github.hyunikn.jsonden.exception;
 
 /**
-  * Thrown when the parse() method of {@link com.github.hyunikn.jsonden.Json Json}
+  * Thrown when the {@code parse} method of {@link com.github.hyunikn.jsonden.Json Json}
   * class or one of its subclasses fails.
   * Currently, there are five cases of this kind of failure:
   *  (1) wrong JSON syntax
   *  (2) unexpected JSON type
   *  (3) a duplicate key in a JSON object.
   *  (4) insufficient indentation of a preserved comment
-  *  (5) dot in a JSON object member key, which Json-den bans
-  * A public final field {@code errCase} indicates one of them.
+  *  (5) dot in a JSON object member key, which is prohibited by Json-den.
+  * A public final field {@code errCase} indicates one of these cases.
   * Method {@code getMessage()} will return more detailed description of the error.
   */
 public class ParseError extends Exception {

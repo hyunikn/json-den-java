@@ -1,7 +1,7 @@
 package com.github.hyunikn.jsonden.exception;
 
 /**
-  * Thrown when a Json does not have a subnode at the specified path.
+  * Thrown when a {@code Json} does not or cannot have a subnode at a required path.
   */
 public class UnreachablePath extends Exception {
     public UnreachablePath(String msg) {

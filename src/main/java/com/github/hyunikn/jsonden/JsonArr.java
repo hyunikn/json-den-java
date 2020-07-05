@@ -139,7 +139,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Replaces the element at the index with the {@code Json elem}.
+      * Replaces an existing element at the index with {@code elem}.
       * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
       * -1 indicates the last element, -2 the second last, and so on like in Python list.
       * @param elem if {@code elem} is null then it is understood as a JsonNull.
@@ -201,7 +201,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Inserts an element at the index.
+      * Inserts {@code elem} before an existing element at the index.
       * @param index must be one of -n, -n+1, ..., 0, 1, ..., n-1 where n is the size of this JsonArr.
       * -1 indicates the last element, -2 the second last, and so on like in Python list.
       * @param elem if {@code elem} is null then it is understood as a JsonNull.
@@ -264,7 +264,7 @@ public class JsonArr extends Json {
     }
 
     /**
-      * Appends an element at the end.
+      * Appends {@code elem} at the end.
       * @param elem if {@code elem} is null then it is understood as a JsonNull.
       * @return this {@code JsonArr} for method chaining
       */

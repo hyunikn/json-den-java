@@ -695,108 +695,108 @@ public abstract class Json {
     //---------------------------------------------
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} this method returns
-      * the result of calling its {@code getMap()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} then this method returns
+      * the result of calling its {@code getMap()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonObj.
       */
     public LinkedHashMap<String, Json> getMap() throws Inapplicable {
         return (LinkedHashMap<String, Json>) throwInapplicable("getMap");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} this method returns
-      * the result of calling its {@code getList()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} then this method returns
+      * the result of calling its {@code getList()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonArr.
       */
     public List<Json> getList() throws Inapplicable {
         return (List<Json>) throwInapplicable("getList");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} this method returns
-      * the result of calling its {@code getBoolean()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} then this method returns
+      * the result of calling its {@code getBoolean()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonBool.
       */
     public boolean getBoolean() throws Inapplicable {
         return (boolean) throwInapplicable("getBoolean");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getByte()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getByte()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public byte getByte() throws Inapplicable {
         return (byte) throwInapplicable("getByte");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getShort()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getShort()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public short getShort() throws Inapplicable {
         return (short) throwInapplicable("getShort");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getInt()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getInt()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public int getInt() throws Inapplicable {
         return (int) throwInapplicable("getInt");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getLong()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getLong()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public long getLong() throws Inapplicable {
         return (long) throwInapplicable("getLong");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getFloat()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getFloat()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public float getFloat() throws Inapplicable {
         return (float) throwInapplicable("getFloat");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getDouble()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getDouble()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public double getDouble() throws Inapplicable {
         return (double) throwInapplicable("getDouble");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getBigInteger()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getBigInteger()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public BigInteger getBigInteger() throws Inapplicable {
         return (BigInteger) throwInapplicable("getBigInteger");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} this method returns
-      * the result of calling its {@code getBigDecimal()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
+      * the result of calling its {@code getBigDecimal()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
       */
     public BigDecimal getBigDecimal() throws Inapplicable {
         return (BigDecimal) throwInapplicable("getBigDecimal");
     }
 
     /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} this method returns
-      * the result of calling its {@code getString()}, otherwise throws
-      * {@link com.github.hyunikn.jsonden.exception.Inapplicable}
+      * If this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} then this method returns
+      * the result of calling its {@code getString()}.
+      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonStr.
       */
     public String getString() throws Inapplicable {
         return (String) throwInapplicable("getString");

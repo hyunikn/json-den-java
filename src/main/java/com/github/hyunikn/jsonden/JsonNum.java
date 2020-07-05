@@ -16,7 +16,7 @@ public class JsonNum extends JsonSimple {
     // Public
 
     /**
-      * Constructs a {@code JsonNum} from a text representing a number.
+      * Constructs a {@code JsonNum} from a text which represents a number.
       */
     public JsonNum(String text) {
         super(text);
