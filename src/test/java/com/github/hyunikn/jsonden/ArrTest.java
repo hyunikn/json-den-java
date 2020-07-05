@@ -55,4 +55,31 @@ public class ArrTest {
         JsonArr arr2 = arr1.asArr();
         assertEquals(arr2.getList(), JsonArr.parse("[ [ 1, 1, 1 ], [ 2, 2, 2 ], [ 3, 3, 3 ] ]").getList());
     }
+
+    @Test
+    public void methodChain() throws ParseError {
+        JsonArr arr = new JsonArr();
+        arr.append(new JsonNum(1000))
+            .clear()
+            .append(new JsonNum(0))
+            .append(new JsonNum(1))
+            .append(new JsonNum(2))
+            .append(new JsonNum(3))
+            .append(new JsonNum(4))
+            .append(new JsonNum(5))
+            .insert(-1, new JsonNum(4.5))
+            .insert(-3, new JsonNum(3.5))
+            .insert(-5, new JsonNum(2.5))
+            .insert(-7, new JsonNum(1.5))
+            .insert(-9, new JsonNum(0.5));
+        //System.out.println(arr.toString());
+        assertEquals(JsonArr.parse(Util.readFile("results/_arr_method_chain.json")), arr);
+
+        arr.replace(1, new JsonNum(0.6))
+            .replace(3, new JsonNum(1.6))
+            .replace(5, new JsonNum(2.6))
+            .replace(7, new JsonNum(3.6))
+            .replace(9, new JsonNum(4.6));
+        assertEquals(JsonArr.parse(Util.readFile("results/_arr_method_chain2.json")), arr);
+    }
 }

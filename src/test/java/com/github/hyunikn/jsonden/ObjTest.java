@@ -53,4 +53,21 @@ public class ObjTest {
         obj0.clear();
         assertEquals(empty0, obj0);
     }
+
+    @Test
+    public void methodChain() throws ParseError {
+        JsonObj obj = new JsonObj();
+        obj.set("garbage", new JsonNull())
+            .clear()
+            .set("a", new JsonNum(1))
+            .set("b", new JsonNum(2))
+            .set("c", new JsonNum(3))
+            .set("d", new JsonNum(4))
+            .set("b", new JsonNum(20))
+            .set("c", new JsonNum(30))
+            .delete("d")
+            .set("d", new JsonNum(40));
+        //System.out.println(obj.toString());
+        assertEquals(JsonObj.parse(Util.readFile("results/_obj_method_chain.json")), obj);
+    }
 }

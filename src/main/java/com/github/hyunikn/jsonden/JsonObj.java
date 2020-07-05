@@ -144,7 +144,7 @@ public class JsonObj extends Json {
       * @param key must not be null and must not have a dot (.) character in it.
       * @param value must not be null
       */
-    public Json set(String key, Json value) {
+    public JsonObj set(String key, Json value) {
         if (key == null) {
             throw new IllegalArgumentException("failed to set: key cannot be null");
         } else if (key.indexOf('.') >= 0) {
