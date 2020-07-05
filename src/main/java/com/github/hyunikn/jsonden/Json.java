@@ -154,8 +154,8 @@ public abstract class Json {
     /**
       * Clears a {@code JsonObj} or {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.clearx("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d.e")).clear()} if a {@code JsonObj} is at the path, or to
-      * {@code ((JsonArr) json.getx("a.b.c.d.e")).clear()} if a {@code JsonArr} is at the path.
+      * {@code json.getx("a.b.c.d.e").asObj().clear()} if a {@code JsonObj} is at the path, or to
+      * {@code json.getx("a.b.c.d.e").asArr().clear()} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
@@ -188,7 +188,7 @@ public abstract class Json {
     /**
       * Deletes a {@code Json} located deep in the nested structure.
       * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).delete("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
+      * {@code json.getx("a.b.c.d").asObj().delete("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
       * The behavior is similar when the parent of the target node is a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
@@ -240,7 +240,7 @@ public abstract class Json {
     /**
       * Removes a {@code Json} located deep in the nested structure.
       * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).remove("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
+      * {@code json.getx("a.b.c.d").asObj().remove("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
       * The behavior is similar when the parent of the target node is a {@code JsonArr}.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
@@ -290,7 +290,7 @@ public abstract class Json {
     /**
       * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure.
       * For example, {@code json.setx("a.b.c.d.e", val)} is analogous to
-      * {@code ((JsonObj) json.getx("a.b.c.d")).set("e", val)} if a {@code JsonObj} is at the parent path "a.b.c.d".
+      * {@code json.getx("a.b.c.d").asObj().set("e", val)} if a {@code JsonObj} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
@@ -329,7 +329,7 @@ public abstract class Json {
     /**
       * Replaces a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.replacex("a.b.c.d.0", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d")).replace("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
+      * {@code json.getx("a.b.c.d").asArr().replace("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
@@ -376,7 +376,7 @@ public abstract class Json {
     /**
       * Inserts a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.insertx("a.b.c.d.0", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d")).insert("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
+      * {@code json.getx("a.b.c.d").asArr().insert("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining
@@ -423,7 +423,7 @@ public abstract class Json {
     /**
       * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure.
       * For example, {@code json.appendx("a.b.c.d.e", val)} is analogous to
-      * {@code ((JsonArr) json.getx("a.b.c.d.e")).append(val)} if a {@code JsonArr} is at the path.
+      * {@code json.getx("a.b.c.d.e").asArr().append(val)} if a {@code JsonArr} is at the path.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
       * @return this Json object for method chaining

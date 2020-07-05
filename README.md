@@ -4,7 +4,7 @@ Json-den-java is a JSON parser and stringifier (Decoder and ENcoder) library.
 
 Its distinctive features include
 
-1. Method `equals` checks the value equality, not the reference equality, and method `clone` deeply copies values.
+1. Method `equals` checks the value equality, not the reference equality, and method `clone` deeply copies JSON values.
     They properly handle hierarchical structures of JSON values.
 2. It provides convenient methods `getx`, `setx`, `appendx`, and so on which query or update JSON nodes
     located deep in hierarchical structures with a single dot delimited path.
