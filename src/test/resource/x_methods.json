@@ -1,11 +1,11 @@
 {
-    "how": {
-        "deep": {
-            "is": {
-                "your": {
+    "how": [{
+        "deep": [{
+            "is": [{
+                "your": [{
                     "love": [ true, false, null, 1, 1.1, 1.1e10, "hello" ]
-                }
-            }
-        }
-    }
+                }]
+            }]
+        }]
+    }]
 }

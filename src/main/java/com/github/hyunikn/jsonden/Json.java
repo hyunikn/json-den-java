@@ -122,7 +122,7 @@ public abstract class Json {
     // convenience methods
 
     // ---------------------------------------------------------------------
-    // series of ...x methods
+    // getx and setx
 
     /**
       * Gets a {@code Json} located deep in the nested structure.
@@ -153,151 +153,19 @@ public abstract class Json {
     }
 
     /**
-      * Clears a {@code JsonObj} or {@code JsonArr} located deep in the nested structure.
-      * For example, {@code json.clearx("a.b.c.d.e")} is analogous to
-      * {@code json.getx("a.b.c.d.e").asObj().clear()} if a {@code JsonObj} is at the path, or to
-      * {@code json.getx("a.b.c.d.e").asArr().clear()} if a {@code JsonArr} is at the path.
+      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure
+      * creating parent nodes as needed.
+      * This behavior is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option.
+      * For example, {@code emptyObject.setx("a.b.c.d.e", val)} for an empty JsonObj {@code emptyObject}
+      * results in {@code {"a":{"b":{"c":"{"d":{"e": val}}}}}} with newly created four parent nodes
+      * corresponding to a, b, c and d, respectively.
+      * Each of the created parent nodes is either a {@code JsonArr} or a {@code JsonObj} depending on whether
+      * the next path segment represents an integer (array element index) or not.
       * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when neither a {@code JsonObj} nor a {@code JsonArr}
-      * is at the path.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
-      */
-    public Json clearx(String path) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        Json subnode = getx(path);
-        if (subnode == null) {
-            throw new UnreachablePath(path + " unreachable");
-        } else {
-            if (subnode.isObj()) {
-                subnode.asObj().clear();
-            } else if (subnode.isArr()) {
-                subnode.asArr().clear();
-            } else {
-                throw new Inapplicable("clear is not applicable to a " + subnode.getClass().getSimpleName());
-            }
-        }
-
-        return this;
-    }
-
-    /**
-      * Deletes a {@code Json} located deep in the nested structure.
-      * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code json.getx("a.b.c.d").asObj().delete("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
-      * The behavior is similar when the parent of the target node is a {@code JsonArr}.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither
-      * a {@code JsonObj} nor a {@code
-      * JsonArr}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
-      */
-    public Json deletex(String path) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        String[] divided = dividePath(path);
-        assert divided != null;
-        String parentPath = divided[0];
-
-        Json parent;
-        if (parentPath == null) {
-            parent = this;
-        } else {
-            parent = getx(parentPath);
-            if (parent == null) {
-                throw new UnreachablePath(parentPath + " unreachable");
-            }
-        }
-
-        if (parent.isObj()) {
-            parent.asObj().delete(divided[1]);
-        } else if (parent.isArr()) {
-            int idx;
-            try {
-                idx = Integer.parseInt(divided[1]);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("parent of the target node is a JsonArr and " +
-                        "the last path segment must be an integer, which is not in " + path);
-            }
-
-            parent.asArr().delete(idx);
-        } else {
-            throw new Inapplicable("delete is not applicable to a " + parent.getClass().getSimpleName());
-        }
-
-        return this;
-    }
-
-    /**
-      * Removes a {@code Json} located deep in the nested structure.
-      * For example, {@code json.deletex("a.b.c.d.e")} is analogous to
-      * {@code json.getx("a.b.c.d").asObj().remove("e")} if a {@code JsonObj} is at the parent path "a.b.c.d".
-      * The behavior is similar when the parent of the target node is a {@code JsonArr}.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return the removed Json, or null if none is removed.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is neither
-      * a {@code JsonObj} nor a {@code
-      * JsonArr}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
-      */
-    public Json removex(String path) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        String[] divided = dividePath(path);
-        assert divided != null;
-        String parentPath = divided[0];
-
-        Json parent;
-        if (parentPath == null) {
-            parent = this;
-        } else {
-            parent = getx(parentPath);
-            if (parent == null) {
-                throw new UnreachablePath(parentPath + " unreachable");
-            }
-        }
-
-        if (parent.isObj()) {
-            return parent.asObj().remove(divided[1]);
-        } else if (parent.isArr()) {
-            int idx;
-            try {
-                idx = Integer.parseInt(divided[1]);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("parent of the target node is a JsonArr and " +
-                        "the last path segment must be an integer, which is not in " + path);
-            }
-
-            return parent.asArr().remove(idx);
-        } else {
-            throw new Inapplicable("remove is not applicable to a " + parent.getClass().getSimpleName());
-        }
-    }
-
-    /**
-      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure.
-      * For example, {@code json.setx("a.b.c.d.e", val)} is analogous to
-      * {@code json.getx("a.b.c.d").asObj().set("e", val)} if a {@code JsonObj} is at the parent path "a.b.c.d".
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @param val if {@code val} is null then it is understood as a JsonNull.
+      *   Each segment represents either a name of a JSON object member or an index (integer) of a JSON array element.
       * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
+      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
     public Json setx(String path, Json val) throws Inapplicable, UnreachablePath {
 
@@ -308,21 +176,37 @@ public abstract class Json {
         String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
+        Integer lastIntSegment = getInteger(divided[1]);
 
         Json parent;
         if (parentPath == null) {
             parent = this;
         } else {
-            parent = getx(parentPath);
-            if (parent == null) {
-                throw new UnreachablePath(parentPath + " unreachable");
-            }
+            parent = getxp(parentPath, lastIntSegment == null ? TYPE_OBJECT : TYPE_ARRAY);
         }
 
         if (parent.isObj()) {
             parent.asObj().set(divided[1], val);
+        } else if (parent.isArr()) {
+            if (lastIntSegment == null) {
+                throw new UnreachablePath(
+                        "the parent of the target node is an array but the last segment is not an integer");
+            } else {
+                JsonArr parentArr = parent.asArr();
+                int idx = lastIntSegment.intValue();
+                if (idx == parentArr.size()) {
+                    parentArr.append(val);
+                } else if (idx < parentArr.size()) {
+                    parentArr.replace(idx, val);
+                } else {
+                    throw new UnreachablePath(
+                            "the parent of the target node is an array but the last segment is " +
+                            divided[1] + " which is larger than the size of the array");
+                }
+            }
         } else {
-            throw new Inapplicable("set is not applicable to a " + parent.getClass().getSimpleName());
+            throw new Inapplicable("node at '" + parentPath + "' cannot have a subnode because it is a " +
+                    parent.getClass().getSimpleName());
         }
 
         return this;
@@ -368,427 +252,7 @@ public abstract class Json {
         return setx(path, new JsonStr(s));
     }
 
-    /**
-      * Replaces a {@code Json} into a {@code JsonArr} located deep in the nested structure.
-      * For example, {@code json.replacex("a.b.c.d.0", val)} is analogous to
-      * {@code json.getx("a.b.c.d").asArr().replace("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
-      */
-    public Json replacex(String path, Json val) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        String[] divided = dividePath(path);
-        assert divided != null;
-        String parentPath = divided[0];
-
-        Json parent;
-        if (parentPath == null) {
-            parent = this;
-        } else {
-            parent = getx(parentPath);
-            if (parent == null) {
-                throw new UnreachablePath(parentPath + " unreachable");
-            }
-        }
-
-        if (parent.isArr()) {
-            int idx;
-            try {
-                idx = Integer.parseInt(divided[1]);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("parent of the target node is a JsonArr and " +
-                        "the last path segment must be an integer, which is not in " + path);
-            }
-
-            parent.asArr().replace(idx, val);
-        } else {
-            throw new Inapplicable("replace is not applicable to a " + parent.getClass().getSimpleName());
-        }
-
-        return this;
-    }
-    /** short for {@code replacex(path, new JsonBool(b))} */
-    public Json replacex(String path, boolean b) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonBool(b));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, byte n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, short n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, int n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, long n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, float n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, double n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, BigInteger n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonNum(n))} */
-    public Json replacex(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonNum(n));
-    }
-    /** short for {@code replacex(path, new JsonStr(s))} */
-    public Json replacex(String path, String s) throws Inapplicable, UnreachablePath {
-        return replacex(path, new JsonStr(s));
-    }
-
-
-    /**
-      * Inserts a {@code Json} into a {@code JsonArr} located deep in the nested structure.
-      * For example, {@code json.insertx("a.b.c.d.0", val)} is analogous to
-      * {@code json.getx("a.b.c.d").asArr().insert("0", val)} if a {@code JsonArr} is at the parent path "a.b.c.d".
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonArr}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the parent is not reachable.
-      */
-    public Json insertx(String path, Json val) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        String[] divided = dividePath(path);
-        assert divided != null;
-        String parentPath = divided[0];
-
-        Json parent;
-        if (parentPath == null) {
-            parent = this;
-        } else {
-            parent = getx(parentPath);
-            if (parent == null) {
-                throw new UnreachablePath(parentPath + " unreachable");
-            }
-        }
-
-        if (parent.isArr()) {
-            int idx;
-            try {
-                idx = Integer.parseInt(divided[1]);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("parent of the target node is a JsonArr and " +
-                        "the last path segment must be an integer, which is not in " + path);
-            }
-
-            parent.asArr().insert(idx, val);
-        } else {
-            throw new Inapplicable("insert is not applicable to a " + parent.getClass().getSimpleName());
-        }
-
-        return this;
-    }
-    /** short for {@code insertx(path, new JsonBool(b))} */
-    public Json insertx(String path, boolean b) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonBool(b));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, byte n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, short n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, int n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, long n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, float n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, double n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonNum(n))} */
-    public Json insertx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonNum(n));
-    }
-    /** short for {@code insertx(path, new JsonStr(s))} */
-    public Json insertx(String path, String s) throws Inapplicable, UnreachablePath {
-        return insertx(path, new JsonStr(s));
-    }
-
-
-    /**
-      * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure.
-      * For example, {@code json.appendx("a.b.c.d.e", val)} is analogous to
-      * {@code json.getx("a.b.c.d.e").asArr().append(val)} if a {@code JsonArr} is at the path.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the path is not reachable.
-      */
-    public Json appendx(String path, Json val) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        Json subnode = getx(path);
-        if (subnode == null) {
-            throw new UnreachablePath(path + " unreachable");
-        } else {
-            if (subnode.isArr()) {
-                subnode.asArr().append(val);
-            } else {
-                throw new Inapplicable("append is not applicable to a " + subnode.getClass().getSimpleName());
-            }
-        }
-
-        return this;
-    }
-    /** short for {@code appendx(path, new JsonBool(b))} */
-    public Json appendx(String path, boolean b) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonBool(b));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, byte n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, short n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, int n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, long n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, float n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, double n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonNum(n))} */
-    public Json appendx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonNum(n));
-    }
-    /** short for {@code appendx(path, new JsonStr(s))} */
-    public Json appendx(String path, String s) throws Inapplicable, UnreachablePath {
-        return appendx(path, new JsonStr(s));
-    }
-
-
-    // series of ...x methods
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // setxp and appendxp methods
-
-    /**
-      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure
-      * creating parent nodes as needed.
-      * Its behavior is similar to {@link com.github.hyunikn.jsonden.Json#setx setx}
-      * except that it creates necessary parent nodes if they are absent,
-      * which is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option,
-      * while {@link com.github.hyunikn.jsonden.Json#setx setx} throws
-      * {@link com.github.hyunikn.jsonden.exception.UnreachablePath UnreachablePath} on absent parent nodes.
-      * For example, {@code json.setxp("a.b.c.d.e", val)} behaves the same as {@code json.setx("a.b.c.d.e", val)}
-      * if the path {@code "a.b.c.d"} is reachable from {@code json}. Otherwise, it creates absent parent nodes
-      * and then does the set.
-      * Each of the created parent nodes until the last one is either a {@code JsonArr} or a {@code JsonObj}
-      * depending on whether
-      * the next path segment represent an integer (array element index) or not,
-      * and the last created parent is always a {@code JsonObj}.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
-      */
-    public Json setxp(String path, Json val) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        String[] divided = dividePath(path);
-        assert divided != null;
-        String parentPath = divided[0];
-
-        Json parent;
-        if (parentPath == null) {
-            parent = this;
-        } else {
-            parent = getxp(parentPath, TYPE_OBJECT);
-        }
-
-        if (parent.isObj()) {
-            parent.asObj().set(divided[1], val);
-        } else {
-            throw new Inapplicable("setxp is not applicable to a " + parent.getClass().getSimpleName());
-        }
-
-        return this;
-    }
-    /** short for {@code setxp(path, new JsonBool(b))} */
-    public Json setxp(String path, boolean b) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonBool(b));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, byte n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, short n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, int n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, long n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, float n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, double n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, BigInteger n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonNum(n))} */
-    public Json setxp(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonNum(n));
-    }
-    /** short for {@code setxp(path, new JsonStr(s))} */
-    public Json setxp(String path, String s) throws Inapplicable, UnreachablePath {
-        return setxp(path, new JsonStr(s));
-    }
-
-
-    /**
-      * Appends a {@code Json} into a {@code JsonArr} located deep in the nested structure
-      * creating parent nodes as needed.
-      * Its behavior is similar to {@link com.github.hyunikn.jsonden.Json#appendx appendx}
-      * except that it creates necessary parent nodes if they are absent,
-      * which is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option,
-      * while {@link com.github.hyunikn.jsonden.Json#appendx appendx} throws
-      * {@link com.github.hyunikn.jsonden.exception.UnreachablePath UnreachablePath} on absent parent nodes.
-      * For example, {@code json.appendxp("a.b.c.d.e", val)} behaves the same as {@code json.appendx("a.b.c.d.e", val)}
-      * if the path {@code "a.b.c.d.e"} is reachable from {@code json}. Otherwise, it creates absent parent nodes
-      * and then does the append.
-      * Each of the created parent nodes until the last one is either a {@code JsonArr} or a {@code JsonObj}
-      * depending on whether
-      * the next path segment represent an integer (array element index) or not,
-      * and the last created parent is always a {@code JsonArr}.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
-      * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when a {@code JsonArr} is not at the path.
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
-      */
-    public Json appendxp(String path, Json val) throws Inapplicable, UnreachablePath {
-
-        if (path == null) {
-            throw new IllegalArgumentException("path cannot be null");
-        }
-
-        Json subnode = getxp(path, TYPE_ARRAY);
-        assert subnode != null;
-        if (subnode.isArr()) {
-            subnode.asArr().append(val);
-        } else {
-            throw new Inapplicable("append is not applicable to a " + subnode.getClass().getSimpleName());
-        }
-
-        return this;
-    }
-    /** short for {@code appendxp(path, new JsonBool(b))} */
-    public Json appendxp(String path, boolean b) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonBool(b));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, byte n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, short n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, int n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, long n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, float n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, double n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, BigInteger n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonNum(n))} */
-    public Json appendxp(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonNum(n));
-    }
-    /** short for {@code appendxp(path, new JsonStr(s))} */
-    public Json appendxp(String path, String s) throws Inapplicable, UnreachablePath {
-        return appendxp(path, new JsonStr(s));
-    }
-
-
-    // setxp and appendxp methods
+    // getx and setx
     // ---------------------------------------------------------------------
 
     /**
@@ -1061,9 +525,9 @@ public abstract class Json {
             childNode = parentNode.getChild(s);
             if (childNode == null) {
                 if (parentNode instanceof JsonSimple) {
-                    throw new UnreachablePath("cannot create a subnode at " +
+                    throw new UnreachablePath("cannot create a node at '" +
                             String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                            " because its parent is a terminal node whose type is " +
+                            "' because its parent is a terminal node whose type is " +
                             parentNode.getClass().getSimpleName());
                 }
 
@@ -1133,6 +597,14 @@ public abstract class Json {
 
     }
 
+    protected Integer getInteger(String s) {
+        try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     // ===================================================
     // Private
 
@@ -1161,37 +633,38 @@ public abstract class Json {
                 }
             } else {
                 String nextSegment = segments[i + 1];
-                boolean isNextInt;
-                try {
-                    if (Integer.parseInt(nextSegment) != 0) {
-                        throw new UnreachablePath("an array node to create at " +
+                Integer nextIntSegment = getInteger(nextSegment);
+                if (nextIntSegment == null) {
+                    childNode = new JsonObj();
+                } else {
+                    int idx = nextIntSegment.intValue();
+                    if (idx == 0) {
+                        childNode = new JsonArr();
+                    } else {
+                        throw new UnreachablePath("an array node to create at '" +
                                 String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                " cannot have an element at the non-zero index " + nextSegment);
+                                "' cannot have an element at the non-zero index " + nextSegment);
                     }
-                    isNextInt = true;
-                } catch (NumberFormatException e) {
-                    isNextInt = false;
                 }
-
-                childNode = isNextInt ? new JsonArr() : new JsonObj();
             }
 
             if (parentNode.isObj()) {
                 parentNode.asObj().set(segment, childNode);
             } else if (parentNode.isArr()) {
                 if (parentNode == lastReachable) {
-                    try {
-                        int idx = Integer.parseInt(segment);
-                        if (idx != parentNode.asArr().size()) {
-                            throw new UnreachablePath("cannot create a node at " +
-                                    String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                    " because its parent array node has elements fewer than " + idx);
-                        }
-                    } catch (NumberFormatException e) {
-                        throw new UnreachablePath("cannot create a node at " +
+                    Integer intSegment = getInteger(segment);
+                    if (intSegment == null) {
+                        throw new UnreachablePath("cannot create a node at '" +
                                 String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                " because its parent is an array node and the last path segment " + segment +
-                                " is not an integer");
+                                "' because its parent is an array and the path segment '" +
+                                segment + "' is not an integer");
+                    } else {
+                        int idx = intSegment.intValue();
+                        if (idx != parentNode.asArr().size()) {
+                            throw new UnreachablePath("cannot create a node at '" +
+                                    String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                                    "' because its parent array has elements fewer than " + idx);
+                        }
                     }
                 }
                 parentNode.asArr().append(childNode);

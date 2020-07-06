@@ -431,7 +431,12 @@ public class JsonArr extends Json {
 
     @Override
     protected Json getChild(String key) {
-        return get(getIndex(key));
+        Integer intKey = getInteger(key);
+        if (intKey == null) {
+            return null;
+        } else {
+            return get(intKey.intValue());
+        }
     }
 
     // ===================================================
@@ -450,17 +455,6 @@ public class JsonArr extends Json {
             return index + size;
         } else {
             return index;
-        }
-    }
-
-    private int getIndex(String name) {
-
-		assert name != null;
-
-        try {
-            return Integer.parseInt(name);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(name + " is not an integer and cannot be an index to an array element");
         }
     }
 }
