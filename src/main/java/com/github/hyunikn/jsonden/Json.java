@@ -153,8 +153,7 @@ public abstract class Json {
     }
 
     /**
-      * Sets a {@code Json} into a {@code JsonObj} located deep in the nested structure
-      * creating parent nodes as needed.
+      * Sets {@code val} at the path, possibly deep in a nested structure, creating parent nodes as needed.
       * This behavior is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option.
       * For example, {@code emptyObject.setx("a.b.c.d.e", val)} for an empty JsonObj {@code emptyObject}
       * results in {@code {"a":{"b":{"c":"{"d":{"e": val}}}}}} with newly created four parent nodes
