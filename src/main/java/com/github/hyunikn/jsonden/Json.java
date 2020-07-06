@@ -155,11 +155,11 @@ public abstract class Json {
     /**
       * Sets {@code val} at the path, possibly deep in a nested structure, creating parent nodes as needed.
       * This behavior is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option.
-      * For example, {@code emptyObject.setx("a.b.c.d.e", val)} for an empty JsonObj {@code emptyObject}
-      * results in {@code {"a":{"b":{"c":"{"d":{"e": val}}}}}} with newly created four parent nodes
-      * corresponding to a, b, c and d, respectively.
       * Each of the created parent nodes is either a {@code JsonArr} or a {@code JsonObj} depending on whether
       * the next path segment represents an integer (array element index) or not.
+      * For example, {@code emptyObject.setx("a.b.c.d.e", val)} for an empty {@code JsonObj} {@code emptyObject}
+      * results in {@code {"a":{"b":{"c":"{"d":{"e": val}}}}}} with newly created four parent nodes
+      * corresponding to a, b, c and d, respectively.
       * @param path dot delimited segments of a path to a Json.
       *   Each segment represents either a name of a JSON object member or an index (integer) of a JSON array element.
       * @return this {@code Json} for method chaining
