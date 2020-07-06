@@ -12,7 +12,7 @@ Its distinctive features include
     instead of `json.get("how").get("deep").get("is").get("your").get("love")`.
 3. It provides a convenient method `setx` which creates parent nodes as needed,
     like the UNIX shell command `mkdir -p`, while updating JSON nodes located deep in hierarchical structures.
-    For example, `json.setxp("how.deep.is.your.love", val)` sets `val` at the path "how.deep.is.your.love"
+    For example, `json.setx("how.deep.is.your.love", val)` sets `val` at the path "how.deep.is.your.love"
     even when the node corresponding to 'how', 'deep', 'is' or 'your' is currently absent.
 4. It supports C-style line and block comments in JSON texts. Instead of the common approach,
     minifying JSON texts before parsing, its parser recognizes comments
