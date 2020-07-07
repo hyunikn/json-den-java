@@ -289,4 +289,13 @@ public class JsonTest {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.0.deep.2.is.your.love", 0);
     }
+
+    @Test
+    public void flatten() throws ParseError {
+        Json j = Json.parse(Util.readFile("flatten.json"));
+        //System.out.println(j.flatten().toString());
+        assertEquals(Util.readFile("results/_flatten.out"), j.flatten().toString());
+        //System.out.println(j.flatten2().toString());
+        assertEquals(Util.readFile("results/_flatten2.out"), j.flatten2().toString());
+    }
 }

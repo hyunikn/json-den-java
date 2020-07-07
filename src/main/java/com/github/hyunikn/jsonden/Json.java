@@ -113,6 +113,28 @@ public abstract class Json {
     }
 
     /**
+      * Converts its hierarchical structure into a single map.
+      * The resulting map has paths to terminal nodes as its keys.
+      * A special key dot (.) indicates the path to itself.
+      */
+    public LinkedHashMap<String, Json> flatten() {
+        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
+        flattenInner(accum, ".", false);
+        return accum;
+    }
+
+    /**
+      * Converts its hierarchical structure into a single map.
+      * The resulting map has paths to itself and all the subnodes as its keys.
+      * A special key dot (.) indicates the path to itself.
+      */
+    public LinkedHashMap<String, Json> flatten2() {
+        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
+        flattenInner(accum, ".", true);
+        return accum;
+    }
+
+    /**
       * Deep clone.
       */
     @Override
@@ -503,6 +525,8 @@ public abstract class Json {
     protected Json() { }
 
     // overriden by all
+    protected abstract void flattenInner(
+            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo);
     protected abstract String getTypeName();
     protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
     protected abstract Json getChild(String key);

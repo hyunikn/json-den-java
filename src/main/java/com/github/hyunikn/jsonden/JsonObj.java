@@ -248,6 +248,26 @@ public class JsonObj extends Json {
     protected final LinkedHashMap<String, Json> map;
 
     @Override
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
+
+        if (addIntermediateToo) {
+            accum.put(pathToMe, this);
+        }
+
+        String prefix;
+        if (".".equals(pathToMe)) {
+            prefix = "";
+        } else {
+            prefix = pathToMe + ".";
+        }
+
+        for (String key: map.keySet()) {
+            Json val = map.get(key);
+            val.flattenInner(accum, prefix + key, addIntermediateToo);
+        }
+    }
+
+    @Override
     protected String getTypeName() {
         return "object";
     }

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.LinkedHashMap;
 
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON arrays.
@@ -384,6 +385,27 @@ public class JsonArr extends Json {
     // Protected
 
     protected final LinkedList<Json> list;
+
+    @Override
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
+
+        if (addIntermediateToo) {
+            accum.put(pathToMe, this);
+        }
+
+        String prefix;
+        if (".".equals(pathToMe)) {
+            prefix = "";
+        } else {
+            prefix = pathToMe + ".";
+        }
+
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            Json val = list.get(i);
+            val.flattenInner(accum, prefix + i, addIntermediateToo);
+        }
+    }
 
     @Override
     protected String getTypeName() {

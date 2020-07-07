@@ -1,5 +1,7 @@
 package com.github.hyunikn.jsonden;
 
+import java.util.LinkedHashMap;
+
 abstract class JsonSimple extends Json {
 
     // ===================================================
@@ -10,11 +12,17 @@ abstract class JsonSimple extends Json {
 
     protected final String text;
 
+
     protected JsonSimple(String text) {
         if (text == null) {
             throw new IllegalArgumentException("text of " + getClass().getSimpleName() + " values cannot be null");
         }
         this.text = text;
+    }
+
+    @Override
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
+        accum.put(pathToMe, this);
     }
 
     @Override
