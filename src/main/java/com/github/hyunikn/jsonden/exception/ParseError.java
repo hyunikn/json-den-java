@@ -7,7 +7,7 @@ package com.github.hyunikn.jsonden.exception;
   *  (1) wrong JSON syntax
   *  (2) unexpected JSON type
   *  (3) a duplicate key in a JSON object.
-  *  (4) insufficient indentation of a preserved comment
+  *  (4) insufficient indentation of a remark
   *  (5) dot in a JSON object member key, which is prohibited by Json-den.
   * A public final field {@code errCase} indicates one of these cases.
   * Method {@code getMessage()} will return more detailed description of the error.

@@ -141,13 +141,13 @@ public class JsonTest {
     }
 
     @Test
-    public void commentLines() throws ParseError {
-        String text = Util.readFile("comment.json");
+    public void remarkLines() throws ParseError {
+        String text = Util.readFile("remark.json");
         Json json = Json.parse(text);
         //System.out.println(json.stringify(4));
         //System.out.println(json.stringify(0));
-        assertEquals(Util.readFile("results/_4_comment.json"), json.stringify(4));
-        assertEquals(Util.readFile("results/_0_comment.json"), json.stringify(0));
+        assertEquals(Util.readFile("results/_4_remark.json"), json.stringify(4));
+        assertEquals(Util.readFile("results/_0_remark.json"), json.stringify(0));
     }
 
     @Test

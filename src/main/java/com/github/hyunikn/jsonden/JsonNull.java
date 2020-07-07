@@ -38,9 +38,9 @@ public class JsonNull extends JsonSimple {
     public Object clone() {
         JsonNull clone = new JsonNull();
 
-        String[] cl = this.commentLines();
+        String[] cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;

@@ -21,7 +21,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return s.substring(1, len - 1);
     }
 
-    private String stripCommentMarks(String s) {
+    private String stripRemarkMarks(String s) {
         int len = s.length();
         assert len >= 5;
 
@@ -35,17 +35,17 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     }
 
     @Override public Json visitJson(JsonParse.JsonContext ctx) {
-        return visit(ctx.commentedValue());
+        return visit(ctx.remarkedValue());
     }
 
-    private List<String> getCommentLineList(TerminalNode tn) {
+    private List<String> getRemarkLineList(TerminalNode tn) {
         String text = tn.getText();
         Token tk = tn.getSymbol();
         int row = tk.getLine(); // 1...
         int col = text.substring(1).indexOf("/"); // 0..
 
-        String comment = stripCommentMarks(text);
-        String[] lines = comment.split("\n");
+        String remark = stripRemarkMarks(text);
+        String[] lines = remark.split("\n");
         int nLines = lines.length;
 
         List<String> lineList = new LinkedList<>();
@@ -64,11 +64,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
                         lineList.add("");
                     }
                 } else {
-                    throw new Error("insufficient leading white spaces of a comment line at " + (row + i));
+                    throw new Error("insufficient leading white spaces of a remark line at " + (row + i));
                 }
             } else {
                 if (line.substring(0, col).trim().length() > 0) {
-                    throw new Error("insufficient leading white spaces of a comment line at " + (row + i));
+                    throw new Error("insufficient leading white spaces of a remark line at " + (row + i));
                 }
 
                 String cutLine = ("." + (line.substring(col))).trim();
@@ -81,13 +81,13 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return lineList;
     }
 
-    @Override public Json visitCommentedValue(JsonParse.CommentedValueContext ctx) {
+    @Override public Json visitRemarkedValue(JsonParse.RemarkedValueContext ctx) {
         Json value = visitValue(ctx.value());
-        TerminalNode tn = ctx.COMMENT();
+        TerminalNode tn = ctx.REMARK();
         if (tn != null) {
-            List<String> lineList = getCommentLineList(tn);
+            List<String> lineList = getRemarkLineList(tn);
             if (lineList.size() > 0) {
-                value.setCommentLines(lineList.toArray(RTT));
+                value.setRemarkLines(lineList.toArray(RTT));
             }
         }
         return value;
@@ -117,7 +117,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     @Override public Json visitObj(JsonParse.ObjContext ctx) {
         JsonObj jo = new JsonObj();
 
-        for (JsonParse.CommentedPairContext cp: ctx.commentedPair()) {
+        for (JsonParse.RemarkedPairContext cp: ctx.remarkedPair()) {
 
             JsonParse.PairContext pc = cp.pair();
             String key = stripQuoteMarks(pc.STRING().getText());
@@ -133,11 +133,11 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             }
             jo.set(key, val);
 
-            TerminalNode tn = cp.COMMENT();
+            TerminalNode tn = cp.REMARK();
             if (tn != null) {
-                List<String> lineList = getCommentLineList(tn);
+                List<String> lineList = getRemarkLineList(tn);
                 if (lineList.size() > 0) {
-                    val.setCommentLines(lineList.toArray(RTT));
+                    val.setRemarkLines(lineList.toArray(RTT));
                 }
             }
         }
@@ -145,8 +145,8 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return jo;
     }
 
-    @Override public Json visitCommentedPair(JsonParse.CommentedPairContext ctx) {
-        throw new Error("unreachable: visiting commented pair");
+    @Override public Json visitRemarkedPair(JsonParse.RemarkedPairContext ctx) {
+        throw new Error("unreachable: visiting remarked pair");
     }
 
     @Override public Json visitPair(JsonParse.PairContext ctx) {
@@ -156,8 +156,8 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     @Override public Json visitArr(JsonParse.ArrContext ctx) {
         JsonArr ja = new JsonArr();
 
-        for (JsonParse.CommentedValueContext cv: ctx.commentedValue()) {
-            ja.append(visitCommentedValue(cv));
+        for (JsonParse.RemarkedValueContext cv: ctx.remarkedValue()) {
+            ja.append(visitRemarkedValue(cv));
         }
 
         return ja;

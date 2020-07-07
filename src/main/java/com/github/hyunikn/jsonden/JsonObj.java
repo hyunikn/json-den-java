@@ -72,17 +72,17 @@ public class JsonObj extends Json {
             Json val = map.get(key);
             Json valClone = (Json) val.clone();
 
-            cl = val.commentLines();
+            cl = val.remarkLines();
             if (cl != null) {
-                valClone.setCommentLines(cl);
+                valClone.setRemarkLines(cl);
             }
 
             clone.map.put(key, valClone);    // deep copy
         }
 
-        cl = this.commentLines();
+        cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;
@@ -261,7 +261,7 @@ public class JsonObj extends Json {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeComment(sbuf, commentLines, indentSize, indentLevel);
+            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -283,7 +283,7 @@ public class JsonObj extends Json {
                 }
             }
 
-            writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
+            writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
 
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');

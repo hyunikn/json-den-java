@@ -15,11 +15,11 @@ package com.github.hyunikn.jsonden.parser.antlrgen;
 }
 
 json
-    : commentedValue
+    : remarkedValue
     ;
 
-commentedValue
-    : COMMENT? value
+remarkedValue
+    : REMARK? value
     ;
 
 value
@@ -33,12 +33,12 @@ value
     ;
 
 obj
-    : LBRACE commentedPair (COMMA commentedPair)*? RBRACE
+    : LBRACE remarkedPair (COMMA remarkedPair)*? RBRACE
     | LBRACE RBRACE
     ;
 
-commentedPair
-    : COMMENT? pair
+remarkedPair
+    : REMARK? pair
     ;
 
 pair
@@ -46,6 +46,6 @@ pair
     ;
 
 arr
-    : LBRACKET commentedValue (COMMA commentedValue)*? RBRACKET
+    : LBRACKET remarkedValue (COMMA remarkedValue)*? RBRACKET
     | LBRACKET RBRACKET
     ;

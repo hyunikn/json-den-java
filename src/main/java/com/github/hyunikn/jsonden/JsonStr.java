@@ -48,9 +48,9 @@ public class JsonStr extends JsonSimple {
     public Object clone() {
         JsonStr clone = new JsonStr(this.text);
 
-        String[] cl = this.commentLines();
+        String[] cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;

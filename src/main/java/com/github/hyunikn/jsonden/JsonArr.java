@@ -67,9 +67,9 @@ public class JsonArr extends Json {
             clone.list.add((Json) elem.clone());  // deep copy
         }
 
-        String[] cl = this.commentLines();
+        String[] cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;
@@ -399,7 +399,7 @@ public class JsonArr extends Json {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeComment(sbuf, commentLines, indentSize, indentLevel);
+            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
 

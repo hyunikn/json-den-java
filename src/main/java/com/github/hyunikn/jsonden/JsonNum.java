@@ -86,9 +86,9 @@ public class JsonNum extends JsonSimple {
     public Object clone() {
         JsonNum clone = new JsonNum(this.text);
 
-        String[] cl = this.commentLines();
+        String[] cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;

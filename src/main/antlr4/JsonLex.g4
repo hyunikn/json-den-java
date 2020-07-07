@@ -53,15 +53,15 @@ TRUE: 'true';
 FALSE: 'false';
 NULL: 'null';
 
-COMMENT
+REMARK
     : [\n\r\f] ' '*? '/**' .*? '*/'
     ;
 
-DROPPED_BLOCK_COMMENT
+BLOCK_COMMENT
     : '/*' .*? '*/' -> skip
     ;
 
-DROPPED_LINE_COMMENT
+LINE_COMMENT
     : '//' .*? [\n] -> skip
     ;
 

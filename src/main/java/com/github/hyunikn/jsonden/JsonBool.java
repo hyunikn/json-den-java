@@ -45,9 +45,9 @@ public class JsonBool extends JsonSimple {
     public Object clone() {
         JsonBool clone = new JsonBool(this.val);
 
-        String[] cl = this.commentLines();
+        String[] cl = this.remarkLines();
         if (cl != null) {
-            clone.setCommentLines(cl);
+            clone.setRemarkLines(cl);
         }
 
         return clone;
