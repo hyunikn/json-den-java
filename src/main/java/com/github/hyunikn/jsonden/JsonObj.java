@@ -143,7 +143,7 @@ public class JsonObj extends Json {
     /**
       * Sets the value of the key.
       * @param key must not be null and must not have a dot (.) character in it.
-      * @param elem if {@code elem} is null then it is understood as a JsonNull.
+      * @param value if {@code elem} is null then it is understood as a JsonNull.
       * @return this {@code JsonObj} for method chaining
       */
     public JsonObj set(String key, Json value) {

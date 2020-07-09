@@ -7,6 +7,11 @@ abstract class JsonSimple extends Json {
     // ===================================================
     // Public
 
+    @Override
+    public boolean isLeaf() {
+        return true;
+    }
+
     // ===================================================
     // Protected
 

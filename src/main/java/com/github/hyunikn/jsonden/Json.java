@@ -18,6 +18,7 @@ import java.io.StringReader;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
@@ -140,14 +141,154 @@ public abstract class Json {
     @Override
     public abstract Object clone();
 
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * @return map of paths to the different values.
+      */
+    public LinkedHashMap<String, List<Json>> diff(Json that) {
+        LinkedHashMap<String, Json> flattened = flatten();
+
+        LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            String key = e.getKey();
+            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            if (thatValue != null) {
+                Json thisValue = e.getValue();
+                if (!thisValue.equals(thatValue)) {
+                    ret.put(key, Arrays.asList(thisValue, thatValue));
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+      * Gets the (leaf and non-leaf) nodes whose paths are common of this and that {@code Json}s
+      * and whose values are equal.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      */
+    public LinkedHashMap<String, Json> common(Json that) {
+        LinkedHashMap<String, Json> flattened = flatten2();
+
+        String prefixToSkip = null;
+        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+
+            String key = e.getKey();
+            if (prefixToSkip != null) {
+                if (key.startsWith(prefixToSkip)) {
+                    continue;
+                } else {
+                    prefixToSkip = null;
+                }
+            }
+
+            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            if (thatValue != null) {
+                Json thisValue = e.getValue();
+                if (thisValue.equals(thatValue)) {
+                    ret.put(key, thisValue);
+                    if (".".equals(key)) {
+                        break;  // nothing more to do
+                    }
+                    if (prefixToSkip == null && !(thisValue instanceof JsonSimple)) {
+                        prefixToSkip = key + ".";
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+      * Gets the (leaf and non-leaf) nodes whose paths are in {@code this Json} but not in {@code that Json}.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      */
+    public LinkedHashMap<String, Json> subtract(Json that) {
+        LinkedHashMap<String, Json> flattened = flatten2();
+
+        String prefixToSkip = null;
+        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+
+            String key = e.getKey();
+            if (prefixToSkip != null) {
+                if (key.startsWith(prefixToSkip)) {
+                    continue;
+                } else {
+                    prefixToSkip = null;
+                }
+            }
+
+            if (!".".equals(key) && !that.has(key)) {
+                Json value = e.getValue();
+                ret.put(key, value);
+                if (prefixToSkip == null && !(value instanceof JsonSimple)) {
+                    prefixToSkip = key + ".";
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
+      */
+    public LinkedHashMap<String, Json> commonLeaves(Json that) {
+        LinkedHashMap<String, Json> flattened = flatten();
+
+        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            String key = e.getKey();
+            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            if (thatValue != null) {
+                Json thisValue = e.getValue();
+                if (thisValue.equals(thatValue)) {
+                    ret.put(key, thisValue);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are in {@code this Json} but not in {@code that Json}.
+      */
+    public LinkedHashMap<String, Json> subtractLeaves(Json that) {
+        LinkedHashMap<String, Json> flattened = flatten();
+
+        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            String key = e.getKey();
+            if (!".".equals(key) && !that.has(key)) {
+                ret.put(key, e.getValue());
+            }
+        }
+
+        return ret;
+    }
+
     // --------------------------------------------------
     // convenience methods
+
+    /**
+      * Whether this is one of JsonBool, JsonNull, JsonNum and JsonStr or not.
+      */
+    public boolean isLeaf() {
+        return false;   // overriden by JsonSimple
+    }
 
     // ---------------------------------------------------------------------
     // getx and setx
 
     /**
-      * Gets a {@code Json} located deep in the nested structure.
+      * Gets a proper subnode located at the path in the structure of this {@code Json}.
       * For example, one can use {@code json.getx("a.b.c.d.e")} instead of
       * {@code json.get("a").get("b").get("c").get("d").get("e")} which is common in many
       * JSON libraries.
