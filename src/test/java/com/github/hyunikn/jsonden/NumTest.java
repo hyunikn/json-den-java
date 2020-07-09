@@ -9,9 +9,9 @@ public class NumTest {
 
     @Test
     public void test() throws ParseError {
-        JsonNum i = new JsonNum(3);
-        JsonNum f = new JsonNum(3.33);
-        JsonNum e = new JsonNum(3.33e10);
+        JsonNum i = JsonNum.instance(3);
+        JsonNum f = JsonNum.instance(3.33);
+        JsonNum e = JsonNum.instance(3.33e10);
         assertEquals(i, JsonNum.parse("3"));
         assertEquals(f, JsonNum.parse("3.33"));
         assertEquals(e, JsonNum.parse("3.33e10"));

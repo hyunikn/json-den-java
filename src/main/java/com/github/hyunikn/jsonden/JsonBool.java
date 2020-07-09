@@ -12,10 +12,11 @@ public class JsonBool extends JsonSimple {
     // ===================================================
     // Public
 
-    public JsonBool(boolean val) {
-        super(Boolean.toString(val));
-        this.val = val;
-        this.hash = val ? 31 : 13;   // Baskin Robbins number and its reverse
+    /**
+      * Gets an {@code JsonBool}
+      */
+    public static JsonBool instance(boolean val) {
+        return new JsonBool(val);
     }
 
     /**
@@ -93,6 +94,12 @@ public class JsonBool extends JsonSimple {
     // Protected
 
     protected final boolean val;
+
+    protected JsonBool(boolean val) {
+        super(Boolean.toString(val));
+        this.val = val;
+        this.hash = val ? 31 : 13;   // Baskin Robbins number and its reverse
+    }
 
     @Override
     protected String getTypeName() {

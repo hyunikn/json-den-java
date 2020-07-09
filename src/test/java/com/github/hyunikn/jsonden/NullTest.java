@@ -9,7 +9,7 @@ public class NullTest {
 
     @Test
     public void test() throws ParseError {
-        JsonNull nul = new JsonNull();
+        JsonNull nul = JsonNull.instance();
         assertEquals(nul, JsonNull.parse("null"));
         assertEquals(nul.hashCode(), JsonNull.parse("null").hashCode());
         assertEquals(nul.clone(), JsonNull.parse("null").clone());

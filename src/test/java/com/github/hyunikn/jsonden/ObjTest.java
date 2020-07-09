@@ -13,24 +13,24 @@ public class ObjTest {
 
     @Test
     public void test() throws ParseError {
-        JsonObj empty0 = new JsonObj();
+        JsonObj empty0 = JsonObj.instance();
         JsonObj empty1 = JsonObj.parse("{}");
         assertEquals(empty0, empty1);
         assertEquals(empty0.hashCode(), empty1.hashCode());
         assertEquals(empty0.clone(), empty1.clone());
 
         LinkedHashMap<String, Json> map = new LinkedHashMap<>();
-        JsonArr arr = new JsonArr(Arrays.asList(new JsonNum(1), new JsonNum(1), new JsonNum(1)));
+        JsonArr arr = JsonArr.instance(Arrays.asList(JsonNum.instance(1), JsonNum.instance(1), JsonNum.instance(1)));
         map.put("a", arr);
         map.put("o", empty0);
-        map.put("bt", new JsonBool(true));
-        map.put("bf", new JsonBool(false));
-        map.put("null", new JsonNull());
-        map.put("num-int", new JsonNum(3));
-        map.put("num-float", new JsonNum(3.33));
-        map.put("num-exp", new JsonNum(3.33e10));
-        map.put("str", new JsonStr("hello"));
-        JsonObj obj0 = new JsonObj(map);
+        map.put("bt", JsonBool.instance(true));
+        map.put("bf", JsonBool.instance(false));
+        map.put("null", JsonNull.instance());
+        map.put("num-int", JsonNum.instance(3));
+        map.put("num-float", JsonNum.instance(3.33));
+        map.put("num-exp", JsonNum.instance(3.33e10));
+        map.put("str", JsonStr.instance("hello"));
+        JsonObj obj0 = JsonObj.instance(map);
         JsonObj obj1 = JsonObj.parse(
                 "{\"a\": [1, 1, 1], \"o\": {}, \"bt\": true, \"bf\": false, \"null\": null, " +
                 "\"num-int\": 3, \"num-float\": 3.33, \"num-exp\": 3.33e10, \"str\": \"hello\"}");
@@ -56,17 +56,17 @@ public class ObjTest {
 
     @Test
     public void methodChain() throws ParseError {
-        JsonObj obj = new JsonObj();
-        obj.set("garbage", new JsonNull())
+        JsonObj obj = JsonObj.instance();
+        obj.set("garbage", JsonNull.instance())
             .clear()
-            .set("a", new JsonNum(1))
-            .set("b", new JsonNum(2))
-            .set("c", new JsonNum(3))
-            .set("d", new JsonNum(4))
-            .set("b", new JsonNum(20))
-            .set("c", new JsonNum(30))
+            .set("a", JsonNum.instance(1))
+            .set("b", JsonNum.instance(2))
+            .set("c", JsonNum.instance(3))
+            .set("d", JsonNum.instance(4))
+            .set("b", JsonNum.instance(20))
+            .set("c", JsonNum.instance(30))
             .delete("d")
-            .set("d", new JsonNum(40));
+            .set("d", JsonNum.instance(40));
         //System.out.println(obj.toString());
         assertEquals(JsonObj.parse(Util.readFile("results/_obj_method_chain.json")), obj);
     }

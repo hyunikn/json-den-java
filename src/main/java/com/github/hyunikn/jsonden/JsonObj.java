@@ -21,21 +21,18 @@ public class JsonObj extends Json {
     // Public
 
     /**
-      * Constructs an empty {@code JsonObj}.
+      * Gets an empty {@code JsonObj}.
       */
-    public JsonObj() {
-        map = new LinkedHashMap<>();
+    public static JsonObj instance() {
+        return new JsonObj();
     }
 
     /**
-      * Constructs a {@code JsonObj} from a map.
+      * Gets a {@code JsonObj} from a map.
       * @param map must not be null.
       */
-    public JsonObj(LinkedHashMap<String, Json> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("source map cannot be null");
-        }
-        this.map = new LinkedHashMap<>(map);
+    public static JsonObj instance(LinkedHashMap<String, Json> map) {
+        return new JsonObj(map);
     }
 
     /**
@@ -246,6 +243,17 @@ public class JsonObj extends Json {
     // Protected
 
     protected final LinkedHashMap<String, Json> map;
+
+    protected JsonObj() {
+        map = new LinkedHashMap<>();
+    }
+
+    protected JsonObj(LinkedHashMap<String, Json> map) {
+        if (map == null) {
+            throw new IllegalArgumentException("source map cannot be null");
+        }
+        this.map = new LinkedHashMap<>(map);
+    }
 
     @Override
     protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {

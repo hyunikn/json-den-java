@@ -12,8 +12,11 @@ public class JsonNull extends JsonSimple {
     // ===================================================
     // Public
 
-    public JsonNull() {
-        super("null");
+    /**
+      * Gets an {@code JsonNull}
+      */
+    public static JsonNull instance() {
+        return new JsonNull();
     }
 
     /**
@@ -76,6 +79,10 @@ public class JsonNull extends JsonSimple {
 
     // ===================================================
     // Protected
+
+    protected JsonNull() {
+        super("null");
+    }
 
     @Override
     protected String getTypeName() {

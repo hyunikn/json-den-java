@@ -20,20 +20,20 @@ public class JsonTest {
 
     @Test
     public void basicEquality() {
-        JsonObj obj1 = new JsonObj();
-        JsonObj obj2 = new JsonObj();
-        JsonArr arr1 = new JsonArr();
-        JsonArr arr2 = new JsonArr();
-        JsonBool t1 = new JsonBool(true);
-        JsonBool t2 = new JsonBool(true);
-        JsonBool f1 = new JsonBool(false);
-        JsonBool f2 = new JsonBool(false);
-        JsonNull null1 = new JsonNull();
-        JsonNull null2 = new JsonNull();
-        JsonNum num1 = new JsonNum(1.1);
-        JsonNum num2 = new JsonNum(1.1);
-        JsonStr s1 = new JsonStr("abc");
-        JsonStr s2 = new JsonStr("abc");
+        JsonObj obj1 = JsonObj.instance();
+        JsonObj obj2 = JsonObj.instance();
+        JsonArr arr1 = JsonArr.instance();
+        JsonArr arr2 = JsonArr.instance();
+        JsonBool t1 = JsonBool.instance(true);
+        JsonBool t2 = JsonBool.instance(true);
+        JsonBool f1 = JsonBool.instance(false);
+        JsonBool f2 = JsonBool.instance(false);
+        JsonNull null1 = JsonNull.instance();
+        JsonNull null2 = JsonNull.instance();
+        JsonNum num1 = JsonNum.instance(1.1);
+        JsonNum num2 = JsonNum.instance(1.1);
+        JsonStr s1 = JsonStr.instance("abc");
+        JsonStr s2 = JsonStr.instance("abc");
 
         assertEquals(obj1, obj2);
         assertEquals(arr1, arr2);
@@ -57,8 +57,8 @@ public class JsonTest {
         assertFalse(obj1.equals(obj2));
         assertFalse(arr1.equals(arr2));
         assertFalse(t1.equals(f1));
-        assertFalse(num1.equals(new JsonNum(1.2)));
-        assertFalse(s1.equals(new JsonStr("cde")));
+        assertFalse(num1.equals(JsonNum.instance(1.2)));
+        assertFalse(s1.equals(JsonStr.instance("cde")));
     }
 
     @Test
@@ -216,7 +216,7 @@ public class JsonTest {
     @Test
     public void getx() throws ParseError {
         Json nested = Json.parse(Util.readFile("nested.json"));
-        assertEquals(new JsonStr("merong"), nested.getx("0.a.0.b.c"));
+        assertEquals(JsonStr.instance("merong"), nested.getx("0.a.0.b.c"));
     }
 
     @Test
@@ -237,13 +237,13 @@ public class JsonTest {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         Json r = Json.parse(Util.readFile("results/_x_methods.json"));
         assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.1").getBoolean(), false);
-        assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.2"), new JsonNull());
+        assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.2"), JsonNull.instance());
         assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.4").getDouble(), 1.1, 0.0);
 
         j.setx("how.0.deep.0.is.1.your", "love");
         j.setx("how.0.deep.0.is.2.your", "love");
-        j.setx("how.0.deep.0.is.0.your.0.love.1", new JsonObj());   // replace
-        j.setx("how.0.deep.0.is.0.your.0.love.1.how.deep", new JsonObj());
+        j.setx("how.0.deep.0.is.0.your.0.love.1", JsonObj.instance());   // replace
+        j.setx("how.0.deep.0.is.0.your.0.love.1.how.deep", JsonObj.instance());
         //System.out.println(j.toString());
         assertEquals(r, j);
     }

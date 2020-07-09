@@ -9,8 +9,8 @@ public class BoolTest {
 
     @Test
     public void test() throws ParseError {
-        JsonBool bt = new JsonBool(true);
-        JsonBool bf = new JsonBool(false);
+        JsonBool bt = JsonBool.instance(true);
+        JsonBool bf = JsonBool.instance(false);
         assertEquals(bt, JsonBool.parse("true"));
         assertEquals(bf, JsonBool.parse("false"));
         assertEquals(bt.hashCode(), JsonBool.parse("true").hashCode());

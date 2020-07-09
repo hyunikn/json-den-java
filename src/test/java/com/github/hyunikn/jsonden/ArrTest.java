@@ -12,35 +12,35 @@ public class ArrTest {
 
     @Test
     public void test() throws ParseError {
-        JsonArr empty0 = new JsonArr();
+        JsonArr empty0 = JsonArr.instance();
         JsonArr empty1 = JsonArr.parse("[]");
         assertEquals(empty0, empty1);
         assertEquals(empty0.hashCode(), empty1.hashCode());
         assertEquals(empty0.clone(), empty1.clone());
 
-        JsonArr arr0 = new JsonArr(Arrays.asList(
-                    new JsonArr(Arrays.asList(new JsonNum(1), new JsonNum(1), new JsonNum(1))),
-                    new JsonArr(Arrays.asList(new JsonNum(2), new JsonNum(2), new JsonNum(2))),
-                    new JsonArr(Arrays.asList(new JsonNum(3), new JsonNum(3), new JsonNum(3)))
+        JsonArr arr0 = JsonArr.instance(Arrays.asList(
+                    JsonArr.instance(Arrays.asList(JsonNum.instance(1), JsonNum.instance(1), JsonNum.instance(1))),
+                    JsonArr.instance(Arrays.asList(JsonNum.instance(2), JsonNum.instance(2), JsonNum.instance(2))),
+                    JsonArr.instance(Arrays.asList(JsonNum.instance(3), JsonNum.instance(3), JsonNum.instance(3)))
                 ));
         JsonArr arr1 = JsonArr.parse("[ [ 1, 1, 1 ], [ 2, 2, 2 ], [ 3, 3, 3 ] ]");
         assertEquals(arr0, arr1);
         assertEquals(arr0.hashCode(), arr1.hashCode());
         assertEquals(arr0.clone(), arr1.clone());
 
-        assertEquals(new JsonArr(Arrays.asList(new JsonNum(2), new JsonNum(2), new JsonNum(2))), arr0.get(1));
+        assertEquals(JsonArr.instance(Arrays.asList(JsonNum.instance(2), JsonNum.instance(2), JsonNum.instance(2))), arr0.get(1));
         assertEquals(JsonArr.parse("[ 2, 2, 2 ]"), arr0.remove(1));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], [ 3, 3, 3 ] ]"), arr0);
         assertEquals(JsonArr.parse("[ 3, 3, 3 ]"), arr0.get(1));
-        arr0.replace(1, new JsonStr("hello"));
+        arr0.replace(1, JsonStr.instance("hello"));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], \"hello\" ]"), arr0);
-        arr0.insert(1, new JsonNum(3));
+        arr0.insert(1, JsonNum.instance(3));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\" ]"), arr0);
-        arr0.append(new JsonNull());
+        arr0.append(JsonNull.instance());
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null ]"), arr0);
-        arr0.append(new JsonBool(true));
+        arr0.append(JsonBool.instance(true));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null, true ]"), arr0);
-        arr0.append(new JsonBool(false));
+        arr0.append(JsonBool.instance(false));
         assertEquals(JsonArr.parse("[ [ 1, 1, 1 ], 3, \"hello\", null, true, false ]"), arr0);
 
         assertEquals(6, arr0.size());
@@ -58,28 +58,28 @@ public class ArrTest {
 
     @Test
     public void methodChain() throws ParseError {
-        JsonArr arr = new JsonArr();
-        arr.append(new JsonNum(1000))
+        JsonArr arr = JsonArr.instance();
+        arr.append(JsonNum.instance(1000))
             .clear()
-            .append(new JsonNum(0))
-            .append(new JsonNum(1))
-            .append(new JsonNum(2))
-            .append(new JsonNum(3))
-            .append(new JsonNum(4))
-            .append(new JsonNum(5))
-            .insert(-1, new JsonNum(4.5))
-            .insert(-3, new JsonNum(3.5))
-            .insert(-5, new JsonNum(2.5))
-            .insert(-7, new JsonNum(1.5))
-            .insert(-9, new JsonNum(0.5));
+            .append(JsonNum.instance(0))
+            .append(JsonNum.instance(1))
+            .append(JsonNum.instance(2))
+            .append(JsonNum.instance(3))
+            .append(JsonNum.instance(4))
+            .append(JsonNum.instance(5))
+            .insert(-1, JsonNum.instance(4.5))
+            .insert(-3, JsonNum.instance(3.5))
+            .insert(-5, JsonNum.instance(2.5))
+            .insert(-7, JsonNum.instance(1.5))
+            .insert(-9, JsonNum.instance(0.5));
         //System.out.println(arr.toString());
         assertEquals(JsonArr.parse(Util.readFile("results/_arr_method_chain.json")), arr);
 
-        arr.replace(1, new JsonNum(0.6))
-            .replace(3, new JsonNum(1.6))
-            .replace(5, new JsonNum(2.6))
-            .replace(7, new JsonNum(3.6))
-            .replace(9, new JsonNum(4.6));
+        arr.replace(1, JsonNum.instance(0.6))
+            .replace(3, JsonNum.instance(1.6))
+            .replace(5, JsonNum.instance(2.6))
+            .replace(7, JsonNum.instance(3.6))
+            .replace(9, JsonNum.instance(4.6));
         assertEquals(JsonArr.parse(Util.readFile("results/_arr_method_chain2.json")), arr);
     }
 }

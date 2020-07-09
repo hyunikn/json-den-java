@@ -20,21 +20,18 @@ public class JsonArr extends Json {
     // Public
 
     /**
-      * Constructs an empty {@code JsonArr}.
+      * Gets an empty {@code JsonArr}.
       */
-    public JsonArr() {
-        list = new LinkedList<>();
+    public static JsonArr instance() {
+        return new JsonArr();
     }
 
     /**
-      * Constructs a {@code JsonArr} from a list.
+      * Gets a {@code JsonArr} from a list.
       * @param list must not be null.
       */
-    public JsonArr(List<Json> list) {
-        if (list == null) {
-            throw new IllegalArgumentException("source list cannot be null");
-        }
-        this.list = new LinkedList<>(list);
+    public static JsonArr instance(List<Json> list) {
+        return new JsonArr(list);
     }
 
     /**
@@ -385,6 +382,17 @@ public class JsonArr extends Json {
     // Protected
 
     protected final LinkedList<Json> list;
+
+    protected JsonArr() {
+        list = new LinkedList<>();
+    }
+
+    protected JsonArr(List<Json> list) {
+        if (list == null) {
+            throw new IllegalArgumentException("source list cannot be null");
+        }
+        this.list = new LinkedList<>(list);
+    }
 
     @Override
     protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {

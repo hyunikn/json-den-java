@@ -16,42 +16,58 @@ public class JsonNum extends JsonSimple {
     // Public
 
     /**
-      * Constructs a {@code JsonNum} from a text which represents a number.
+      * Gets a {@code JsonNum} from a text which represents a number.
       */
-    public JsonNum(String text) {
-        super(text);
+    public static JsonNum instance(String text) {
+        return new JsonNum(text);
     }
-
-    public JsonNum(byte val) {
-        super(Byte.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a byte.
+      */
+    public static JsonNum instance(byte val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(short val) {
-        super(Short.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a short.
+      */
+    public static JsonNum instance(short val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(int val) {
-        super(Integer.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a int.
+      */
+    public static JsonNum instance(int val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(long val) {
-        super(Long.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a long.
+      */
+    public static JsonNum instance(long val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(float val) {
-        super(Float.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a float.
+      */
+    public static JsonNum instance(float val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(double val) {
-        super(Double.toString(val));
+    /**
+      * Gets a {@code JsonNum} from a double.
+      */
+    public static JsonNum instance(double val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(BigInteger val) {
-        super(val.toString());
+    /**
+      * Gets a {@code JsonNum} from a BigInteger.
+      */
+    public static JsonNum instance(BigInteger val) {
+        return new JsonNum(val);
     }
-
-    public JsonNum(BigDecimal val) {
-        super(val.toPlainString());
+    /**
+      * Gets a {@code JsonNum} from a BigDecimal.
+      */
+    public static JsonNum instance(BigDecimal val) {
+        return new JsonNum(val);
     }
 
     /**
@@ -253,6 +269,35 @@ public class JsonNum extends JsonSimple {
     protected BigInteger bigIntegerVal;
 
     protected BigDecimal bigDecimalVal;
+
+    // constructors
+    protected JsonNum(String text) {
+        super(text);
+    }
+    protected JsonNum(byte val) {
+        super(Byte.toString(val));
+    }
+    protected JsonNum(short val) {
+        super(Short.toString(val));
+    }
+    protected JsonNum(int val) {
+        super(Integer.toString(val));
+    }
+    protected JsonNum(long val) {
+        super(Long.toString(val));
+    }
+    protected JsonNum(float val) {
+        super(Float.toString(val));
+    }
+    protected JsonNum(double val) {
+        super(Double.toString(val));
+    }
+    protected JsonNum(BigInteger val) {
+        super(val.toString());
+    }
+    protected JsonNum(BigDecimal val) {
+        super(val.toPlainString());
+    }
 
     @Override
     protected String getTypeName() {

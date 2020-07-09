@@ -96,15 +96,15 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     @Override public Json visitValue(JsonParse.ValueContext ctx) {
 
         if (ctx.STRING() != null) {
-            return new JsonStr(stripQuoteMarks(ctx.STRING().getText()));
+            return JsonStr.instance(stripQuoteMarks(ctx.STRING().getText()));
         } else if (ctx.NUMBER() != null) {
-            return new JsonNum(ctx.NUMBER().getText());
+            return JsonNum.instance(ctx.NUMBER().getText());
         } else if (ctx.TRUE() != null) {
-            return new JsonBool(true);
+            return JsonBool.instance(true);
         } else if (ctx.FALSE() != null) {
-            return new JsonBool(false);
+            return JsonBool.instance(false);
         } else if (ctx.NULL() != null) {
-            return new JsonNull();
+            return JsonNull.instance();
         } else if (ctx.obj() != null) {
             return visitObj(ctx.obj());
         } else if (ctx.arr() != null) {
@@ -115,7 +115,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     }
 
     @Override public Json visitObj(JsonParse.ObjContext ctx) {
-        JsonObj jo = new JsonObj();
+        JsonObj jo = JsonObj.instance();
 
         for (JsonParse.RemarkedPairContext cp: ctx.remarkedPair()) {
 
@@ -154,7 +154,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     }
 
     @Override public Json visitArr(JsonParse.ArrContext ctx) {
-        JsonArr ja = new JsonArr();
+        JsonArr ja = JsonArr.instance();
 
         for (JsonParse.RemarkedValueContext cv: ctx.remarkedValue()) {
             ja.append(visitRemarkedValue(cv));

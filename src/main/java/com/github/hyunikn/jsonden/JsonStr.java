@@ -12,8 +12,11 @@ public class JsonStr extends JsonSimple {
     // ===================================================
     // Public
 
-    public JsonStr(String str) {
-        super(str);
+    /**
+      * Gets a {@code JsonStr}.
+      */
+    public static JsonStr instance(String str) {
+        return new JsonStr(str);
     }
 
     /**
@@ -92,6 +95,10 @@ public class JsonStr extends JsonSimple {
 
     // ===================================================
     // Protected
+
+    protected JsonStr(String str) {
+        super(str);
+    }
 
     @Override
     protected String getTypeName() {
