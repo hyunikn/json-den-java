@@ -17,7 +17,7 @@ public class BoolTest {
         assertEquals(bf.hashCode(), JsonBool.parse("false").hashCode());
         assertEquals(bt, bt.clone());
         assertEquals(bf, bf.clone());
-        assertTrue(bt.isBool() && bf.isBool()); 
+        assertTrue(bt.isBool() && bf.isBool());
         assertEquals(bt, bt.asBool());
         assertTrue(bt.getBoolean());
         assertTrue(!bf.getBoolean());

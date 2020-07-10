@@ -81,6 +81,21 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         return lineList;
     }
 
+    public static Integer getArrElemIndex(String s) {
+        assert s != null;
+
+        // array element index must start with a hash(#) character.
+        if (s.indexOf('#') == 0) {
+            try {
+                return Integer.valueOf(s.substring(1));
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     @Override public Json visitRemarkedValue(JsonParse.RemarkedValueContext ctx) {
         Json value = visitValue(ctx.value());
         TerminalNode tn = ctx.REMARK();
@@ -124,6 +139,10 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
             if (key.indexOf('.') >= 0) {
                 throw new Error("Json-den does not allow dot(.) characters in JSON object member keys: '" +
                         key + "' at " + getLocation(pc.STRING()));
+            }
+            if (getArrElemIndex(key) != null) {
+                throw new Error("Json-den does not allow object member keys which are of the form, " +
+                        "hash(#) followed by an integer: " + key);
             }
 
             Json val = visitValue(pc.value());

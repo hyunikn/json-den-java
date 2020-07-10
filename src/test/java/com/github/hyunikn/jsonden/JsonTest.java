@@ -220,34 +220,34 @@ public class JsonTest {
     @Test
     public void getx() throws ParseError {
         Json nested = Json.parse(Util.readFile("nested.json"));
-        assertEquals(JsonStr.instance("merong"), nested.getx("0.a.0.b.c"));
+        assertEquals(JsonStr.instance("merong"), nested.getx("#0.a.#0.b.c"));
     }
 
     @Test
     public void has() throws ParseError {
         Json nested = Json.parse(Util.readFile("nested.json"));
-        assertTrue(nested.has("0.a.0.b.c"));
-        assertFalse(nested.has("0.a.1.b.c"));
+        assertTrue(nested.has("#0.a.#0.b.c"));
+        assertFalse(nested.has("#0.a.#1.b.c"));
     }
 
     @Test
     public void longestReachablePrefix() throws ParseError {
         Json nested = Json.parse(Util.readFile("nested.json"));
-        assertEquals("0.a.0", nested.longestReachablePrefix("0.a.0.d.e"));
+        assertEquals("#0.a.#0", nested.longestReachablePrefix("#0.a.#0.d.e"));
     }
 
     @Test
     public void xMethods() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         Json r = Json.parse(Util.readFile("results/_x_methods.json"));
-        assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.1").getBoolean(), false);
-        assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.2"), JsonNull.instance());
-        assertEquals(j.getx("how.0.deep.0.is.0.your.0.love.4").getDouble(), 1.1, 0.0);
+        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#1").getBoolean(), false);
+        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#2"), JsonNull.instance());
+        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#4").getDouble(), 1.1, 0.0);
 
-        j.setx("how.0.deep.0.is.1.your", "love");
-        j.setx("how.0.deep.0.is.2.your", "love");
-        j.setx("how.0.deep.0.is.0.your.0.love.1", JsonObj.instance());   // replace
-        j.setx("how.0.deep.0.is.0.your.0.love.1.how.deep", JsonObj.instance());
+        j.setx("how.#0.deep.#0.is.#1.your", "love");
+        j.setx("how.#0.deep.#0.is.#2.your", "love");
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.#1", JsonObj.instance());   // replace
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.#1.how.deep", JsonObj.instance());
         //System.out.println(j.toString());
         assertEquals(r, j);
     }
@@ -255,43 +255,43 @@ public class JsonTest {
     @Test(expected=UnreachablePath.class)
     public void setxErr0() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.0.is.0.your.0.love.love", 0);
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
     public void setxErr1() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.0.is.0.your.0.love.8", 0);
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.#8", 0);
     }
 
     @Test(expected=Inapplicable.class)
     public void setxErr2() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.0.is.0.your.0.love.0.love", 0);
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.#0.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
     public void setxErr3() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.0.is.0.your.0.love.0.love.love", 0);
+        j.setx("how.#0.deep.#0.is.#0.your.#0.love.#0.love.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
     public void setxErr4() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.1.is.1.your.0.love", 0);
+        j.setx("how.#0.deep.#1.is.#1.your.#0.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
     public void setxErr5() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.is.your.love", 0);
+        j.setx("how.#0.deep.is.your.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
     public void setxErr6() throws ParseError, Inapplicable, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
-        j.setx("how.0.deep.2.is.your.love", 0);
+        j.setx("how.#0.deep.#2.is.your.love", 0);
     }
 
     @Test

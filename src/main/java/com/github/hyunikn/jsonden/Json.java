@@ -289,11 +289,10 @@ public abstract class Json {
 
     /**
       * Gets a proper subnode located at the path in the structure of this {@code Json}.
-      * For example, one can use {@code json.getx("a.b.c.d.e")} instead of
-      * {@code json.get("a").get("b").get("c").get("d").get("e")} which is common in many
-      * JSON libraries.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an (integer) index of a JSON array element.
+      * For example, one can use {@code json.getx("a.b.#0.c.d")} instead of
+      * {@code json.get("a").get("b").get(0).get("c").get("d")}.
+      * @param path dot delimited segments of a path to a subnode.
+      *  Each segment represents either an object member key or an array element index (hash followed by an integer).
       * @return the Json located at the path if present, otherwise null.
       */
     public Json getx(String path) {
@@ -319,12 +318,12 @@ public abstract class Json {
       * Sets {@code val} at the path, possibly deep in a nested structure, creating parent nodes as needed.
       * This behavior is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option.
       * Each of the created parent nodes is either a {@code JsonArr} or a {@code JsonObj} depending on whether
-      * the next path segment represents an integer (array element index) or not.
-      * For example, {@code eo.setx("a.b.c.d.e", val)} for an empty {@code JsonObj} {@code eo}
-      * results in {@code {"a":{"b":{"c":"{"d":{"e": val}}}}}} with newly created four parent nodes
-      * corresponding to a, b, c and d, respectively.
-      * @param path dot delimited segments of a path to a Json.
-      *   Each segment represents either a name of a JSON object member or an index (integer) of a JSON array element.
+      * the next path segment is a hash(#) followed by an integer (array element index) or not.
+      * For example, {@code eo.setx("a.b.#0.c.d", val)} for an empty {@code JsonObj} {@code eo}
+      * results in {@code {"a":{"b": [ {"c":"{"d": val}} ]}}} with newly created four parent nodes
+      * corresponding to a, b, #0 and c, respectively.
+      * @param path dot delimited segments of a path to a subnode.
+      *  Each segment represents either an object member key or an array element index (hash followed by an integer).
       * @return this {@code Json} for method chaining
       * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
@@ -338,24 +337,24 @@ public abstract class Json {
         String[] divided = dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
-        Integer lastIntSegment = getInteger(divided[1]);
+        Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(divided[1]);
 
         Json parent;
         if (parentPath == null) {
             parent = this;
         } else {
-            parent = getxp(parentPath, lastIntSegment == null ? TYPE_OBJECT : TYPE_ARRAY);
+            parent = getxp(parentPath, arrElemIndex == null ? TYPE_OBJECT : TYPE_ARRAY);
         }
 
         if (parent.isObj()) {
             parent.asObj().set(divided[1], val);
         } else if (parent.isArr()) {
-            if (lastIntSegment == null) {
+            if (arrElemIndex == null) {
                 throw new UnreachablePath(
                         "the parent of the target node is an array but the last segment is not an integer");
             } else {
                 JsonArr parentArr = parent.asArr();
-                int idx = lastIntSegment.intValue();
+                int idx = arrElemIndex.intValue();
                 if (idx == parentArr.size()) {
                     parentArr.append(val);
                 } else if (idx < parentArr.size()) {
@@ -688,10 +687,11 @@ public abstract class Json {
         for (String s: segments) {
             childNode = parentNode.getChild(s);
             if (childNode == null) {
-                if (parentNode instanceof JsonSimple) {
+                // the last reachable node can be a simple node
+                if (parentNode.isLeaf()) {
                     throw new UnreachablePath("cannot create a node at '" +
                             String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                            "' because its parent is a terminal node whose type is " +
+                            "' because its parent is a leaf node whose type is " +
                             parentNode.getClass().getSimpleName());
                 }
 
@@ -761,14 +761,6 @@ public abstract class Json {
 
     }
 
-    protected Integer getInteger(String s) {
-        try {
-            return Integer.valueOf(s);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
     // ===================================================
     // Private
 
@@ -797,11 +789,11 @@ public abstract class Json {
                 }
             } else {
                 String nextSegment = segments[i + 1];
-                Integer nextIntSegment = getInteger(nextSegment);
-                if (nextIntSegment == null) {
+                Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(nextSegment);
+                if (arrElemIndex == null) {
                     childNode = new JsonObj();
                 } else {
-                    int idx = nextIntSegment.intValue();
+                    int idx = arrElemIndex.intValue();
                     if (idx == 0) {
                         childNode = new JsonArr();
                     } else {
@@ -816,19 +808,19 @@ public abstract class Json {
                 parentNode.asObj().set(segment, childNode);
             } else if (parentNode.isArr()) {
                 if (parentNode == lastReachable) {
-                    Integer intSegment = getInteger(segment);
-                    if (intSegment == null) {
+                    Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(segment);
+                    if (arrElemIndex == null) {
                         throw new UnreachablePath("cannot create a node at '" +
                                 String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
                                 "' because its parent is an array and the path segment '" +
                                 segment + "' is not an integer");
-                    } else {
-                        int idx = intSegment.intValue();
-                        if (idx != parentNode.asArr().size()) {
-                            throw new UnreachablePath("cannot create a node at '" +
-                                    String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                    "' because its parent array has elements fewer than " + idx);
-                        }
+                    }
+
+                    int idx = arrElemIndex.intValue();
+                    if (idx != parentNode.asArr().size()) {
+                        throw new UnreachablePath("cannot create a node at '" +
+                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                                "' because its parent array has elements fewer than " + idx);
                     }
                 }
                 parentNode.asArr().append(childNode);

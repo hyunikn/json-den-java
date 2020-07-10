@@ -1,6 +1,7 @@
 package com.github.hyunikn.jsonden;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.io.IOException;
 
@@ -403,9 +404,9 @@ public class JsonArr extends Json {
 
         String prefix;
         if (".".equals(pathToMe)) {
-            prefix = "";
+            prefix = "#";
         } else {
-            prefix = pathToMe + ".";
+            prefix = pathToMe + ".#";
         }
 
         int size = list.size();
@@ -461,7 +462,7 @@ public class JsonArr extends Json {
 
     @Override
     protected Json getChild(String key) {
-        Integer intKey = getInteger(key);
+        Integer intKey = MyParseTreeVisitor.getArrElemIndex(key);
         if (intKey == null) {
             return null;
         } else {

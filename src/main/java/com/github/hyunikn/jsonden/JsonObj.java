@@ -1,6 +1,7 @@
 package com.github.hyunikn.jsonden;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.io.IOException;
 
@@ -87,6 +88,9 @@ public class JsonObj extends Json {
 
     /**
       * Parses the string into a {@code JsonObj}.
+      * Json-den does not allow those object member keys which have a dot (.) character in it or
+      * have the form of hash(#) followed by an integer. Json-den uses such keys for special purposes
+      * (see {@link com.github.hyunikn.jsonden.Json#getx} and {@link com.github.hyunikn.jsonden.Json#setx}).
       * @param s string to parse
       * @return a JsonObj if s legally represent a JSON object.
       * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json object.
@@ -142,16 +146,23 @@ public class JsonObj extends Json {
 
     /**
       * Sets the value of the key.
-      * @param key must not be null and must not have a dot (.) character in it.
+      * @param key must not be null, must not have a dot (.) character in it and must not have the form of
+      * hash(#) followed by an integer.
       * @param value if {@code elem} is null then it is understood as a JsonNull.
       * @return this {@code JsonObj} for method chaining
       */
     public JsonObj set(String key, Json value) {
         if (key == null) {
             throw new IllegalArgumentException("failed to set: key cannot be null");
-        } else if (key.indexOf('.') >= 0) {
+        }
+        if (key.indexOf('.') >= 0) {
             throw new IllegalArgumentException("failed to set: " +
                     "Json-den does not allow dot(.) characters in JSON object member keys");
+        }
+        if (MyParseTreeVisitor.getArrElemIndex(key) != null) {
+            throw new IllegalArgumentException("failed to set: " +
+                    "Json-den does not allow object member keys which have the form of " +
+                    "hash(#) followed by an integer: " + key);
         }
 
         if (value == null) {
