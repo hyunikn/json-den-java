@@ -8,7 +8,7 @@ Its distinctive features include
     They properly handle hierarchical structures of JSON values.
 2. It provides methods `diff`, `common` and `subtract` which identify the identical or different parts of
     two JSON values.
-3. It provides a method `getx` which queries JSON nodes
+3. It provides a method `getx` which can query JSON nodes
     located deep in hierarchical structures with a single dot delimited path.
     For example, you can use `json.getx("how.deep.is.your.love")`
     instead of `json.get("how").get("deep").get("is").get("your").get("love")`.
