@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON numbers.
   */
-public class JsonNum extends JsonSimple {
+public class JsonNum extends JsonLeaf {
 
     // ===================================================
     // Public

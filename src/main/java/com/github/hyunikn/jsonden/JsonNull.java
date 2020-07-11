@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents the JSON null.
   */
-public class JsonNull extends JsonSimple {
+public class JsonNull extends JsonLeaf {
 
     // ===================================================
     // Public

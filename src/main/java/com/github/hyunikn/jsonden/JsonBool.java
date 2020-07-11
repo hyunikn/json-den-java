@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON booleans.
   */
-public class JsonBool extends JsonSimple {
+public class JsonBool extends JsonLeaf {
 
     // ===================================================
     // Public

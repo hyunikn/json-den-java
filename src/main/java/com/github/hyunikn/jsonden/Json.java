@@ -114,32 +114,26 @@ public abstract class Json {
     }
 
     /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to terminal nodes as its keys.
-      * A special key dot (.) indicates the path to itself.
-      */
-    public LinkedHashMap<String, Json> flatten() {
-        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
-        flattenInner(accum, ".", false);
-        return accum;
-    }
-
-    /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to itself and all the subnodes as its keys.
-      * A special key dot (.) indicates the path to itself.
-      */
-    public LinkedHashMap<String, Json> flatten2() {
-        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
-        flattenInner(accum, ".", true);
-        return accum;
-    }
-
-    /**
       * Deep clone.
       */
     @Override
     public abstract Object clone();
+
+    /**
+      * Converts its hierarchical structure into a single map.
+      * The resulting map has paths to all the leaf proper subnodes as its keys.
+      */
+    public LinkedHashMap<String, Json> flatten() {
+        return flattenInner(null, null, false);
+    }
+
+    /**
+      * Converts its hierarchical structure into a single map.
+      * The resulting map has paths to all the proper subnodes as its keys.
+      */
+    public LinkedHashMap<String, Json> flatten2() {
+        return flattenInner(null, null, true);
+    }
 
     /**
       * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
@@ -151,7 +145,7 @@ public abstract class Json {
         LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
             String key = e.getKey();
-            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            Json thatValue = that.getx(key);
             if (thatValue != null) {
                 Json thisValue = e.getValue();
                 if (!thisValue.equals(thatValue)) {
@@ -168,12 +162,24 @@ public abstract class Json {
       * and whose values are equal.
       * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
       * its subnodes are not included in the result.
+      * In particular, if this and that {@code Json} are equal then the result is a map whose key is 
+      * a spacial path ".", which represent the path to itself, and whose value is this {@Json}.
       */
     public LinkedHashMap<String, Json> intersect(Json that) {
+
+        LinkedHashMap<String, Json> ret;
+
+        // a trivial case
+        if (this.equals(that)) {
+            ret = new LinkedHashMap<>();
+            ret.put(".", this);
+            return ret;
+        }
+
         LinkedHashMap<String, Json> flattened = flatten2();
 
         String prefixToSkip = null;
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
+        ret = new LinkedHashMap<>();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
 
             String key = e.getKey();
@@ -185,15 +191,12 @@ public abstract class Json {
                 }
             }
 
-            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            Json thatValue = that.getx(key);
             if (thatValue != null) {
                 Json thisValue = e.getValue();
                 if (thisValue.equals(thatValue)) {
                     ret.put(key, thisValue);
-                    if (".".equals(key)) {
-                        break;  // nothing more to do
-                    }
-                    if (prefixToSkip == null && !(thisValue instanceof JsonSimple)) {
+                    if (prefixToSkip == null && !(thisValue instanceof JsonLeaf)) {
                         prefixToSkip = key + ".";
                     }
                 }
@@ -224,10 +227,10 @@ public abstract class Json {
                 }
             }
 
-            if (!".".equals(key) && !that.has(key)) {
+            if (!that.has(key)) {
                 Json value = e.getValue();
                 ret.put(key, value);
-                if (prefixToSkip == null && !(value instanceof JsonSimple)) {
+                if (prefixToSkip == null && !(value instanceof JsonLeaf)) {
                     prefixToSkip = key + ".";
                 }
             }
@@ -245,7 +248,7 @@ public abstract class Json {
         LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
             String key = e.getKey();
-            Json thatValue = ".".equals(key) ? that : that.getx(key);
+            Json thatValue = that.getx(key);
             if (thatValue != null) {
                 Json thisValue = e.getValue();
                 if (thisValue.equals(thatValue)) {
@@ -266,7 +269,7 @@ public abstract class Json {
         LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
             String key = e.getKey();
-            if (!".".equals(key) && !that.has(key)) {
+            if (!that.has(key)) {
                 ret.put(key, e.getValue());
             }
         }
@@ -281,7 +284,7 @@ public abstract class Json {
       * Whether this is one of {@code JsonBool}, {@code JsonNull}, {@code JsonNum} and {@code JsonStr} or not.
       */
     public boolean isLeaf() {
-        return false;   // overriden by JsonSimple
+        return false;   // overriden by JsonLeaf
     }
 
     // ---------------------------------------------------------------------
@@ -648,7 +651,7 @@ public abstract class Json {
     protected Json() { }
 
     // overriden by all
-    protected abstract void flattenInner(
+    protected abstract LinkedHashMap<String, Json> flattenInner(
             LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo);
     protected abstract String getTypeName();
     protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);

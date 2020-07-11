@@ -304,40 +304,6 @@ public class JsonTest {
     }
 
     @Test
-    public void compare() {
-        Json j1, j2;
-        j1 = new JsonBool(true);
-        j2 = new JsonNum(1);
-
-        LinkedHashMap<String, List<Json>> d0 = j1.diffAtCommonPaths(j2);
-        LinkedHashMap<String, List<Json>> d1 = j1.diffAtCommonPaths(j1);
-        //System.out.println(Arrays.asList(d0, d1));
-        assertEquals(Util.readFile("results/_compare_0.out"), Arrays.asList(d0, d1).toString());
-
-        LinkedHashMap<String, Json> c0 = j1.intersect(j2);
-        LinkedHashMap<String, Json> c1 = j1.intersect(j1);
-        //System.out.println(Arrays.asList(c0, c1));
-        assertEquals(Util.readFile("results/_compare_1.out"), Arrays.asList(c0, c1).toString());
-
-        LinkedHashMap<String, Json> s0 = j1.subtract(j2);
-        LinkedHashMap<String, Json> s1 = j1.subtract(j1);
-        LinkedHashMap<String, Json> s2 = j2.subtract(j1);
-        //System.out.println(Arrays.asList(s0, s1, s2));
-        assertEquals(Util.readFile("results/_compare_2.out"), Arrays.asList(s0, s1, s2).toString());
-
-        c0 = j1.intersectLeaves(j2);
-        c1 = j2.intersectLeaves(j2);
-        //System.out.println(Arrays.asList(c0, c1));
-        assertEquals(Util.readFile("results/_compare_3.out"), Arrays.asList(c0, c1).toString());
-
-        s0 = j1.subtractLeaves(j2);
-        s1 = j1.subtractLeaves(j1);
-        s2 = j2.subtractLeaves(j1);
-        //System.out.println(Arrays.asList(s0, s1, s2));
-        assertEquals(Util.readFile("results/_compare_4.out"), Arrays.asList(s0, s1, s2).toString());
-    }
-
-    @Test
     public void compareObjects() throws ParseError {
         Json j1, j2;
         j1 = Json.parse(Util.readFile("compare1.json"));

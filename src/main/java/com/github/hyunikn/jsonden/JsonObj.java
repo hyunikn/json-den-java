@@ -267,16 +267,19 @@ public class JsonObj extends Json {
     }
 
     @Override
-    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
+    protected LinkedHashMap<String, Json> flattenInner(
+            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
 
-        if (addIntermediateToo) {
-            accum.put(pathToMe, this);
-        }
+        assert (accum == null) == (pathToMe == null);
 
         String prefix;
-        if (".".equals(pathToMe)) {
+        if (pathToMe == null) {
+            accum = new LinkedHashMap<>();
             prefix = "";
         } else {
+            if (addIntermediateToo) {
+                accum.put(pathToMe, this);
+            }
             prefix = pathToMe + ".";
         }
 
@@ -284,6 +287,8 @@ public class JsonObj extends Json {
             Json val = map.get(key);
             val.flattenInner(accum, prefix + key, addIntermediateToo);
         }
+
+        return accum;
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON strings.
   */
-public class JsonStr extends JsonSimple {
+public class JsonStr extends JsonLeaf {
 
     // ===================================================
     // Public

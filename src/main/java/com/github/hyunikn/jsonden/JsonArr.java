@@ -396,24 +396,29 @@ public class JsonArr extends Json {
     }
 
     @Override
-    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
+    protected LinkedHashMap<String, Json> flattenInner(
+            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
 
-        if (addIntermediateToo) {
-            accum.put(pathToMe, this);
-        }
+        assert (accum == null) == (pathToMe == null);
 
         String prefix;
-        if (".".equals(pathToMe)) {
+        if (pathToMe == null) {
+            accum = new LinkedHashMap<>();
             prefix = "#";
         } else {
+            if (addIntermediateToo) {
+                accum.put(pathToMe, this);
+            }
             prefix = pathToMe + ".#";
         }
 
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            Json val = list.get(i);
+        int i = 0;
+        for (Json val: list) {
             val.flattenInner(accum, prefix + i, addIntermediateToo);
+            i++;
         }
+
+        return accum;
     }
 
     @Override
