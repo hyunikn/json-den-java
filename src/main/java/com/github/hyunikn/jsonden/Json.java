@@ -5,7 +5,6 @@ import com.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
 import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.Inapplicable;
 import com.github.hyunikn.jsonden.exception.UnreachablePath;
 
 import org.antlr.v4.runtime.*;
@@ -119,164 +118,6 @@ public abstract class Json {
     @Override
     public abstract Object clone();
 
-    /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to all the leaf proper subnodes as its keys.
-      */
-    public LinkedHashMap<String, Json> flatten() {
-        return flattenInner(null, null, false);
-    }
-
-    /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to all the proper subnodes as its keys.
-      */
-    public LinkedHashMap<String, Json> flatten2() {
-        return flattenInner(null, null, true);
-    }
-
-    /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
-      * @return map of paths to the different values.
-      */
-    public LinkedHashMap<String, List<Json>> diffAtCommonPaths(Json that) {
-        LinkedHashMap<String, Json> flattened = flatten();
-
-        LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            String key = e.getKey();
-            Json thatValue = that.getx(key);
-            if (thatValue != null) {
-                Json thisValue = e.getValue();
-                if (!thisValue.equals(thatValue)) {
-                    ret.put(key, Arrays.asList(thisValue, thatValue));
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-      * Gets the nodes whose paths are common of this and that {@code Json}s
-      * and whose values are equal.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
-      * In particular, if this and that {@code Json} are equal then the result is a map whose key is 
-      * a spacial path ".", which represent the path to itself, and whose value is this {@Json}.
-      */
-    public LinkedHashMap<String, Json> intersect(Json that) {
-
-        LinkedHashMap<String, Json> ret;
-
-        // a trivial case
-        if (this.equals(that)) {
-            ret = new LinkedHashMap<>();
-            ret.put(".", this);
-            return ret;
-        }
-
-        LinkedHashMap<String, Json> flattened = flatten2();
-
-        String prefixToSkip = null;
-        ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-
-            String key = e.getKey();
-            if (prefixToSkip != null) {
-                if (key.startsWith(prefixToSkip)) {
-                    continue;
-                } else {
-                    prefixToSkip = null;
-                }
-            }
-
-            Json thatValue = that.getx(key);
-            if (thatValue != null) {
-                Json thisValue = e.getValue();
-                if (thisValue.equals(thatValue)) {
-                    ret.put(key, thisValue);
-                    if (prefixToSkip == null && !(thisValue instanceof JsonLeaf)) {
-                        prefixToSkip = key + ".";
-                    }
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
-      */
-    public LinkedHashMap<String, Json> subtract(Json that) {
-        LinkedHashMap<String, Json> flattened = flatten2();
-
-        String prefixToSkip = null;
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-
-            String key = e.getKey();
-            if (prefixToSkip != null) {
-                if (key.startsWith(prefixToSkip)) {
-                    continue;
-                } else {
-                    prefixToSkip = null;
-                }
-            }
-
-            if (!that.has(key)) {
-                Json value = e.getValue();
-                ret.put(key, value);
-                if (prefixToSkip == null && !(value instanceof JsonLeaf)) {
-                    prefixToSkip = key + ".";
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
-      */
-    public LinkedHashMap<String, Json> intersectLeaves(Json that) {
-        LinkedHashMap<String, Json> flattened = flatten();
-
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            String key = e.getKey();
-            Json thatValue = that.getx(key);
-            if (thatValue != null) {
-                Json thisValue = e.getValue();
-                if (thisValue.equals(thatValue)) {
-                    ret.put(key, thisValue);
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      */
-    public LinkedHashMap<String, Json> subtractLeaves(Json that) {
-        LinkedHashMap<String, Json> flattened = flatten();
-
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            String key = e.getKey();
-            if (!that.has(key)) {
-                ret.put(key, e.getValue());
-            }
-        }
-
-        return ret;
-    }
-
     // --------------------------------------------------
     // convenience methods
 
@@ -328,10 +169,9 @@ public abstract class Json {
       * @param path dot delimited segments of a path to a subnode.
       *  Each segment represents either an object member key or an array element index (hash followed by an integer).
       * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the parent is not a {@code JsonObj}.
       * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
-    public Json setx(String path, Json val) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, Json val) throws UnreachablePath {
 
         if (path == null) {
             throw new IllegalArgumentException("path cannot be null");
@@ -369,50 +209,50 @@ public abstract class Json {
                 }
             }
         } else {
-            throw new Inapplicable("node at '" + parentPath + "' cannot have a subnode because it is a " +
+            throw new UnreachablePath("node at '" + parentPath + "' cannot have a subnode because it is a " +
                     parent.getClass().getSimpleName());
         }
 
         return this;
     }
     /** short for {@code setx(path, new JsonBool(b))} */
-    public Json setx(String path, boolean b) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, boolean b) throws UnreachablePath {
         return setx(path, new JsonBool(b));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, byte n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, byte n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, short n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, short n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, int n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, int n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, long n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, long n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, float n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, float n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, double n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, double n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, BigInteger n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, BigInteger n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonNum(n))} */
-    public Json setx(String path, BigDecimal n) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, BigDecimal n) throws UnreachablePath {
         return setx(path, new JsonNum(n));
     }
     /** short for {@code setx(path, new JsonStr(s))} */
-    public Json setx(String path, String s) throws Inapplicable, UnreachablePath {
+    public Json setx(String path, String s) throws UnreachablePath {
         return setx(path, new JsonStr(s));
     }
 
@@ -523,118 +363,7 @@ public abstract class Json {
     /**
       * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr}, otherwise {@code null}.
       */
-    public JsonStr  asStr()  { return null; }
-
-    //---------------------------------------------
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} then this method returns
-      * the result of calling its {@code getMap()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonObj.
-      */
-    public LinkedHashMap<String, Json> getMap() throws Inapplicable {
-        return (LinkedHashMap<String, Json>) throwInapplicable("getMap");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} then this method returns
-      * the result of calling its {@code getList()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonArr.
-      */
-    public List<Json> getList() throws Inapplicable {
-        return (List<Json>) throwInapplicable("getList");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} then this method returns
-      * the result of calling its {@code getBoolean()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonBool.
-      */
-    public boolean getBoolean() throws Inapplicable {
-        return (boolean) throwInapplicable("getBoolean");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getByte()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public byte getByte() throws Inapplicable {
-        return (byte) throwInapplicable("getByte");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getShort()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public short getShort() throws Inapplicable {
-        return (short) throwInapplicable("getShort");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getInt()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public int getInt() throws Inapplicable {
-        return (int) throwInapplicable("getInt");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getLong()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public long getLong() throws Inapplicable {
-        return (long) throwInapplicable("getLong");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getFloat()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public float getFloat() throws Inapplicable {
-        return (float) throwInapplicable("getFloat");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getDouble()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public double getDouble() throws Inapplicable {
-        return (double) throwInapplicable("getDouble");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getBigInteger()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public BigInteger getBigInteger() throws Inapplicable {
-        return (BigInteger) throwInapplicable("getBigInteger");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} then this method returns
-      * the result of calling its {@code getBigDecimal()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonNum.
-      */
-    public BigDecimal getBigDecimal() throws Inapplicable {
-        return (BigDecimal) throwInapplicable("getBigDecimal");
-    }
-
-    /**
-      * If this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} then this method returns
-      * the result of calling its {@code getString()}.
-      * @throws com.github.hyunikn.jsonden.exception.Inapplicable when the run-time type is not JsonStr.
-      */
-    public String getString() throws Inapplicable {
-        return (String) throwInapplicable("getString");
-    }
-
+    public JsonStr asStr()  { return null; }
 
     // ===================================================
     // Protected
@@ -651,8 +380,6 @@ public abstract class Json {
     protected Json() { }
 
     // overriden by all
-    protected abstract LinkedHashMap<String, Json> flattenInner(
-            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo);
     protected abstract String getTypeName();
     protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
     protected abstract Json getChild(String key);
@@ -878,10 +605,6 @@ public abstract class Json {
         "       ",
         "        "
     };
-
-    private Object throwInapplicable(String op) throws Inapplicable {
-        throw new Inapplicable(op + " is not applicable to " + getClass().getSimpleName() + " nodes");
-    }
 
     private void checkStringifyOptions(int indentSize) {
         if (indentSize > 8) {

@@ -85,7 +85,6 @@ public class JsonBool extends JsonLeaf {
     /**
       * Returns the value as a boolean.
       */
-    @Override
     public boolean getBoolean() {
         return val;
     }

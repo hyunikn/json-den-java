@@ -26,19 +26,6 @@ abstract class JsonLeaf extends Json {
     }
 
     @Override
-    protected LinkedHashMap<String, Json> flattenInner(
-            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
-
-        assert (accum == null) == (pathToMe == null);
-
-        if (accum != null) {
-            accum.put(pathToMe, this);
-        }
-
-        return accum;
-    }
-
-    @Override
     protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
 
         if (indentLevel < 0) {

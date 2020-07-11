@@ -141,7 +141,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code byte}.
       */
-    @Override
     public byte getByte() {
         if (!byteCached) {
             byteVal = Byte.parseByte(text);
@@ -154,7 +153,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code short}.
       */
-    @Override
     public short getShort() {
         if (!shortCached) {
             shortVal = Short.parseShort(text);
@@ -167,7 +165,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as an {@code int}.
       */
-    @Override
     public int getInt() {
         if (!intCached) {
             intVal = Integer.parseInt(text);
@@ -180,7 +177,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code long}.
       */
-    @Override
     public long getLong() {
         if (!longCached) {
             longVal = Long.parseLong(text);
@@ -193,7 +189,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code float}.
       */
-    @Override
     public float getFloat() {
         if (!floatCached) {
             floatVal = Float.parseFloat(text);
@@ -206,7 +201,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code double}.
       */
-    @Override
     public double getDouble() {
         if (!doubleCached) {
             doubleVal = Double.parseDouble(text);
@@ -219,7 +213,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code BigInteger}.
       */
-    @Override
     public BigInteger getBigInteger() {
         if (bigIntegerVal == null) {
             bigIntegerVal = new BigInteger(text);
@@ -231,7 +224,6 @@ public class JsonNum extends JsonLeaf {
     /**
       * Returns the value as a {@code BigDecimal}.
       */
-    @Override
     public BigDecimal getBigDecimal() {
         if (bigDecimalVal == null) {
             bigDecimalVal = new BigDecimal(text);

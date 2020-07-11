@@ -90,7 +90,6 @@ public class JsonStr extends JsonLeaf {
     /**
       * Returns the value as a {@code String}.
       */
-    @Override
     public String getString() { return text; }
 
     // ===================================================

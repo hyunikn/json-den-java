@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -16,7 +17,7 @@ import java.util.LinkedHashSet;
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON objects.
   * It remembers the order of member addition, and prints them in that order when stringified.
   */
-public class JsonObj extends Json {
+public class JsonObj extends JsonNonLeaf {
 
     // ===================================================
     // Public
@@ -236,7 +237,6 @@ public class JsonObj extends Json {
     /**
       * Returns the members as a map.
       */
-    @Override
     public LinkedHashMap<String, Json> getMap() { return new LinkedHashMap(map); }
 
     // ---------------------------------------------------
@@ -248,6 +248,49 @@ public class JsonObj extends Json {
     public JsonObj clear() {
         map.clear();
         return this;
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * @return map of paths to the different values.
+      */
+    public LinkedHashMap<String, List<Json>> diffAtCommonPaths(JsonObj that) {
+        return super.diffAtCommonPaths(that);
+    }
+
+    /**
+      * Gets the nodes whose paths are common of this and that {@code Json}s
+      * and whose values are equal.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      * In particular, if this and that {@code Json} are equal then the result is a map whose key is
+      * a spacial path ".", which represent the path to itself, and whose value is this {@code Json}.
+      */
+    public LinkedHashMap<String, Json> intersect(JsonObj that) {
+        return super.intersect(that);
+    }
+
+    /**
+      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      */
+    public LinkedHashMap<String, Json> subtract(JsonObj that) {
+        return super.subtract(that);
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
+      */
+    public LinkedHashMap<String, Json> intersectLeaves(JsonObj that) {
+        return super.intersectLeaves(that);
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
+      */
+    public LinkedHashMap<String, Json> subtractLeaves(JsonObj that) {
+        return super.subtractLeaves(that);
     }
 
     // ===================================================
@@ -267,17 +310,13 @@ public class JsonObj extends Json {
     }
 
     @Override
-    protected LinkedHashMap<String, Json> flattenInner(
-            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
-
-        assert (accum == null) == (pathToMe == null);
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo) {
 
         String prefix;
         if (pathToMe == null) {
-            accum = new LinkedHashMap<>();
             prefix = "";
         } else {
-            if (addIntermediateToo) {
+            if (addNonLeafToo) {
                 accum.put(pathToMe, this);
             }
             prefix = pathToMe + ".";
@@ -285,10 +324,12 @@ public class JsonObj extends Json {
 
         for (String key: map.keySet()) {
             Json val = map.get(key);
-            val.flattenInner(accum, prefix + key, addIntermediateToo);
+            if (val instanceof JsonNonLeaf) {
+                ((JsonNonLeaf) val).flattenInner(accum, prefix + key, addNonLeafToo);
+            } else {
+                accum.put(prefix + key, val);
+            }
         }
-
-        return accum;
     }
 
     @Override

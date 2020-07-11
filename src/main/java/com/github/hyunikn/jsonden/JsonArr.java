@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 /**
   * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON arrays.
   */
-public class JsonArr extends Json {
+public class JsonArr extends JsonNonLeaf {
 
     // ===================================================
     // Public
@@ -376,8 +376,50 @@ public class JsonArr extends Json {
     /**
       * Returns the elements as a list.
       */
-    @Override
     public List<Json> getList() { return new LinkedList(list); }
+
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * @return map of paths to the different values.
+      */
+    public LinkedHashMap<String, List<Json>> diffAtCommonPaths(JsonArr that) {
+        return super.diffAtCommonPaths(that);
+    }
+
+    /**
+      * Gets the nodes whose paths are common of this and that {@code Json}s
+      * and whose values are equal.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      * In particular, if this and that {@code Json} are equal then the result is a map whose key is
+      * a spacial path ".", which represent the path to itself, and whose value is this {@code Json}.
+      */
+    public LinkedHashMap<String, Json> intersect(JsonArr that) {
+        return super.intersect(that);
+    }
+
+    /**
+      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
+      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
+      * its subnodes are not included in the result.
+      */
+    public LinkedHashMap<String, Json> subtract(JsonArr that) {
+        return super.subtract(that);
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
+      */
+    public LinkedHashMap<String, Json> intersectLeaves(JsonArr that) {
+        return super.intersectLeaves(that);
+    }
+
+    /**
+      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
+      */
+    public LinkedHashMap<String, Json> subtractLeaves(JsonArr that) {
+        return super.subtractLeaves(that);
+    }
 
     // ===================================================
     // Protected
@@ -396,17 +438,13 @@ public class JsonArr extends Json {
     }
 
     @Override
-    protected LinkedHashMap<String, Json> flattenInner(
-            LinkedHashMap<String, Json> accum, String pathToMe, boolean addIntermediateToo) {
-
-        assert (accum == null) == (pathToMe == null);
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo) {
 
         String prefix;
         if (pathToMe == null) {
-            accum = new LinkedHashMap<>();
             prefix = "#";
         } else {
-            if (addIntermediateToo) {
+            if (addNonLeafToo) {
                 accum.put(pathToMe, this);
             }
             prefix = pathToMe + ".#";
@@ -414,11 +452,13 @@ public class JsonArr extends Json {
 
         int i = 0;
         for (Json val: list) {
-            val.flattenInner(accum, prefix + i, addIntermediateToo);
+            if (val instanceof JsonNonLeaf) {
+                ((JsonNonLeaf) val).flattenInner(accum, prefix + i, addNonLeafToo);
+            } else {
+                accum.put(prefix + i, val);
+            }
             i++;
         }
-
-        return accum;
     }
 
     @Override

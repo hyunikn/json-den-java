@@ -1,7 +1,6 @@
 package com.github.hyunikn.jsonden;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.Inapplicable;
 import com.github.hyunikn.jsonden.exception.UnreachablePath;
 
 import java.util.List;
@@ -237,12 +236,12 @@ public class JsonTest {
     }
 
     @Test
-    public void xMethods() throws ParseError, Inapplicable, UnreachablePath {
+    public void xMethods() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         Json r = Json.parse(Util.readFile("results/_x_methods.json"));
-        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#1").getBoolean(), false);
+        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#1").asBool().getBoolean(), false);
         assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#2"), JsonNull.instance());
-        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#4").getDouble(), 1.1, 0.0);
+        assertEquals(j.getx("how.#0.deep.#0.is.#0.your.#0.love.#4").asNum().getDouble(), 1.1, 0.0);
 
         j.setx("how.#0.deep.#0.is.#1.your", "love");
         j.setx("how.#0.deep.#0.is.#2.your", "love");
@@ -253,50 +252,50 @@ public class JsonTest {
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr0() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr0() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#0.is.#0.your.#0.love.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr1() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr1() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#0.is.#0.your.#0.love.#8", 0);
     }
 
-    @Test(expected=Inapplicable.class)
-    public void setxErr2() throws ParseError, Inapplicable, UnreachablePath {
+    @Test(expected=UnreachablePath.class)
+    public void setxErr2() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#0.is.#0.your.#0.love.#0.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr3() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr3() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#0.is.#0.your.#0.love.#0.love.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr4() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr4() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#1.is.#1.your.#0.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr5() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr5() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.is.your.love", 0);
     }
 
     @Test(expected=UnreachablePath.class)
-    public void setxErr6() throws ParseError, Inapplicable, UnreachablePath {
+    public void setxErr6() throws ParseError, UnreachablePath {
         Json j = Json.parse(Util.readFile("x_methods.json"));
         j.setx("how.#0.deep.#2.is.your.love", 0);
     }
 
     @Test
     public void flatten() throws ParseError {
-        Json j = Json.parse(Util.readFile("flatten.json"));
+        JsonObj j = JsonObj.parse(Util.readFile("flatten.json"));
         //System.out.println(j.flatten().toString());
         assertEquals(Util.readFile("results/_flatten.out"), j.flatten().toString());
         //System.out.println(j.flatten2().toString());
@@ -305,9 +304,9 @@ public class JsonTest {
 
     @Test
     public void compareObjects() throws ParseError {
-        Json j1, j2;
-        j1 = Json.parse(Util.readFile("compare1.json"));
-        j2 = Json.parse(Util.readFile("compare2.json"));
+        JsonObj j1, j2;
+        j1 = JsonObj.parse(Util.readFile("compare1.json"));
+        j2 = JsonObj.parse(Util.readFile("compare2.json"));
 
         LinkedHashMap<String, List<Json>> d0 = j1.diffAtCommonPaths(j2);
         LinkedHashMap<String, List<Json>> d1 = j1.diffAtCommonPaths(j1);
