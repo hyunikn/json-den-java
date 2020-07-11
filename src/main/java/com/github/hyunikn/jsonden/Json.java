@@ -145,7 +145,7 @@ public abstract class Json {
       * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
-    public LinkedHashMap<String, List<Json>> diff(Json that) {
+    public LinkedHashMap<String, List<Json>> diffAtCommonPaths(Json that) {
         LinkedHashMap<String, Json> flattened = flatten();
 
         LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
@@ -164,12 +164,12 @@ public abstract class Json {
     }
 
     /**
-      * Gets the (leaf and non-leaf) nodes whose paths are common of this and that {@code Json}s
+      * Gets the nodes whose paths are common of this and that {@code Json}s
       * and whose values are equal.
       * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
       * its subnodes are not included in the result.
       */
-    public LinkedHashMap<String, Json> common(Json that) {
+    public LinkedHashMap<String, Json> intersect(Json that) {
         LinkedHashMap<String, Json> flattened = flatten2();
 
         String prefixToSkip = null;
@@ -204,7 +204,7 @@ public abstract class Json {
     }
 
     /**
-      * Gets the (leaf and non-leaf) nodes whose paths are in {@code this Json} but not in {@code that Json}.
+      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
       * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
       * its subnodes are not included in the result.
       */
@@ -239,7 +239,7 @@ public abstract class Json {
     /**
       * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
       */
-    public LinkedHashMap<String, Json> commonLeaves(Json that) {
+    public LinkedHashMap<String, Json> intersectLeaves(Json that) {
         LinkedHashMap<String, Json> flattened = flatten();
 
         LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
@@ -258,7 +258,7 @@ public abstract class Json {
     }
 
     /**
-      * Gets the leaf nodes whose paths are in {@code this Json} but not in {@code that Json}.
+      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
       */
     public LinkedHashMap<String, Json> subtractLeaves(Json that) {
         LinkedHashMap<String, Json> flattened = flatten();
@@ -278,7 +278,7 @@ public abstract class Json {
     // convenience methods
 
     /**
-      * Whether this is one of JsonBool, JsonNull, JsonNum and JsonStr or not.
+      * Whether this is one of {@code JsonBool}, {@code JsonNull}, {@code JsonNum} and {@code JsonStr} or not.
       */
     public boolean isLeaf() {
         return false;   // overriden by JsonSimple
@@ -334,7 +334,7 @@ public abstract class Json {
             throw new IllegalArgumentException("path cannot be null");
         }
 
-        String[] divided = dividePath(path);
+        String[] divided = Jsons.dividePath(path);
         assert divided != null;
         String parentPath = divided[0];
         Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(divided[1]);
@@ -630,23 +630,6 @@ public abstract class Json {
       */
     public String getString() throws Inapplicable {
         return (String) throwInapplicable("getString");
-    }
-
-    /** Divides the path into parent and child parts.
-      * Parent part is null if the path has only one segment.
-      * @return two element String array whose first element is the parent part, and the second is the child part.
-      */
-    public static String[] dividePath(String path) {
-        if (path == null) {
-            return null;
-        }
-
-        int idx = path.lastIndexOf('.');
-        if (idx < 0) {
-            return new String[]{ null, path };    // no parent part.
-        } else {
-            return new String[]{ path.substring(0, idx), path.substring(idx + 1) };
-        }
     }
 
 

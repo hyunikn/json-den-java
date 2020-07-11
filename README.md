@@ -6,7 +6,7 @@ Its distinctive features include
 
 1. Method `equals` checks the value equality, not the reference equality. Method `clone` deeply copies JSON values.
     They properly handle hierarchical structures of JSON values.
-2. It provides methods `diff`, `common` and `subtract` which identify the identical or different parts of
+2. It provides methods `diff`, `intersect` and `subtract` which identify identical or different parts of
     two JSON values.
 3. It provides a method `getx` which can query JSON nodes
     located deep in hierarchical structures with a single dot delimited path.
