@@ -1,6 +1,8 @@
 package com.github.hyunikn.jsonden;
 
 import com.github.hyunikn.jsonden.exception.ParseError;
+import com.github.hyunikn.jsonden.exception.UnreachablePath;
+
 import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.io.IOException;
@@ -419,6 +421,68 @@ public class JsonArr extends JsonNonLeaf {
       */
     public LinkedHashMap<String, Json> subtractLeaves(JsonArr that) {
         return super.subtractLeaves(that);
+    }
+
+    /**
+      * Sets {@code val} at the path, possibly deep in a nested structure, creating parent nodes as needed.
+      * This behavior is reminiscent of the UNIX shell command {@code mkdir} with {@code -p} option.
+      * Each of the created parent nodes is either a {@code JsonArr} or a {@code JsonObj} depending on whether
+      * the next path segment is a hash(#) followed by an integer (array element index) or not.
+      * For example, {@code eo.setx("a.b.#0.c.d", val)} for an empty {@code JsonObj} {@code eo}
+      * results in {@code {"a":{"b": [ {"c":"{"d": val}} ]}}} with newly created four parent nodes
+      * corresponding to a, b, #0 and c, respectively.
+      * @param path dot delimited segments of a path to a subnode.
+      *  Each segment represents either an object member key or an array element index (hash followed by an integer).
+      * @return this {@code Json} for method chaining
+      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
+      */
+    public JsonArr setx(String path, Json val) throws UnreachablePath {
+        return (JsonArr) super.setx(path, val);
+    }
+    /** short for {@code setx(path, new JsonBool(b))} */
+    public JsonArr setx(String path, boolean b) throws UnreachablePath {
+        return setx(path, new JsonBool(b));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, byte n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, short n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, int n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, long n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, float n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, double n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, BigInteger n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonNum(n))} */
+    public JsonArr setx(String path, BigDecimal n) throws UnreachablePath {
+        return setx(path, new JsonNum(n));
+    }
+    /** short for {@code setx(path, new JsonStr(s))} */
+    public JsonArr setx(String path, String s) throws UnreachablePath {
+        return setx(path, new JsonStr(s));
+    }
+
+    /** TODO */
+    public JsonArr loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
+        return (JsonArr) super.loadFlattened(flattened);
     }
 
     // ===================================================
