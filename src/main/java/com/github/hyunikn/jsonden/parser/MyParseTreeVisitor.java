@@ -87,7 +87,12 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         // array element index must start with a hash(#) character.
         if (s.indexOf('#') == 0) {
             try {
-                return Integer.valueOf(s.substring(1));
+                int i = Integer.valueOf(s.substring(1));
+                if (i < 0) {
+                    return null;
+                } else {
+                    return i;
+                }
             } catch (NumberFormatException e) {
                 return null;
             }

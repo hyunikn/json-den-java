@@ -128,16 +128,18 @@ abstract class JsonNonLeaf extends Json {
                 throw new UnreachablePath(
                         "the parent of the target node is an array but the last segment is not an integer");
             } else {
-                JsonArr parentArr = parent.asArr();
                 int idx = arrElemIndex.intValue();
-                if (idx == parentArr.size()) {
-                    parentArr.append(val);
-                } else if (idx < parentArr.size()) {
+
+                JsonArr parentArr = parent.asArr();
+                int currSize = parentArr.size();
+
+                if (idx < currSize) {
                     parentArr.replace(idx, val);
                 } else {
-                    throw new UnreachablePath(
-                            "the parent of the target node is an array but the last segment is " +
-                            divided[1] + " which is larger than the size of the array");
+                    for (int i = currSize; i < idx; i++) {
+                        parentArr.append(JsonNull.instance());  // fill the gap with nulls.
+                    }
+                    parentArr.append(val);
                 }
             }
         } else {
@@ -296,5 +298,127 @@ abstract class JsonNonLeaf extends Json {
 
     protected abstract void flattenInner(
             LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo);
+
+    // ===================================================
+    // Private
+
+    private Json createMissingNodes(Json lastReachable, String[] segments,
+            int idxOfFirstMissing, int typeOfLastNode) throws UnreachablePath {
+
+        Json childNode = null;
+        int len = segments.length;
+
+        Json parentNode = lastReachable;
+        for (int i = idxOfFirstMissing; i < len; i++) {
+            String segment = segments[i];
+
+            if (i == len - 1) {
+                // the last to create
+                switch (typeOfLastNode) {
+                    case TYPE_OBJECT:
+                        childNode = new JsonObj();
+                        break;
+                    case TYPE_ARRAY:
+                        childNode = new JsonArr();
+                        break;
+                    default:
+                        assert false;   // unreachable
+                        childNode = null;   // just to make the compiler happy
+                }
+            } else {
+                String nextSegment = segments[i + 1];
+                Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(nextSegment);
+                if (arrElemIndex == null) {
+                    childNode = new JsonObj();
+                } else {
+                    childNode = new JsonArr();
+                }
+            }
+
+            if (parentNode.isObj()) {
+                parentNode.asObj().set(segment, childNode);
+            } else if (parentNode.isArr()) {
+
+                JsonArr parentArr = parentNode.asArr();
+
+                Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(segment);
+                if (arrElemIndex == null) {
+                    throw new UnreachablePath("cannot create a node at '" +
+                            String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                            "' because its parent is an array and the path segment '" +
+                            segment + "' is not an array element index");
+                }
+                int idx = arrElemIndex.intValue();
+                assert idx >= parentArr.size();
+
+                for (int j = parentArr.size(); j < idx; j++) {
+                    parentArr.append(JsonNull.instance());  // fill the gap with nulls.
+                }
+                parentArr.append(childNode);
+            } else {
+                assert false; // unreachable
+            }
+
+            parentNode = childNode;
+        }
+
+        assert childNode != null;
+        return childNode;
+    }
+
+    private Json getxp(String path, int typeOfLastNode) throws UnreachablePath {
+
+        assert (path != null);
+
+        String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
+        int len = segments.length;
+
+        Json childNode = null;
+        Json parentNode = this;
+        int i = 0;
+        for (String s: segments) {
+            childNode = parentNode.getChild(s);
+            if (childNode == null) {
+                // the last reachable node can be a simple node
+                if (parentNode.isLeaf()) {
+                    throw new UnreachablePath("cannot create a node at '" +
+                            String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
+                            "' because its parent is a leaf node whose type is " +
+                            parentNode.getClass().getSimpleName());
+                }
+
+                JsonArr parentArr = null;
+                int origArrSize = -1;
+                if (parentNode.isArr()) {
+                    parentArr = parentNode.asArr();
+                    origArrSize = parentArr.size();
+                }
+
+                try {
+                    return createMissingNodes(parentNode, segments, i, typeOfLastNode); // returns the target node.
+                } catch (Throwable e) {
+
+                    // revert a possible side effect, that is, remove the possibly added child.
+                    if (parentNode.isObj()) {
+                        parentNode.asObj().remove(s);
+                    } else if (parentNode.isArr()) {
+                        while (parentArr.size() > origArrSize) {
+                            parentArr.remove(-1);   // remove elem at the end
+                        }
+                        assert parentArr.size() == origArrSize;
+                    } else {
+                        assert false;
+                    }
+                    throw e;
+                }
+            } else {
+                i++;
+                parentNode = childNode;
+            }
+        }
+
+        assert childNode != null;
+        return childNode;
+    }
 }
 

@@ -216,56 +216,6 @@ public abstract class Json {
     // --------------------------------------------------
     // Utility
 
-    protected Json getxp(String path, int typeOfLastNode) throws UnreachablePath {
-
-        assert (path != null);
-
-        String[] segments = path.split("\\.", -1);  // -1: do not discard trailing empty strings
-        int len = segments.length;
-
-        Json childNode = null;
-        Json parentNode = this;
-        int i = 0;
-        for (String s: segments) {
-            childNode = parentNode.getChild(s);
-            if (childNode == null) {
-                // the last reachable node can be a simple node
-                if (parentNode.isLeaf()) {
-                    throw new UnreachablePath("cannot create a node at '" +
-                            String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                            "' because its parent is a leaf node whose type is " +
-                            parentNode.getClass().getSimpleName());
-                }
-
-                try {
-                    return createMissingNodes(parentNode, segments, i, typeOfLastNode); // returns the target node.
-                } catch (Throwable e) {
-
-                    // revert a possible side effect, that is, remove the possibly added child.
-                    if (parentNode.isObj()) {
-                        parentNode.asObj().remove(s);
-                    } else if (parentNode.isArr()) {
-                        try {
-                            int idx = Integer.parseInt(s);
-                            parentNode.asArr().remove(idx);
-                        } catch (NumberFormatException ee) {
-                            // do nothing
-                        }
-                    } else {
-                        assert false;
-                    }
-                    throw e;
-                }
-            } else {
-                i++;
-                parentNode = childNode;
-            }
-        }
-
-        assert childNode != null;
-        return childNode;
-    }
-
     protected static void writeIndent(StringBuffer sbuf, int indentSize, int indentLevel) {
 
         if (indentSize == 0 || indentLevel == 0) {
@@ -305,77 +255,6 @@ public abstract class Json {
 
     // ===================================================
     // Private
-
-    private Json createMissingNodes(Json lastReachable, String[] segments,
-            int idxOfFirstMissing, int typeOfLastNode) throws UnreachablePath {
-
-        Json childNode = null;
-        int len = segments.length;
-
-        Json parentNode = lastReachable;
-        for (int i = idxOfFirstMissing; i < len; i++) {
-            String segment = segments[i];
-
-            if (i == len - 1) {
-                // the last to create
-                switch (typeOfLastNode) {
-                    case TYPE_OBJECT:
-                        childNode = new JsonObj();
-                        break;
-                    case TYPE_ARRAY:
-                        childNode = new JsonArr();
-                        break;
-                    default:
-                        assert false;   // unreachable
-                        childNode = null;   // just to make the compiler happy
-                }
-            } else {
-                String nextSegment = segments[i + 1];
-                Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(nextSegment);
-                if (arrElemIndex == null) {
-                    childNode = new JsonObj();
-                } else {
-                    int idx = arrElemIndex.intValue();
-                    if (idx == 0) {
-                        childNode = new JsonArr();
-                    } else {
-                        throw new UnreachablePath("an array node to create at '" +
-                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                "' cannot have an element at the non-zero index " + nextSegment);
-                    }
-                }
-            }
-
-            if (parentNode.isObj()) {
-                parentNode.asObj().set(segment, childNode);
-            } else if (parentNode.isArr()) {
-                if (parentNode == lastReachable) {
-                    Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(segment);
-                    if (arrElemIndex == null) {
-                        throw new UnreachablePath("cannot create a node at '" +
-                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                "' because its parent is an array and the path segment '" +
-                                segment + "' is not an integer");
-                    }
-
-                    int idx = arrElemIndex.intValue();
-                    if (idx != parentNode.asArr().size()) {
-                        throw new UnreachablePath("cannot create a node at '" +
-                                String.join(".", Arrays.copyOfRange(segments, 0, i + 1)) +
-                                "' because its parent array has elements fewer than " + idx);
-                    }
-                }
-                parentNode.asArr().append(childNode);
-            } else {
-                assert false; // unreachable
-            }
-
-            parentNode = childNode;
-        }
-
-        assert childNode != null;
-        return childNode;
-    }
 
     private static String getDesc(RecognitionException cause, JsonParse parser) {
 
