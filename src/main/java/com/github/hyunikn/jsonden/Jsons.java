@@ -32,6 +32,36 @@ public class Jsons {
     /**
       * TODO
       */
+    public static String prettyPrintFlattened(LinkedHashMap<String, Json> flattened) {
+
+        StringBuffer sbuf = new StringBuffer();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            sbuf.append(String.format("\n%s: %s", e.getKey(), e.getValue().stringify(4)));
+        }
+        return sbuf.toString();
+    }
+
+    /**
+      * TODO
+      */
+    public static String prettyPrintDiff(LinkedHashMap<String, List<Json>> diff) {
+
+        StringBuffer sbuf = new StringBuffer();
+        for (Map.Entry<String, List<Json>> e: diff.entrySet()) {
+            List<Json> list = e.getValue();
+            if (list.size() != 2) {
+                throw new IllegalArgumentException("every entry of diff must have two Jsons as its value," +
+                       " whi is not for " + list);
+            }
+            sbuf.append(String.format("\n. %s:\nL: %s\nR: %s", e.getKey(),
+                        list.get(0).stringify(4), list.get(1).stringify(4)));
+        }
+        return sbuf.toString();
+    }
+
+    /**
+      * TODO
+      */
     public static LinkedHashMap<String, List<Json>> diff(JsonObj o1, JsonObj o2) {
         return diff((JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
     }
