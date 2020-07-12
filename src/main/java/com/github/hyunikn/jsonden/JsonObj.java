@@ -49,7 +49,7 @@ public class JsonObj extends JsonNonLeaf {
         }
 
         JsonObj that = (JsonObj) o;
-        return that.map.equals(this.map);
+        return that.myMap.equals(this.myMap);
     }
 
     /**
@@ -57,7 +57,7 @@ public class JsonObj extends JsonNonLeaf {
       */
     @Override
     public int hashCode() {
-        return map.hashCode();
+        return myMap.hashCode();
     }
 
     /**
@@ -69,8 +69,8 @@ public class JsonObj extends JsonNonLeaf {
         JsonObj clone = new JsonObj();  // What if Json.clone() or just clone() where clone uses This constructor?
                                         // Shoud This constructor call its parent's (and hence all its aoncestors')
                                         // automatically?
-        for (String key: map.keySet()) {
-            Json val = map.get(key);
+        for (String key: myMap.keySet()) {
+            Json val = myMap.get(key);
             Json valClone = (Json) val.clone();
 
             cl = val.remarkLines();
@@ -78,7 +78,7 @@ public class JsonObj extends JsonNonLeaf {
                 valClone.setRemarkLines(cl);
             }
 
-            clone.map.put(key, valClone);    // deep copy
+            clone.myMap.put(key, valClone);    // deep copy
         }
 
         cl = this.remarkLines();
@@ -116,7 +116,7 @@ public class JsonObj extends JsonNonLeaf {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         } else {
-            return map.get(key);
+            return myMap.get(key);
         }
     }
 
@@ -129,7 +129,7 @@ public class JsonObj extends JsonNonLeaf {
         if (key == null) {
             throw new IllegalArgumentException("failed to delete: key cannot be null");
         } else {
-            map.remove(key);
+            myMap.remove(key);
             return this;
         }
     }
@@ -143,7 +143,7 @@ public class JsonObj extends JsonNonLeaf {
         if (key == null) {
             throw new IllegalArgumentException("failed to remove: key cannot be null");
         } else {
-            return map.remove(key);
+            return myMap.remove(key);
         }
     }
 
@@ -172,7 +172,7 @@ public class JsonObj extends JsonNonLeaf {
             value = new JsonNull();
         }
 
-        map.put(key, value);
+        myMap.put(key, value);
         return this;
     }
     /** short for {@code set(key, new JsonBool(b))} */
@@ -221,7 +221,7 @@ public class JsonObj extends JsonNonLeaf {
       * Iterating the set yields the keys in the order of addition (see {@link java.util.LinkedHashSet LinkedHashSet}).
       */
     public LinkedHashSet<String> keySet() {
-        return new LinkedHashSet<>(map.keySet());
+        return new LinkedHashSet<>(myMap.keySet());
     }
 
     /**
@@ -239,7 +239,7 @@ public class JsonObj extends JsonNonLeaf {
     /**
       * Returns the members as a map.
       */
-    public LinkedHashMap<String, Json> getMap() { return new LinkedHashMap(map); }
+    public LinkedHashMap<String, Json> getMap() { return new LinkedHashMap(myMap); }
 
     // ---------------------------------------------------
 
@@ -248,7 +248,7 @@ public class JsonObj extends JsonNonLeaf {
       * @return this {@code JsonObj} for method chaining
       */
     public JsonObj clear() {
-        map.clear();
+        myMap.clear();
         return this;
     }
 
@@ -365,17 +365,17 @@ public class JsonObj extends JsonNonLeaf {
     // ===================================================
     // Protected
 
-    protected final LinkedHashMap<String, Json> map;
+    protected final LinkedHashMap<String, Json> myMap;
 
     protected JsonObj() {
-        map = new LinkedHashMap<>();
+        myMap = new LinkedHashMap<>();
     }
 
     protected JsonObj(LinkedHashMap<String, Json> map) {
         if (map == null) {
             throw new IllegalArgumentException("source map cannot be null");
         }
-        this.map = new LinkedHashMap<>(map);
+        this.myMap = new LinkedHashMap<>(map);
     }
 
     @Override
@@ -391,8 +391,8 @@ public class JsonObj extends JsonNonLeaf {
             prefix = pathToMe + ".";
         }
 
-        for (String key: map.keySet()) {
-            Json val = map.get(key);
+        for (String key: myMap.keySet()) {
+            Json val = myMap.get(key);
             if (val instanceof JsonNonLeaf) {
                 ((JsonNonLeaf) val).flattenInner(accum, prefix + key, addNonLeafToo);
             } else {
@@ -419,14 +419,19 @@ public class JsonObj extends JsonNonLeaf {
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
+        if (myMap.isEmpty()) {
+            sbuf.append("{}");
+            return;
+        }
+
         sbuf.append('{');
         if (useIndents) {
             sbuf.append('\n');
         }
 
         boolean first = true;
-        for (String key: map.keySet()) {
-            Json val = map.get(key);
+        for (String key: myMap.keySet()) {
+            Json val = myMap.get(key);
             if (first) {
                 first = false;
             } else {
@@ -458,7 +463,7 @@ public class JsonObj extends JsonNonLeaf {
 
     @Override
     protected Json getChild(String key) {
-        return map.get(key);
+        return myMap.get(key);
     }
 
     // ===================================================

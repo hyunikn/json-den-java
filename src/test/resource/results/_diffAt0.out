@@ -1,37 +1,49 @@
 
-. oc.a1:
+
+oc.a1:
 L: true
 R: false
-. oc.c1:
+
+oc.c1:
 L: 1
 R: 3
-. oc.d1:
+
+oc.d1:
 L: "str"
 R: "sstr"
-. oc.a:
+
+oc.a:
 L: true
 R: false
-. oc.b:
+
+oc.b:
 L: null
 R: 7
-. oc.d:
+
+oc.d:
 L: "str"
 R: "s-tr"
-. oc.bc:
+
+oc.bc:
 L: null
 R: 33
-. oc.cc:
+
+oc.cc:
 L: 3
 R: 77
-. ac:
+
+ac:
 L: false
 R: true
-. bc:
+
+bc:
 L: 1
 R: null
-. cc:
+
+cc:
 L: 2
 R: 3
-. dc:
+
+dc:
 L: "merong"
 R: "str"

@@ -47,7 +47,7 @@ public class JsonArr extends JsonNonLeaf {
         }
 
         JsonArr that = (JsonArr) o;
-        return that.list.equals(this.list);
+        return that.myList.equals(this.myList);
     }
 
     /**
@@ -55,7 +55,7 @@ public class JsonArr extends JsonNonLeaf {
       */
     @Override
     public int hashCode() {
-        return list.hashCode();
+        return myList.hashCode();
     }
 
     /**
@@ -64,8 +64,8 @@ public class JsonArr extends JsonNonLeaf {
     @Override
     public Object clone() {
         JsonArr clone = new JsonArr();
-        for (Json elem: list) {
-            clone.list.add((Json) elem.clone());  // deep copy
+        for (Json elem: myList) {
+            clone.myList.add((Json) elem.clone());  // deep copy
         }
 
         String[] cl = this.remarkLines();
@@ -103,7 +103,7 @@ public class JsonArr extends JsonNonLeaf {
         if (i < 0) {
             return null;
         } else {
-            return list.get(i);
+            return myList.get(i);
         }
     }
 
@@ -117,7 +117,7 @@ public class JsonArr extends JsonNonLeaf {
     public JsonArr delete(int index) {
         int i = adjustIndex(index);
         if (i >= 0) {
-            list.remove(i);
+            myList.remove(i);
         }
 
         return this;
@@ -135,7 +135,7 @@ public class JsonArr extends JsonNonLeaf {
         if (i < 0) {
             return null;
         } else {
-            return list.remove(i);
+            return myList.remove(i);
         }
     }
 
@@ -156,7 +156,7 @@ public class JsonArr extends JsonNonLeaf {
                 elem = new JsonNull();
             }
 
-            list.set(i, elem);
+            myList.set(i, elem);
             return this;
         }
     }
@@ -219,7 +219,7 @@ public class JsonArr extends JsonNonLeaf {
                 elem = new JsonNull();
             }
 
-            list.add(i, elem);
+            myList.add(i, elem);
             return this;
         }
     }
@@ -275,7 +275,7 @@ public class JsonArr extends JsonNonLeaf {
             elem = new JsonNull();
         }
 
-        list.add(elem);
+        myList.add(elem);
         return this;
     }
     /** short for {@code append(new JsonBool(b))} */
@@ -323,7 +323,7 @@ public class JsonArr extends JsonNonLeaf {
       * Gets the size of this {@code JsonArr}.
       */
     public int size() {
-        return list.size();
+        return myList.size();
     }
 
     // ---------------------------------------------------
@@ -333,7 +333,7 @@ public class JsonArr extends JsonNonLeaf {
       * @return this {@code JsonArr} for method chaining
       */
     public JsonArr clear() {
-        list.clear();
+        myList.clear();
         return this;
     }
 
@@ -347,7 +347,7 @@ public class JsonArr extends JsonNonLeaf {
             throw new IllegalArgumentException("elem cannot be null");
         }
 
-        return list.indexOf(elem);
+        return myList.indexOf(elem);
     }
 
     /**
@@ -360,7 +360,7 @@ public class JsonArr extends JsonNonLeaf {
             throw new IllegalArgumentException("elem cannot be null");
         }
 
-        return list.lastIndexOf(elem);
+        return myList.lastIndexOf(elem);
     }
 
     /**
@@ -378,7 +378,7 @@ public class JsonArr extends JsonNonLeaf {
     /**
       * Returns the elements as a list.
       */
-    public List<Json> getList() { return new LinkedList(list); }
+    public List<Json> getList() { return new LinkedList(myList); }
 
     /**
       * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
@@ -493,17 +493,17 @@ public class JsonArr extends JsonNonLeaf {
     // ===================================================
     // Protected
 
-    protected final LinkedList<Json> list;
+    protected final LinkedList<Json> myList;
 
     protected JsonArr() {
-        list = new LinkedList<>();
+        myList = new LinkedList<>();
     }
 
     protected JsonArr(List<Json> list) {
         if (list == null) {
             throw new IllegalArgumentException("source list cannot be null");
         }
-        this.list = new LinkedList<>(list);
+        this.myList = new LinkedList<>(list);
     }
 
     @Override
@@ -520,7 +520,7 @@ public class JsonArr extends JsonNonLeaf {
         }
 
         int i = 0;
-        for (Json val: list) {
+        for (Json val: myList) {
             if (val instanceof JsonNonLeaf) {
                 ((JsonNonLeaf) val).flattenInner(accum, prefix + i, addNonLeafToo);
             } else {
@@ -548,13 +548,18 @@ public class JsonArr extends JsonNonLeaf {
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
+        if (myList.isEmpty()) {
+            sbuf.append("[]");
+            return;
+        }
+
         sbuf.append('[');
         if (useIndents) {
             sbuf.append('\n');
         }
 
         boolean first = true;
-        for (Json val: list) {
+        for (Json val: myList) {
             if (first) {
                 first = false;
             } else {
@@ -591,7 +596,7 @@ public class JsonArr extends JsonNonLeaf {
 
     private int adjustIndex(int index) {
 
-        int size = list.size();
+        int size = myList.size();
         if (index < -size || index >= size) {
             return -1;
         }

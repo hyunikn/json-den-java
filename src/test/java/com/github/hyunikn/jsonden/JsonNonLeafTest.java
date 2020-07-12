@@ -146,4 +146,38 @@ public class JsonNonLeafTest {
         //System.out.println(Jsons.prettyPrintFlattened(s2));
         assertEquals(Util.readFile("results/_subtractLeaves2.out"), Jsons.prettyPrintFlattened(s2));
     }
+
+    @Test
+    public void Jsons() throws ParseError, UnreachablePath {
+        JsonObj j1, j2;
+        j1 = JsonObj.parse(Util.readFile("compare11.json"));
+        j2 = JsonObj.parse(Util.readFile("compare22.json"));
+
+        LinkedHashMap<String, List<Json>> d0 = Jsons.diff(j1, j2);
+        //System.out.println(Jsons.prettyPrintDiff(d0));
+        assertEquals(Util.readFile("results/_diff00.out"), Jsons.prettyPrintDiff(d0));
+        LinkedHashMap<String, List<Json>> d1 = Jsons.diff(j1, j1);
+        assertEquals("", Jsons.prettyPrintDiff(d1));
+
+        JsonObj o0 = Jsons.intersect(j1, j2);
+        //System.out.println(o0.stringify(4));
+        assertEquals(Util.readFile("results/_intersect00.out"), o0.stringify(4));
+
+        o0 = Jsons.subtract(j1, j2);
+        //System.out.println(o0.stringify(4));
+        assertEquals(Util.readFile("results/_subtract00.out"), o0.stringify(4));
+
+        o0 = Jsons.overlap(j1, j2);
+        //System.out.println(o0.stringify(4));
+        assertEquals(Util.readFile("results/_overlap00.out"), o0.stringify(4));
+
+        o0 = Jsons.subtractLeaves(j1, j2);
+        //System.out.println(o0.stringify(4));
+        assertEquals(Util.readFile("results/_subtractLeaves00.out"), o0.stringify(4));
+
+        o0 = Jsons.overlapLeaves(j1, j2);
+        //System.out.println(o0.stringify(4));
+        assertEquals(Util.readFile("results/_overlapLeaves00.out"), o0.stringify(4));
+    }
+
 }

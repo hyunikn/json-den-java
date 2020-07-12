@@ -53,8 +53,11 @@ public class Jsons {
                 throw new IllegalArgumentException("every entry of diff must have two Jsons as its value," +
                        " whi is not for " + list);
             }
-            sbuf.append(String.format("\n. %s:\nL: %s\nR: %s", e.getKey(),
-                        list.get(0).stringify(4), list.get(1).stringify(4)));
+            Json left = list.get(0);
+            Json right = list.get(1);
+            sbuf.append(String.format("\n\n%s:\nL: %s\nR: %s", e.getKey(),
+                        left == null ? "---" : left.stringify(4),
+                        right == null ? "---" : right.stringify(4)));
         }
         return sbuf.toString();
     }
@@ -224,8 +227,16 @@ public class Jsons {
 
     private static JsonNonLeaf overlap(JsonNonLeaf n1, JsonNonLeaf n2, boolean forLeaves) throws UnreachablePath {
 
+        JsonNonLeaf ret;
+        if (forLeaves) {
+            ret = n1.isObj() ? JsonObj.instance() : JsonArr.instance();
+            ret.loadFlattened(n1.flatten(), true);
+        } else {
+            ret = (JsonNonLeaf) n1.clone();
+        }
+
         LinkedHashMap<String, Json> flattened = forLeaves ? n2.flatten() : n2.flatten2();
-        return ((JsonNonLeaf) n1.clone()).loadFlattened(flattened, true);
+        return ret.loadFlattened(flattened, true);
     }
 }
 
