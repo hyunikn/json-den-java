@@ -44,7 +44,7 @@ public class Jsons {
     /**
       * TODO
       */
-    public static String prettyPrintDiff(LinkedHashMap<String, List<Json>> diff) {
+    public static String prettyPrintDiff(Map<String, List<Json>> diff) {
 
         StringBuffer sbuf = new StringBuffer();
         for (Map.Entry<String, List<Json>> e: diff.entrySet()) {
@@ -65,28 +65,28 @@ public class Jsons {
     /**
       * TODO
       */
-    public static LinkedHashMap<String, List<Json>> diff(JsonObj o1, JsonObj o2) {
+    public static Map<String, List<Json>> diff(JsonObj o1, JsonObj o2) {
         return diff((JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
     }
 
     /**
       * TODO
       */
-    public static LinkedHashMap<String, List<Json>> diff(JsonArr a1, JsonArr a2) {
+    public static Map<String, List<Json>> diff(JsonArr a1, JsonArr a2) {
         return diff((JsonNonLeaf) a1, (JsonNonLeaf) a2, false);
     }
 
     /**
       * TODO
       */
-    public static LinkedHashMap<String, List<Json>> diffLeaves(JsonObj o1, JsonObj o2) {
+    public static Map<String, List<Json>> diffLeaves(JsonObj o1, JsonObj o2) {
         return diff((JsonNonLeaf) o1, (JsonNonLeaf) o2, true);
     }
 
     /**
       * TODO
       */
-    public static LinkedHashMap<String, List<Json>> diffLeaves(JsonArr a1, JsonArr a2) {
+    public static Map<String, List<Json>> diffLeaves(JsonArr a1, JsonArr a2) {
         return diff((JsonNonLeaf) a1, (JsonNonLeaf) a2, true);
     }
 
@@ -189,9 +189,9 @@ public class Jsons {
     // ============================================================
     // Private
 
-    private static LinkedHashMap<String, List<Json>> diff(JsonNonLeaf n1, JsonNonLeaf n2, boolean forLeaves) {
+    private static Map<String, List<Json>> diff(JsonNonLeaf n1, JsonNonLeaf n2, boolean forLeaves) {
 
-        LinkedHashMap<String, List<Json>> ret = n1.diffAtCommonPaths(n2);
+        Map<String, List<Json>> ret = n1.diffAtCommonPaths(n2);
 
         LinkedHashMap<String, Json> left = forLeaves ? n1.subtractLeaves(n2) : n1.subtract(n2);
         for (Map.Entry<String, Json> e: left.entrySet()) {

@@ -3,6 +3,7 @@ package com.github.hyunikn.jsonden;
 import com.github.hyunikn.jsonden.exception.ParseError;
 import com.github.hyunikn.jsonden.exception.UnreachablePath;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -105,10 +106,10 @@ public class JsonNonLeafTest {
         j1 = JsonObj.parse(Util.readFile("compare1.json"));
         j2 = JsonObj.parse(Util.readFile("compare2.json"));
 
-        LinkedHashMap<String, List<Json>> d0 = j1.diffAtCommonPaths(j2);
+        Map<String, List<Json>> d0 = j1.diffAtCommonPaths(j2);
         //System.out.println(Jsons.prettyPrintDiff(d0));
         assertEquals(Util.readFile("results/_diffAt0.out"), Jsons.prettyPrintDiff(d0));
-        LinkedHashMap<String, List<Json>> d1 = j1.diffAtCommonPaths(j1);
+        Map<String, List<Json>> d1 = j1.diffAtCommonPaths(j1);
         //System.out.println(Jsons.prettyPrintDiff(d1));
         assertEquals("", Jsons.prettyPrintDiff(d1));
 
@@ -153,10 +154,10 @@ public class JsonNonLeafTest {
         j1 = JsonObj.parse(Util.readFile("compare11.json"));
         j2 = JsonObj.parse(Util.readFile("compare22.json"));
 
-        LinkedHashMap<String, List<Json>> d0 = Jsons.diff(j1, j2);
+        Map<String, List<Json>> d0 = Jsons.diff(j1, j2);
         //System.out.println(Jsons.prettyPrintDiff(d0));
         assertEquals(Util.readFile("results/_diff00.out"), Jsons.prettyPrintDiff(d0));
-        LinkedHashMap<String, List<Json>> d1 = Jsons.diff(j1, j1);
+        Map<String, List<Json>> d1 = Jsons.diff(j1, j1);
         assertEquals("", Jsons.prettyPrintDiff(d1));
 
         JsonObj o0 = Jsons.intersect(j1, j2);

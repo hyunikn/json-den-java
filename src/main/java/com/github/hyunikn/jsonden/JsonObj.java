@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
+import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -256,7 +257,7 @@ public class JsonObj extends JsonNonLeaf {
       * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
-    public LinkedHashMap<String, List<Json>> diffAtCommonPaths(JsonObj that) {
+    public Map<String, List<Json>> diffAtCommonPaths(JsonObj that) {
         return super.diffAtCommonPaths(that);
     }
 

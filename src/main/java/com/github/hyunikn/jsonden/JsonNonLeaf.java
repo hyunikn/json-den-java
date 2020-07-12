@@ -148,7 +148,7 @@ abstract class JsonNonLeaf extends Json {
         return this;
     }
 
-    protected LinkedHashMap<String, List<Json>> diffAtCommonPaths(JsonNonLeaf that) {
+    protected Map<String, List<Json>> diffAtCommonPaths(JsonNonLeaf that) {
         LinkedHashMap<String, Json> flattened = flatten();
 
         LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
