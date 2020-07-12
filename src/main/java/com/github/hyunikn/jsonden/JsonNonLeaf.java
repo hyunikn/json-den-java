@@ -148,11 +148,6 @@ abstract class JsonNonLeaf extends Json {
         return this;
     }
 
-    protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
-        // TODO
-        return this;
-    }
-
     protected LinkedHashMap<String, List<Json>> diffAtCommonPaths(JsonNonLeaf that) {
         LinkedHashMap<String, Json> flattened = flatten();
 
@@ -169,6 +164,33 @@ abstract class JsonNonLeaf extends Json {
         }
 
         return ret;
+    }
+
+    protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
+
+        String prefixToSkip = null;
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+
+            String key = e.getKey();
+            if (".".equals(key)) {
+                throw new IllegalArgumentException("flattened cannot contain a key \".\": " +
+                        "this method sets only proper subnodes");
+            }
+            if (prefixToSkip != null) {
+                if (key.startsWith(prefixToSkip)) {
+                    continue;
+                } else {
+                    prefixToSkip = null;
+                }
+            }
+
+            Json val = clone ? (Json) e.getValue().clone() : e.getValue();
+            setx(key, val);
+            if (prefixToSkip == null && val instanceof JsonNonLeaf) {
+                prefixToSkip = key + ".";
+            }
+        }
+        return this;
     }
 
     protected LinkedHashMap<String, Json> intersect(JsonNonLeaf that) {
@@ -202,7 +224,7 @@ abstract class JsonNonLeaf extends Json {
                 Json thisValue = e.getValue();
                 if (thisValue.equals(thatValue)) {
                     ret.put(key, thisValue);
-                    if (prefixToSkip == null && !(thisValue instanceof JsonLeaf)) {
+                    if (prefixToSkip == null && thisValue instanceof JsonNonLeaf) {
                         prefixToSkip = key + ".";
                     }
                 }
@@ -231,7 +253,7 @@ abstract class JsonNonLeaf extends Json {
             if (!that.has(key)) {
                 Json value = e.getValue();
                 ret.put(key, value);
-                if (prefixToSkip == null && !(value instanceof JsonLeaf)) {
+                if (prefixToSkip == null && value instanceof JsonNonLeaf) {
                     prefixToSkip = key + ".";
                 }
             }

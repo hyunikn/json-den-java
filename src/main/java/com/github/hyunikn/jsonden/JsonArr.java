@@ -482,7 +482,12 @@ public class JsonArr extends JsonNonLeaf {
 
     /** TODO */
     public JsonArr loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
-        return (JsonArr) super.loadFlattened(flattened);
+        return (JsonArr) super.loadFlattened(flattened, true);
+    }
+
+    /** TODO */
+    public JsonArr loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
+        return (JsonArr) super.loadFlattened(flattened, clone);
     }
 
     // ===================================================

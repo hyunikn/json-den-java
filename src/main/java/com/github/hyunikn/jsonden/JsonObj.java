@@ -354,7 +354,12 @@ public class JsonObj extends JsonNonLeaf {
 
     /** TODO */
     public JsonObj loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
-        return (JsonObj) super.loadFlattened(flattened);
+        return (JsonObj) super.loadFlattened(flattened, true);
+    }
+
+    /** TODO */
+    public JsonObj loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
+        return (JsonObj) super.loadFlattened(flattened, clone);
     }
 
     // ===================================================
