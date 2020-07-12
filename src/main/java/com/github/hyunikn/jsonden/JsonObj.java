@@ -94,7 +94,7 @@ public class JsonObj extends JsonNonLeaf {
       * Parses the string into a {@code JsonObj}.
       * Json-den does not allow those object member keys which have a dot (.) character in it or
       * have the form of hash(#) followed by an integer. Json-den uses such keys for special purposes
-      * (see {@link com.github.hyunikn.jsonden.Json#getx} and {@link com.github.hyunikn.jsonden.Json#setx}).
+      * (see {@code getx} and {@code setx}).
       * @param s string to parse
       * @return a JsonObj if s legally represent a JSON object.
       * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json object.
@@ -353,12 +353,26 @@ public class JsonObj extends JsonNonLeaf {
         return setx(path, new JsonStr(s));
     }
 
-    /** TODO */
+    /**
+      * Same as {@code loadFlattened(flattened, true)}
+      */
     public JsonObj loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
         return (JsonObj) super.loadFlattened(flattened, true);
     }
 
-    /** TODO */
+    /**
+      * Loads a flattened {@code Json} value into this object.
+      * This method causes in-place modification of the current object.
+      * If the current object already has a value at a path in {@code flattened} then the value is overwritten
+      * by the one in {@code flattened}.
+      * @param flattened a flattened {@code Json} value obtained by
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten2 flatten2},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
+      * @param clone whether to clone the {@code Json} values while loading or not.
+      * @return the current object for method chaining.
+      */
     public JsonObj loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
         return (JsonObj) super.loadFlattened(flattened, clone);
     }

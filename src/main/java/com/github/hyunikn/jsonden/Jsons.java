@@ -29,8 +29,8 @@ public class Jsons {
         }
     }
 
-    /**
-      * TODO
+    /** Gets a string which represents a flattened {@code Json} value.
+      * This is mainly for debugging.
       */
     public static String prettyPrintFlattened(LinkedHashMap<String, Json> flattened) {
 
@@ -41,8 +41,8 @@ public class Jsons {
         return sbuf.toString();
     }
 
-    /**
-      * TODO
+    /** Gets a string which represents a result of diffing two {@code Json} values.
+      * This is mainly for debugging.
       */
     public static String prettyPrintDiff(Map<String, List<Json>> diff) {
 
@@ -62,132 +62,162 @@ public class Jsons {
         return sbuf.toString();
     }
 
-    /**
-      * TODO
+    /** Diffs two {@code JsonObj}s.
+      * Unlike {@code diffLeaves}, the result can contain an empty object or an empty array at some paths.
+      * @return map from paths to pairs of {@code Json} values. In each pair, the first element comes from {@code n1}
+      * and the second one comes from {@code n2}. These two {@code Json} values in each pair are always different
+      * in the result map.
       */
-    public static Map<String, List<Json>> diff(JsonObj o1, JsonObj o2) {
-        return diff((JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
+    public static Map<String, List<Json>> diff(JsonObj n1, JsonObj n2) {
+        return diff((JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Diffs two {@code JsonArr}s.
+      * Unlike {@code diffLeaves}, the result can contain an empty object or an empty array at some paths.
+      * @return map from paths to pairs of {@code Json} values. In each pair, the first element comes from {@code n1}
+      * and the second one comes from {@code n2}. These two {@code Json} values in each pair are always different
+      * in the result map.
       */
-    public static Map<String, List<Json>> diff(JsonArr a1, JsonArr a2) {
-        return diff((JsonNonLeaf) a1, (JsonNonLeaf) a2, false);
+    public static Map<String, List<Json>> diff(JsonArr n1, JsonArr n2) {
+        return diff((JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Diffs leaf nodes of two {@code JsonObj}s.
+      * Unlike {@code diff}, {@code diffLeaves} compares only values at leaf positions.
+      * @return map from paths to pairs of {@code Json} values. In each pair, the first element comes from {@code n1}
+      * and the second one comes from {@code n2}. These two {@code Json} values in each pair are always different
+      * in the result map.
       */
-    public static Map<String, List<Json>> diffLeaves(JsonObj o1, JsonObj o2) {
-        return diff((JsonNonLeaf) o1, (JsonNonLeaf) o2, true);
+    public static Map<String, List<Json>> diffLeaves(JsonObj n1, JsonObj n2) {
+        return diff((JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
-    /**
-      * TODO
+    /** Diffs leaf nodes of two {@code JsonArr}s.
+      * Unlike {@code diff}, {@code diffLeaves} compares only values at leaf positions.
+      * @return map from paths to pairs of {@code Json} values. In each pair, the first element comes from {@code n1}
+      * and the second one comes from {@code n2}. These two {@code Json} values in each pair are always different
+      * in the result map.
       */
-    public static Map<String, List<Json>> diffLeaves(JsonArr a1, JsonArr a2) {
-        return diff((JsonNonLeaf) a1, (JsonNonLeaf) a2, true);
+    public static Map<String, List<Json>> diffLeaves(JsonArr n1, JsonArr n2) {
+        return diff((JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
-    /**
-      * TODO
+    /** Intersects two {@code JsonObj}s.
+      * Gets the common part, common paths and the identical values at each of the common paths,
+      * of {@code n1} and {@code n2}.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj intersect(JsonObj o1, JsonObj o2) throws UnreachablePath {
+    public static JsonObj intersect(JsonObj n1, JsonObj n2) throws UnreachablePath {
         JsonObj accum = JsonObj.instance();
-        return (JsonObj) intersect(accum, (JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
+        return (JsonObj) intersect(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Intersects two {@code JsonArr}s.
+      * Gets the common part, common paths and the identical values at each of the common paths,
+      * of {@code n1} and {@code n2}.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr intersect(JsonArr a1, JsonArr a2) throws UnreachablePath {
+    public static JsonArr intersect(JsonArr n1, JsonArr n2) throws UnreachablePath {
         JsonArr accum = JsonArr.instance();
-        return (JsonArr) intersect(accum, (JsonNonLeaf) a1, (JsonNonLeaf) a2, false);
+        return (JsonArr) intersect(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Intersects leaf nodes of two {@code JsonObj}s.
+      * Gets the common leaves, common paths and the identical values at each of the common paths,
+      * of {@code n1} and {@code n2}.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj intersectLeaves(JsonObj o1, JsonObj o2) throws UnreachablePath {
+    public static JsonObj intersectLeaves(JsonObj n1, JsonObj n2) throws UnreachablePath {
         JsonObj accum = JsonObj.instance();
-        return (JsonObj) intersect(accum, (JsonNonLeaf) o1, (JsonNonLeaf) o2, true);
+        return (JsonObj) intersect(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
-    /**
-      * TODO
+    /** Intersects leaf nodes of two {@code JsonArr}s.
+      * Gets the common leaves, common paths and the identical values at each of the common paths,
+      * of {@code n1} and {@code n2}.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr intersectLeaves(JsonArr a1, JsonArr a2) throws UnreachablePath {
+    public static JsonArr intersectLeaves(JsonArr n1, JsonArr n2) throws UnreachablePath {
         JsonArr accum = JsonArr.instance();
-        return (JsonArr) intersect(accum, (JsonNonLeaf) a1, (JsonNonLeaf) a2, true);
+        return (JsonArr) intersect(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
-    /**
-      * TODO
+    /** Subtracts two {@code JsonObj}s.
+      * Gets paths which are in {@code n1} but not in {@code n2} and {@code Json} values at those paths.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj subtract(JsonObj o1, JsonObj o2) throws UnreachablePath {
+    public static JsonObj subtract(JsonObj n1, JsonObj n2) throws UnreachablePath {
         JsonObj accum = JsonObj.instance();
-        subtract(accum, (JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
+        subtract(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
         return accum;
     }
 
-    /**
-      * TODO
+    /** Subtracts two {@code JsonArr}s.
+      * Gets paths which are in {@code n1} but not in {@code n2} and {@code Json} values at those paths.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr subtract(JsonArr a1, JsonArr a2) throws UnreachablePath {
+    public static JsonArr subtract(JsonArr n1, JsonArr n2) throws UnreachablePath {
         JsonArr accum = JsonArr.instance();
-        subtract(accum, (JsonNonLeaf) a1, (JsonNonLeaf) a2, false);
+        subtract(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
         return accum;
     }
 
-    /**
-      * TODO
+    /** Subtracts leaf nodes of two {@code JsonObj}s.
+      * Gets leaf paths which are in {@code n1} but not in {@code n2} and {@code Json} values at those paths.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj subtractLeaves(JsonObj o1, JsonObj o2) throws UnreachablePath {
+    public static JsonObj subtractLeaves(JsonObj n1, JsonObj n2) throws UnreachablePath {
         JsonObj accum = JsonObj.instance();
-        subtract(accum, (JsonNonLeaf) o1, (JsonNonLeaf) o2, true);
+        subtract(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
         return accum;
     }
 
-    /**
-      * TODO
+    /** Subtracts leaf nodes of two {@code JsonArr}s.
+      * Gets leaf paths which are in {@code n1} but not in {@code n2} and {@code Json} values at those paths.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr subtractLeaves(JsonArr a1, JsonArr a2) throws UnreachablePath {
+    public static JsonArr subtractLeaves(JsonArr n1, JsonArr n2) throws UnreachablePath {
         JsonArr accum = JsonArr.instance();
-        subtract(accum, (JsonNonLeaf) a1, (JsonNonLeaf) a2, true);
+        subtract(accum, (JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
         return accum;
     }
 
-    /**
-      * TODO
+    /** Overlaps two {@code JsonObj}s.
+      * Overwrites nodes of {@code n2} onto nodes of {@code n1}.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj overlap(JsonObj o1, JsonObj o2) throws UnreachablePath {
-        return (JsonObj) overlap((JsonNonLeaf) o1, (JsonNonLeaf) o2, false);
+    public static JsonObj overlap(JsonObj n1, JsonObj n2) throws UnreachablePath {
+        return (JsonObj) overlap((JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Overlaps two {@code JsonArr}s.
+      * Overwrites nodes of {@code n2} onto nodes of {@code n1}.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr overlap(JsonArr a1, JsonArr a2) throws UnreachablePath {
-        return (JsonArr) overlap((JsonNonLeaf) a1, (JsonNonLeaf) a2, false);
+    public static JsonArr overlap(JsonArr n1, JsonArr n2) throws UnreachablePath {
+        return (JsonArr) overlap((JsonNonLeaf) n1, (JsonNonLeaf) n2, false);
     }
 
-    /**
-      * TODO
+    /** Overlaps leaf nodes of two {@code JsonObj}s.
+      * Overwrites leaf nodes of {@code n2} onto leaf nodes of {@code n1}.
+      * @return {@code JsonObj} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonObj overlapLeaves(JsonObj o1, JsonObj o2) throws UnreachablePath {
-        return (JsonObj) overlap((JsonNonLeaf) o1, (JsonNonLeaf) o2, true);
+    public static JsonObj overlapLeaves(JsonObj n1, JsonObj n2) throws UnreachablePath {
+        return (JsonObj) overlap((JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
-    /**
-      * TODO
+    /** Overlaps leaf nodes of two {@code JsonArr}s.
+      * Overwrites leaf nodes of {@code n2} onto leaf nodes of {@code n1}.
+      * @return {@code JsonArr} that represent the result. All the subnodes in the result are clones of their sources.
       */
-    public static JsonArr overlapLeaves(JsonArr a1, JsonArr a2) throws UnreachablePath {
-        return (JsonArr) overlap((JsonNonLeaf) a1, (JsonNonLeaf) a2, true);
+    public static JsonArr overlapLeaves(JsonArr n1, JsonArr n2) throws UnreachablePath {
+        return (JsonArr) overlap((JsonNonLeaf) n1, (JsonNonLeaf) n2, true);
     }
 
     // ============================================================
     // Private
+
+    private Jsons() { }
 
     private static Map<String, List<Json>> diff(JsonNonLeaf n1, JsonNonLeaf n2, boolean forLeaves) {
 

@@ -481,12 +481,26 @@ public class JsonArr extends JsonNonLeaf {
         return setx(path, new JsonStr(s));
     }
 
-    /** TODO */
+    /**
+      * Same as {@code loadFlattened(flattened, true)}
+      */
     public JsonArr loadFlattened(LinkedHashMap<String, Json> flattened) throws UnreachablePath {
         return (JsonArr) super.loadFlattened(flattened, true);
     }
 
-    /** TODO */
+    /**
+      * Loads a flattened {@code Json} value into this array.
+      * This method causes in-place modification of the current array.
+      * If the current array already has a value at a path in {@code flattened} then the value is overwritten
+      * by the one in {@code flattened}.
+      * @param flattened a flattened {@code Json} value obtained by
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten2 flatten2},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
+      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
+      * @param clone whether to clone the {@code Json} values while loading or not.
+      * @return the current array for method chaining.
+      */
     public JsonArr loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
         return (JsonArr) super.loadFlattened(flattened, clone);
     }
