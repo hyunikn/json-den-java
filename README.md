@@ -20,9 +20,9 @@ Its distinctive features include
     minifying JSON texts before parsing, its parser recognizes comments
     so that it can preserve and report the original row and column offsets of tokens on syntax errors,
     which is imposible in the minifying approach.
-6. It preserves block comments which are specified so
+6. It preserves block comments that are specified so
     (start comments you want to preserve with "/\*\*", not just with "/\*".)
-    Unlike the ordinary ones, such comments are not erased while parsing but kept in internal representation,
+    Unlike the ordinary ones, such comments are not erased while parsing, kept in internal representation,
     and printed back when stringified.
 
 Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
