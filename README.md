@@ -25,7 +25,7 @@ Its distinctive features include
     Unlike the ordinary ones, such comments are not erased while parsing, kept in internal representation,
     and printed back when stringified.
 
-Git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
+For more information, git-clone it, run `gen-apidocs.sh` included, and see the generated API documentation.
 
 Json-den-java is under the BSD-2 license.
 
