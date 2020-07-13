@@ -277,7 +277,7 @@ public class JsonObj extends JsonNonLeaf {
         return (JsonObj) super.subtract(that);
     }
 
-    /** Merges that {@code JsonObj} into this.
+    /** Merges (overwrites) that {@code JsonObj} into this.
       * The update is in-place and this object may change after this operation.
       */
     public JsonObj merge(JsonObj that) throws UnreachablePath {

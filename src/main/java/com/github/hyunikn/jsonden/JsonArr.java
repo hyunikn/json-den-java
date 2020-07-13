@@ -404,7 +404,7 @@ public class JsonArr extends JsonNonLeaf {
         return (JsonArr) super.subtract(that);
     }
 
-    /** Merges that {@code JsonArr} into this.
+    /** Merges (overwrites) that {@code JsonArr} into this.
       * The update is in-place and this object may change after this operation.
       */
     public JsonArr merge(JsonArr that) throws UnreachablePath {

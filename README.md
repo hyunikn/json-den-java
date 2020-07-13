@@ -4,18 +4,19 @@ Json-den-java is a library that parses (Decodes), stringifies (ENcodes) and  man
 
 Its distinctive features include
 
-1. Method `equals` checks the value equality, not the reference equality. Method `clone` deeply copies JSON values.
-    They properly handle hierarchical structures of JSON values.
-2. It provides methods `diff`, `intersect` and `subtract` which identify identical or different parts of
-    two JSON values.
-3. It provides a method `getx` which can query JSON nodes
+1. Method `equals` checks the value equality (not the reference equality).
+    `clone` deeply copies JSON values.
+    `diff` identifies different parts of two JSON values.
+    These methods properly handle hierarchical structure of JSON values.
+2. It provides a method `getx` which can query JSON nodes
     located deep in hierarchical structures with a single path.
     For example, you can use `json.getx("how.deep.is.your.love")`
     instead of `json.get("how").get("deep").get("is").get("your").get("love")`.
-4. It provides a method `setx` which creates parent nodes as needed,
+3. It provides a method `setx` which creates parent nodes as needed,
     like the UNIX shell command `mkdir -p`, and then updates the JSON node at the specified path.
     For example, `json.setx("how.deep.is.your.love", val)` sets `val` at "how.deep.is.your.love"
     even when the node corresponding to 'how', 'deep', 'is' or 'your' is currently absent.
+4. It supports binary operations `intersect`, `subtract` and `merge` on JSON objects and arrays.
 5. It supports C-style line and block comments in JSON texts. Instead of the common approach,
     minifying JSON texts before parsing, its parser recognizes comments
     so that it can preserve and report the original row and column offsets of tokens on syntax errors,
