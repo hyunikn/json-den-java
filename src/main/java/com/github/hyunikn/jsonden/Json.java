@@ -128,6 +128,10 @@ public abstract class Json {
         return false;   // overriden by JsonLeaf
     }
 
+    /**
+      * Whether this has no subnodes or not.
+      */
+    public abstract boolean isTerminal();
 
     // --------------------------------------------------
     // for six individual JSON types

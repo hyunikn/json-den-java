@@ -1,43 +1,16 @@
 
-.: {
-    "o": {
-        "a1": true,
-        "b1": null,
-        "c1": 1,
-        "d1": "str",
-        "a": true,
-        "b": null,
-        "c": 1,
-        "d": "str",
-        "ac": true,
-        "bc": null,
-        "cc": 3,
-        "dc": "str"
-    },
-    "oc": {
-        "a1": true,
-        "b1": null,
-        "c1": 1,
-        "d1": "str",
-        "a": true,
-        "b": null,
-        "c": 1,
-        "d": "str",
-        "ac": true,
-        "bc": null,
-        "cc": 3,
-        "dc": "str"
-    },
-    "a2": true,
-    "b2": null,
-    "c2": 1,
-    "d2": "str",
-    "a": true,
-    "b": null,
-    "c": 1,
-    "d": "str",
-    "ac": false,
-    "bc": 1,
-    "cc": 2,
-    "dc": "merong"
-}
+OE: {}
+AE: []
+OE1: {}
+AE1: []
+o.a: true
+o.b: null
+oc.a: true
+oc.b: null
+a1: true
+O.oo: false
+A.#0: {}
+O1.oo: 3
+A1.#0: 7
+a: true
+b: null

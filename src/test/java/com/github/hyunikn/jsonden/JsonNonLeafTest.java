@@ -102,15 +102,13 @@ public class JsonNonLeafTest {
         JsonObj j = JsonObj.parse(Util.readFile("flatten.json"));
         //System.out.println(Jsons.prettyPrintFlattened(j.flatten()));
         assertEquals(Util.readFile("results/_flatten.out"), Jsons.prettyPrintFlattened(j.flatten()));
-        //System.out.println(Jsons.prettyPrintFlattened(j.flatten2()));
-        assertEquals(Util.readFile("results/_flatten2.out"), Jsons.prettyPrintFlattened(j.flatten2()));
     }
 
     @Test
-    public void compareObjects() throws ParseError {
+    public void compareObjects() throws ParseError, UnreachablePath {
         JsonObj j1, j2;
-        j1 = JsonObj.parse(Util.readFile("compare1.json"));
-        j2 = JsonObj.parse(Util.readFile("compare2.json"));
+        j1 = JsonObj.parse(Util.readFile("compare11.json"));
+        j2 = JsonObj.parse(Util.readFile("compare22.json"));
 
         Map<String, List<Json>> d0 = j1.diffAtCommonPaths(j2);
         //System.out.println(Jsons.prettyPrintDiff(d0));
@@ -119,72 +117,45 @@ public class JsonNonLeafTest {
         //System.out.println(Jsons.prettyPrintDiff(d1));
         assertEquals("", Jsons.prettyPrintDiff(d1));
 
-        LinkedHashMap<String, Json> c0 = j1.intersect(j2);
-        //System.out.println(Jsons.prettyPrintFlattened(c0));
-        assertEquals(Util.readFile("results/_intersect0.out"), Jsons.prettyPrintFlattened(c0));
-        LinkedHashMap<String, Json> c1 = j1.intersect(j1);
-        //System.out.println(Jsons.prettyPrintFlattened(c1));
-        assertEquals(Util.readFile("results/_intersect1.out"), Jsons.prettyPrintFlattened(c1));
+        Map<String, List<Json>> d2 = j1.diff(j2);
+        //System.out.println(Jsons.prettyPrintDiff(d2));
+        assertEquals(Util.readFile("results/_diff00.out"), Jsons.prettyPrintDiff(d2));
+        Map<String, List<Json>> d3 = j1.diff(j1);
+        assertEquals("", Jsons.prettyPrintDiff(d3));
 
-        LinkedHashMap<String, Json> s0 = j1.subtract(j2);
-        //System.out.println(Jsons.prettyPrintFlattened(s0));
-        assertEquals(Util.readFile("results/_subtract0.out"), Jsons.prettyPrintFlattened(s0));
-        LinkedHashMap<String, Json> s1 = j1.subtract(j1);
-        //System.out.println(Jsons.prettyPrintFlattened(s1));
-        assertEquals("", Jsons.prettyPrintFlattened(s1));
-        LinkedHashMap<String, Json> s2 = j2.subtract(j1);
-        //System.out.println(Jsons.prettyPrintFlattened(s2));
-        assertEquals(Util.readFile("results/_subtract2.out"), Jsons.prettyPrintFlattened(s2));
+        JsonObj c0 = (JsonObj) j1.clone();
+        c0.intersect(j2);
+        //System.out.println(c0.stringify(4));
+        assertEquals(Util.readFile("results/_intersect0.out"), c0.stringify(4));
 
-        c0 = j1.intersectLeaves(j2);
-        //System.out.println(Jsons.prettyPrintFlattened(c0));
-        assertEquals(Util.readFile("results/_intersectLeaves0.out"), Jsons.prettyPrintFlattened(c0));
-        c1 = j2.intersectLeaves(j2);
-        //System.out.println(Jsons.prettyPrintFlattened(c1));
-        assertEquals(Util.readFile("results/_intersectLeaves1.out"), Jsons.prettyPrintFlattened(c1));
+        JsonObj c1 = (JsonObj) j1.clone();
+        c1.intersect(j1);
+        //System.out.println(c1.stringify(4));
+        assertEquals(c1, j1);
 
-        s0 = j1.subtractLeaves(j2);
-        //System.out.println(Jsons.prettyPrintFlattened(s0));
-        assertEquals(Util.readFile("results/_subtractLeaves0.out"), Jsons.prettyPrintFlattened(s0));
-        s1 = j1.subtractLeaves(j1);
-        //System.out.println(Jsons.prettyPrintFlattened(s1));
-        assertEquals("", Jsons.prettyPrintFlattened(s1));
-        s2 = j2.subtractLeaves(j1);
-        //System.out.println(Jsons.prettyPrintFlattened(s2));
-        assertEquals(Util.readFile("results/_subtractLeaves2.out"), Jsons.prettyPrintFlattened(s2));
+        JsonObj s0 = (JsonObj) j1.clone();
+        s0.subtract(j2);
+        //System.out.println(s0.stringify(4));
+        assertEquals(Util.readFile("results/_subtract0.out"), s0.stringify(4));
+
+        JsonObj s1 = (JsonObj) j1.clone();
+        s1.subtract(j1);
+        //System.out.println(s1.stringify(4));
+        assertEquals(JsonObj.instance(), s1);
+
+        JsonObj s2 = (JsonObj) j2.clone();
+        s2.subtract(j1);
+        //System.out.println(s2.stringify(4));
+        assertEquals(Util.readFile("results/_subtract2.out"), s2.stringify(4));
+
+        JsonObj m0 = (JsonObj) j1.clone();
+        m0.merge(j2);
+        //System.out.println(m0.stringify(4));
+        assertEquals(Util.readFile("results/_merge0.out"), m0.stringify(4));
+
+        JsonObj m1 = (JsonObj) j2.clone();
+        m1.merge(j1);
+        //System.out.println(m1.stringify(4));
+        assertEquals(Util.readFile("results/_merge1.out"), m1.stringify(4));
     }
-
-    @Test
-    public void Jsons() throws ParseError, UnreachablePath {
-        JsonObj j1, j2;
-        j1 = JsonObj.parse(Util.readFile("compare11.json"));
-        j2 = JsonObj.parse(Util.readFile("compare22.json"));
-
-        Map<String, List<Json>> d0 = Jsons.diff(j1, j2);
-        //System.out.println(Jsons.prettyPrintDiff(d0));
-        assertEquals(Util.readFile("results/_diff00.out"), Jsons.prettyPrintDiff(d0));
-        Map<String, List<Json>> d1 = Jsons.diff(j1, j1);
-        assertEquals("", Jsons.prettyPrintDiff(d1));
-
-        JsonObj o0 = Jsons.intersect(j1, j2);
-        //System.out.println(o0.stringify(4));
-        assertEquals(Util.readFile("results/_intersect00.out"), o0.stringify(4));
-
-        o0 = Jsons.subtract(j1, j2);
-        //System.out.println(o0.stringify(4));
-        assertEquals(Util.readFile("results/_subtract00.out"), o0.stringify(4));
-
-        o0 = Jsons.overlap(j1, j2);
-        //System.out.println(o0.stringify(4));
-        assertEquals(Util.readFile("results/_overlap00.out"), o0.stringify(4));
-
-        o0 = Jsons.subtractLeaves(j1, j2);
-        //System.out.println(o0.stringify(4));
-        assertEquals(Util.readFile("results/_subtractLeaves00.out"), o0.stringify(4));
-
-        o0 = Jsons.overlapLeaves(j1, j2);
-        //System.out.println(o0.stringify(4));
-        assertEquals(Util.readFile("results/_overlapLeaves00.out"), o0.stringify(4));
-    }
-
 }

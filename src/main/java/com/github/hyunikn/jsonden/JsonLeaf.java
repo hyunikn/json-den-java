@@ -7,8 +7,19 @@ abstract class JsonLeaf extends Json {
     // ===================================================
     // Public
 
+    /**
+      * Returns true (this is a leaf node.)
+      */
     @Override
     public boolean isLeaf() {
+        return true;
+    }
+
+    /**
+      * Returns true (this is a terminal node.)
+      */
+    @Override
+    public boolean isTerminal() {
         return true;
     }
 

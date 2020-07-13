@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -248,6 +249,7 @@ public class JsonObj extends JsonNonLeaf {
       * Erases all the members.
       * @return this {@code JsonObj} for method chaining
       */
+    @Override
     public JsonObj clear() {
         myMap.clear();
         return this;
@@ -261,39 +263,25 @@ public class JsonObj extends JsonNonLeaf {
         return super.diffAtCommonPaths(that);
     }
 
-    /**
-      * Gets the nodes whose paths are common of this and that {@code Json}s
-      * and whose values are equal.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
-      * In particular, if this and that {@code Json} are equal then the result is a map whose key is
-      * a spacial path ".", which represent the path to itself, and whose value is this {@code Json}.
+    /** Intersects this and that {@code JsonObj}s.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> intersect(JsonObj that) {
-        return super.intersect(that);
+    public JsonObj intersect(JsonObj that) throws UnreachablePath {
+        return (JsonObj) super.intersect(that);
     }
 
-    /**
-      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
+    /** Subtracts that {@code JsonObj} from this.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> subtract(JsonObj that) {
-        return super.subtract(that);
+    public JsonObj subtract(JsonObj that) throws UnreachablePath {
+        return (JsonObj) super.subtract(that);
     }
 
-    /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
+    /** Merges that {@code JsonObj} into this.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> intersectLeaves(JsonObj that) {
-        return super.intersectLeaves(that);
-    }
-
-    /**
-      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      */
-    public LinkedHashMap<String, Json> subtractLeaves(JsonObj that) {
-        return super.subtractLeaves(that);
+    public JsonObj merge(JsonObj that) throws UnreachablePath {
+        return (JsonObj) super.merge(that);
     }
 
     /**
@@ -377,6 +365,14 @@ public class JsonObj extends JsonNonLeaf {
         return (JsonObj) super.loadFlattened(flattened, clone);
     }
 
+    /**
+      * Whether this object is empty or not.
+      */
+    @Override
+    public boolean isTerminal() {
+        return myMap.isEmpty();
+    }
+
     // ===================================================
     // Protected
 
@@ -394,24 +390,26 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     @Override
-    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo) {
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe) {
 
         String prefix;
         if (pathToMe == null) {
             prefix = "";
         } else {
-            if (addNonLeafToo) {
-                accum.put(pathToMe, this);
-            }
             prefix = pathToMe + ".";
         }
 
-        for (String key: myMap.keySet()) {
-            Json val = myMap.get(key);
-            if (val instanceof JsonNonLeaf) {
-                ((JsonNonLeaf) val).flattenInner(accum, prefix + key, addNonLeafToo);
-            } else {
-                accum.put(prefix + key, val);
+        Set<String> keys = myMap.keySet();
+        if (keys.isEmpty()) {
+            accum.put(pathToMe, this);
+        } else {
+            for (String key: keys) {
+                Json val = myMap.get(key);
+                if (val instanceof JsonNonLeaf) {
+                    ((JsonNonLeaf) val).flattenInner(accum, prefix + key);
+                } else {
+                    accum.put(prefix + key, val);
+                }
             }
         }
     }

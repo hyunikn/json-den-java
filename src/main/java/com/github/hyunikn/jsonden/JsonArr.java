@@ -333,6 +333,7 @@ public class JsonArr extends JsonNonLeaf {
       * Erases all the elements.
       * @return this {@code JsonArr} for method chaining
       */
+    @Override
     public JsonArr clear() {
         myList.clear();
         return this;
@@ -389,39 +390,25 @@ public class JsonArr extends JsonNonLeaf {
         return super.diffAtCommonPaths(that);
     }
 
-    /**
-      * Gets the nodes whose paths are common of this and that {@code Json}s
-      * and whose values are equal.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
-      * In particular, if this and that {@code Json} are equal then the result is a map whose key is
-      * a spacial path ".", which represent the path to itself, and whose value is this {@code Json}.
+    /** Intersects this and that {@code JsonArr}s.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> intersect(JsonArr that) {
-        return super.intersect(that);
+    public JsonArr intersect(JsonArr that) throws UnreachablePath {
+        return (JsonArr) super.intersect(that);
     }
 
-    /**
-      * Gets the nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      * If a non-leaf ({@code JsonObj} or {@code JsonArr}) is contained in the result then
-      * its subnodes are not included in the result.
+    /** Subtracts that {@code JsonArr} from this.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> subtract(JsonArr that) {
-        return super.subtract(that);
+    public JsonArr subtract(JsonArr that) throws UnreachablePath {
+        return (JsonArr) super.subtract(that);
     }
 
-    /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are equal.
+    /** Merges that {@code JsonArr} into this.
+      * The update is in-place and this object may change after this operation.
       */
-    public LinkedHashMap<String, Json> intersectLeaves(JsonArr that) {
-        return super.intersectLeaves(that);
-    }
-
-    /**
-      * Gets the leaf nodes whose paths are in this {@code Json} but not in that {@code Json}.
-      */
-    public LinkedHashMap<String, Json> subtractLeaves(JsonArr that) {
-        return super.subtractLeaves(that);
+    public JsonArr merge(JsonArr that) throws UnreachablePath {
+        return (JsonArr) super.merge(that);
     }
 
     /**
@@ -505,6 +492,14 @@ public class JsonArr extends JsonNonLeaf {
         return (JsonArr) super.loadFlattened(flattened, clone);
     }
 
+    /**
+      * Whether this array is empty or not.
+      */
+    @Override
+    public boolean isTerminal() {
+        return myList.isEmpty();
+    }
+
     // ===================================================
     // Protected
 
@@ -522,26 +517,27 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     @Override
-    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo) {
+    protected void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe) {
 
         String prefix;
         if (pathToMe == null) {
             prefix = "#";
         } else {
-            if (addNonLeafToo) {
-                accum.put(pathToMe, this);
-            }
             prefix = pathToMe + ".#";
         }
 
-        int i = 0;
-        for (Json val: myList) {
-            if (val instanceof JsonNonLeaf) {
-                ((JsonNonLeaf) val).flattenInner(accum, prefix + i, addNonLeafToo);
-            } else {
-                accum.put(prefix + i, val);
+        if (myList.isEmpty()) {
+            accum.put(pathToMe, this);
+        } else {
+            int i = 0;
+            for (Json val: myList) {
+                if (val instanceof JsonNonLeaf) {
+                    ((JsonNonLeaf) val).flattenInner(accum, prefix + i);
+                } else {
+                    accum.put(prefix + i, val);
+                }
+                i++;
             }
-            i++;
         }
     }
 

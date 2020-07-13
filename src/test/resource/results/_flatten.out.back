@@ -16,7 +16,6 @@ b.b4.#0.#0.b4A: true
 b.b4.#0.#0.b4B: null
 b.b4.#0.#0.b4C: 1.1
 b.b4.#0.#0.b4D: "b4D"
-b.b4.#0.#0.b4E: {}
 c.c0: true
 c.c1: null
 c.c2: 1
@@ -34,4 +33,3 @@ d.d4.d4A: true
 d.d4.d4B: null
 d.d4.d4C: 1.1
 d.d4.d4D: "d4D"
-d.d4.d4E.#0: {}

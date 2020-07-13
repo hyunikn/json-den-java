@@ -1,61 +1,57 @@
 
 
+OE1:
+L: {}
+R: <none>
+
+AE1:
+L: []
+R: <none>
+
 oc.a:
 L: true
 R: false
+
+a1:
+L: true
+R: <none>
 
 O.oo:
 L: false
 R: 3
 
+A.#0:
+L: {}
+R: 7
+
+O1.oo:
+L: 3
+R: <none>
+
+A1.#0:
+L: 7
+R: <none>
+
 a:
 L: true
 R: false
 
-OE1:
-L: {}
-R: ---
-
-AE1:
-L: []
-R: ---
-
-a1:
-L: true
-R: ---
-
-O1:
-L: {
-    "oo": 3
-}
-R: ---
-
-A1:
-L: [
-    7
-]
-R: ---
-
 OE2:
-L: ---
+L: <none>
 R: {}
 
 AE2:
-L: ---
+L: <none>
 R: []
 
 a2:
-L: ---
+L: <none>
 R: true
 
-O2:
-L: ---
-R: {
-    "oo": 3
-}
+O2.oo:
+L: <none>
+R: 3
 
-A2:
-L: ---
-R: [
-    7
-]
+A2.#0:
+L: <none>
+R: 7

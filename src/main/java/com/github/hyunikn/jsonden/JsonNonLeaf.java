@@ -80,28 +80,44 @@ abstract class JsonNonLeaf extends Json {
         }
     }
 
-    /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to all the leaf proper subnodes as its keys.
+    /** Converts its hierarchical structure into a single map.
+      * The keys of the resulting map are paths to all the terminal subnodes.
       */
     public LinkedHashMap<String, Json> flatten() {
         LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
-        flattenInner(accum, null, false);
+        flattenInner(accum, null);
         return accum;
     }
 
-    /**
-      * Converts its hierarchical structure into a single map.
-      * The resulting map has paths to all the proper subnodes as its keys.
-      */
-    public LinkedHashMap<String, Json> flatten2() {
-        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
-        flattenInner(accum, null, true);
-        return accum;
-    }
+    public abstract JsonNonLeaf clear();
 
     // ===================================================
     // Protected
+
+    protected abstract void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe);
+
+    protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone)
+            throws UnreachablePath {
+
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+
+            String key = e.getKey();
+            Json val = e.getValue();
+
+            if (!val.isTerminal()) {
+                throw new IllegalArgumentException("flattened cannot contain a non-terminal value: " +
+                        val.stringify(4));
+            }
+
+            if (clone) {
+                val = (Json) val.clone();
+            }
+
+            setx(key, val);
+        }
+
+        return this;
+    }
 
     protected JsonNonLeaf setx(String path, Json val) throws UnreachablePath {
 
@@ -151,9 +167,10 @@ abstract class JsonNonLeaf extends Json {
     }
 
     protected Map<String, List<Json>> diffAtCommonPaths(JsonNonLeaf that) {
-        LinkedHashMap<String, Json> flattened = flatten();
 
         LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
+
+        LinkedHashMap<String, Json> flattened = flatten();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
             String key = e.getKey();
             Json thatValue = that.getx(key);
@@ -168,136 +185,79 @@ abstract class JsonNonLeaf extends Json {
         return ret;
     }
 
-    protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone) throws UnreachablePath {
+    protected Map<String, List<Json>> diff(JsonNonLeaf that) {
 
-        String prefixToSkip = null;
+        LinkedHashMap<String, List<Json>> ret = new LinkedHashMap<>();
+
+        LinkedHashMap<String, Json> flattened = flatten();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            String key = e.getKey();
+            Json thisValue = e.getValue();
+            Json thatValue = that.getx(key);
+            if (thatValue == null) {
+                ret.put(key, Arrays.asList(thisValue, null));
+            } else {
+                if (!thisValue.equals(thatValue)) {
+                    ret.put(key, Arrays.asList(thisValue, thatValue));
+                }
+            }
+        }
+
+        flattened = that.flatten();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            String key = e.getKey();
+            Json thisValue = this.getx(key);
+            if (thisValue == null) {
+                ret.put(key, Arrays.asList(null, e.getValue()));
+            }
+        }
+
+        return ret;
+    }
+
+    protected JsonNonLeaf intersect(JsonNonLeaf that) throws UnreachablePath {
+
+        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
+
+        LinkedHashMap<String, Json> flattened = flatten();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
 
             String key = e.getKey();
-            if (".".equals(key)) {
-                throw new IllegalArgumentException("flattened cannot contain a key \".\": " +
-                        "this method sets only proper subnodes");
-            }
-            if (prefixToSkip != null) {
-                if (key.startsWith(prefixToSkip)) {
-                    continue;
-                } else {
-                    prefixToSkip = null;
-                }
-            }
-
-            Json val = clone ? (Json) e.getValue().clone() : e.getValue();
-            setx(key, val);
-            if (prefixToSkip == null && val instanceof JsonNonLeaf) {
-                prefixToSkip = key + ".";
+            Json thisValue = e.getValue();
+            if (thisValue.equals(that.getx(key))) {
+                accum.put(key, thisValue);
             }
         }
+
+        return this.clear().loadFlattened(accum, false);
+    }
+
+    protected JsonNonLeaf subtract(JsonNonLeaf that) throws UnreachablePath {
+
+        LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
+
+        LinkedHashMap<String, Json> flattened = flatten();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+
+            String key = e.getKey();
+            Json thisValue = e.getValue();
+            if (!thisValue.equals(that.getx(key))) {
+                accum.put(key, thisValue);
+            }
+        }
+
+        return this.clear().loadFlattened(accum, false);
+    }
+
+    protected JsonNonLeaf merge(JsonNonLeaf that) throws UnreachablePath {
+
+        LinkedHashMap<String, Json> flattened = that.flatten();
+        for (Map.Entry<String, Json> e: flattened.entrySet()) {
+            setx(e.getKey(), (Json) e.getValue().clone());
+        }
+
         return this;
     }
-
-    protected LinkedHashMap<String, Json> intersect(JsonNonLeaf that) {
-
-        LinkedHashMap<String, Json> ret;
-
-        // a trivial case
-        if (this.equals(that)) {
-            ret = new LinkedHashMap<>();
-            ret.put(".", this);
-            return ret;
-        }
-
-        LinkedHashMap<String, Json> flattened = flatten2();
-
-        String prefixToSkip = null;
-        ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-
-            String key = e.getKey();
-            if (prefixToSkip != null) {
-                if (key.startsWith(prefixToSkip)) {
-                    continue;
-                } else {
-                    prefixToSkip = null;
-                }
-            }
-
-            Json thatValue = that.getx(key);
-            if (thatValue != null) {
-                Json thisValue = e.getValue();
-                if (thisValue.equals(thatValue)) {
-                    ret.put(key, thisValue);
-                    if (prefixToSkip == null && thisValue instanceof JsonNonLeaf) {
-                        prefixToSkip = key + ".";
-                    }
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    protected LinkedHashMap<String, Json> subtract(JsonNonLeaf that) {
-        LinkedHashMap<String, Json> flattened = flatten2();
-
-        String prefixToSkip = null;
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-
-            String key = e.getKey();
-            if (prefixToSkip != null) {
-                if (key.startsWith(prefixToSkip)) {
-                    continue;
-                } else {
-                    prefixToSkip = null;
-                }
-            }
-
-            if (!that.has(key)) {
-                Json value = e.getValue();
-                ret.put(key, value);
-                if (prefixToSkip == null && value instanceof JsonNonLeaf) {
-                    prefixToSkip = key + ".";
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    protected LinkedHashMap<String, Json> intersectLeaves(JsonNonLeaf that) {
-        LinkedHashMap<String, Json> flattened = flatten();
-
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            String key = e.getKey();
-            Json thatValue = that.getx(key);
-            if (thatValue != null) {
-                Json thisValue = e.getValue();
-                if (thisValue.equals(thatValue)) {
-                    ret.put(key, thisValue);
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    protected LinkedHashMap<String, Json> subtractLeaves(JsonNonLeaf that) {
-        LinkedHashMap<String, Json> flattened = flatten();
-
-        LinkedHashMap<String, Json> ret = new LinkedHashMap<>();
-        for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            String key = e.getKey();
-            if (!that.has(key)) {
-                ret.put(key, e.getValue());
-            }
-        }
-
-        return ret;
-    }
-
-    protected abstract void flattenInner(
-            LinkedHashMap<String, Json> accum, String pathToMe, boolean addNonLeafToo);
 
     // ===================================================
     // Private
