@@ -66,48 +66,48 @@ public class Jsons {
       * The result is equal to that of {@code left.intersect(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonObj}.
      */
-    public static JsonObj intersect(JsonObj left, JsonObj right) {
-        return left.clone().intersect(right);
+    public static JsonObj intersect(JsonObj left, JsonObj right) throws UnreachablePath {
+        return ((JsonObj) left.clone()).intersect(right);
     }
 
     /** Subtracts {@code right JsonObj} from {@code left}.
       * The result is equal to that of {@code left.subtract(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonObj}.
      */
-    public static JsonObj subtract(JsonObj left, JsonObj right) {
-        return left.clone().subtract(right);
+    public static JsonObj subtract(JsonObj left, JsonObj right) throws UnreachablePath {
+        return ((JsonObj) left.clone()).subtract(right);
     }
 
     /** Merges (overwrites) {@code right JsonObj} into {@code left}.
       * The result is equal to that of {@code left.merge(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonObj}.
      */
-    public static JsonObj merge(JsonObj left, JsonObj right) {
-        return left.clone().merge(right);
+    public static JsonObj merge(JsonObj left, JsonObj right) throws UnreachablePath {
+        return ((JsonObj) left.clone()).merge(right);
     }
 
     /** Intersects {@code left} and {@code right JsonArr}s.
       * The result is equal to that of {@code left.intersect(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonArr}.
      */
-    public static JsonArr intersect(JsonArr left, JsonArr right) {
-        return left.clone().intersect(right);
+    public static JsonArr intersect(JsonArr left, JsonArr right) throws UnreachablePath {
+        return ((JsonArr) left.clone()).intersect(right);
     }
 
     /** Subtracts {@code right JsonArr} from {@code left}.
       * The result is equal to that of {@code left.subtract(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonArr}.
      */
-    public static JsonArr subtract(JsonArr left, JsonArr right) {
-        return left.clone().subtract(right);
+    public static JsonArr subtract(JsonArr left, JsonArr right) throws UnreachablePath {
+        return ((JsonArr) left.clone()).subtract(right);
     }
 
     /** Merges (overwrites) {@code right JsonArr} into {@code left}.
       * The result is equal to that of {@code left.merge(right)} but, unlike it,
       * {@code left} is left unchanged and the result is a new {@code JsonArr}.
      */
-    public static JsonArr merge(JsonArr left, JsonArr right) {
-        return left.clone().merge(right);
+    public static JsonArr merge(JsonArr left, JsonArr right) throws UnreachablePath {
+        return ((JsonArr) left.clone()).merge(right);
     }
 
     // ============================================================
