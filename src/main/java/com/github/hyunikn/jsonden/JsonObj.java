@@ -264,21 +264,27 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /** Intersects this and that {@code JsonObj}s.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonObj} consists of the terminal nodes that are in both this and that
+      * {@code JsonObj}s
+      * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj intersect(JsonObj that) throws UnreachablePath {
         return (JsonObj) super.intersect(that);
     }
 
     /** Subtracts that {@code JsonObj} from this.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
+      * not in that {@code JsonObj}.
+      * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj subtract(JsonObj that) throws UnreachablePath {
         return (JsonObj) super.subtract(that);
     }
 
     /** Merges (overwrites) that {@code JsonObj} into this.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
+      * not in that {@code JsonObj} in addition to those in that {@code JsonObj}.
+      * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj merge(JsonObj that) throws UnreachablePath {
         return (JsonObj) super.merge(that);

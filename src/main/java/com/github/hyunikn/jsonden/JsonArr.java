@@ -391,21 +391,27 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /** Intersects this and that {@code JsonArr}s.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonArr} consists of the terminal nodes that are in both this and that
+      * {@code JsonArr}s
+      * The update is in-place, that is, changes this {@code JsonArr}.
       */
     public JsonArr intersect(JsonArr that) throws UnreachablePath {
         return (JsonArr) super.intersect(that);
     }
 
     /** Subtracts that {@code JsonArr} from this.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * not in that {@code JsonArr}.
+      * The update is in-place, that is, changes this {@code JsonArr}.
       */
     public JsonArr subtract(JsonArr that) throws UnreachablePath {
         return (JsonArr) super.subtract(that);
     }
 
     /** Merges (overwrites) that {@code JsonArr} into this.
-      * The update is in-place and this object may change after this operation.
+      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * not in that {@code JsonArr} in addition to those in that {@code JsonArr}.
+      * The update is in-place, that is, changes this {@code JsonArr}.
       */
     public JsonArr merge(JsonArr that) throws UnreachablePath {
         return (JsonArr) super.merge(that);
