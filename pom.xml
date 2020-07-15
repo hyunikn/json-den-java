@@ -79,20 +79,6 @@
             </execution>
         </executions>
       </plugin>
-	  <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-gpg-plugin</artifactId>
-		<version>1.5</version>
-		<executions>
-			<execution>
-				<id>sign-artifacts</id>
-				<phase>verify</phase>
-				<goals>
-					<goal>sign</goal>
-				</goals>
-			</execution>
-		</executions>
-	  </plugin>
 	  <!-- Do not use this. Instead use gen-apidocs.sh.
 		   Javadoc seems to have a bugs for generated code, in my case, Antlr.  -->
 	  <plugin>
@@ -105,6 +91,20 @@
 			<goals>
 				<goal>jar</goal>
 			</goals>
+			</execution>
+		</executions>
+	  </plugin>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-gpg-plugin</artifactId>
+		<version>1.5</version>
+		<executions>
+			<execution>
+				<id>sign-artifacts</id>
+				<phase>verify</phase>
+				<goals>
+					<goal>sign</goal>
+				</goals>
 			</execution>
 		</executions>
 	  </plugin>
