@@ -16,8 +16,18 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>Na, Hyunik</name>
+      <email>hyunikn@gmail.com</email>
+    </developer>
+  </developers>
+  <scm>
+    <url>https://github.com/hyunikn/json-den-java</url>
+  </scm>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <antlr.version>4.8-1</antlr.version>
@@ -69,7 +79,6 @@
             </execution>
         </executions>
       </plugin>
-      <!--
 	  <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-gpg-plugin</artifactId>
@@ -84,7 +93,6 @@
 			</execution>
 		</executions>
 	  </plugin>
-	   -->
 	  <!-- Do not use this. Instead use gen-apidocs.sh.
 		   Javadoc seems to have a bugs for generated code, in my case, Antlr.
 	  <plugin>
