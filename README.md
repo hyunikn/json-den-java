@@ -60,8 +60,8 @@ outputs when run.
     },
     "a": [
         {
-            "r": {
-                "R": "R"
+            "l": {
+                "L": "L"
             },
             "c": {
                 "C": null
@@ -95,8 +95,8 @@ outputs when run.
     },
     "a": [
         {
-            "l": {
-                "L": "L"
+            "r": {
+                "R": "R"
             },
             "c": {
                 "C": null
@@ -152,7 +152,7 @@ public class Example {
 
 ```
 # stringify with indent size 0
-{"l":{},"c":7,"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"r":{"R":"R"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
+{"l":{},"c":7,"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
 # stringify with indent size 2
 {
   "l": {},
@@ -172,8 +172,8 @@ public class Example {
   },
   "a": [
     {
-      "r": {
-        "R": "R"
+      "l": {
+        "L": "L"
       },
       "c": {
         "C": null
@@ -233,8 +233,8 @@ o.d2.#1:
 L: true
 R: false
 
-a.#0.r.R:
-L: "R"
+a.#0.l.L:
+L: "L"
 R: <none>
 
 a.#0.d.D:
@@ -257,9 +257,9 @@ o.r:
 L: <none>
 R: "right"
 
-a.#0.l.L:
+a.#0.r.R:
 L: <none>
-R: "L"
+R: "R"
 
 a.#2.#3:
 L: <none>
@@ -325,8 +325,8 @@ R: "R"
     },
     "a": [
         {
-            "r": {
-                "R": "R"
+            "l": {
+                "L": "L"
             },
             "d": {
                 "D": "O"
@@ -360,8 +360,8 @@ R: "R"
     },
     "a": [
         {
-            "r": {
-                "R": "R"
+            "l": {
+                "L": "L"
             },
             "c": {
                 "C": null
@@ -369,8 +369,8 @@ R: "R"
             "d": {
                 "D": "X"
             },
-            "l": {
-                "L": "L"
+            "r": {
+                "R": "R"
             }
         },
         [
