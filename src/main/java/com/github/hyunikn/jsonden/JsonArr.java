@@ -383,7 +383,15 @@ public class JsonArr extends JsonNonLeaf {
     public List<Json> getList() { return new LinkedList(myList); }
 
     /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets diff of this and that {@code JsonArr}s.
+      * @return map of paths to the different values.
+      */
+    public Map<String, List<Json>> diff(JsonArr that) {
+        return super.diff(that);
+    }
+
+    /**
+      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonArr that) {
