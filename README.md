@@ -37,17 +37,15 @@ Json-den-java is under BSD-2 license.
 ### Sample JSON files
 
 <table>
-
 <tr>
-<th> left.json </th>
-<th> </th>
-<th> right.json </th>
+<th> Good </th>
+<th> Bad </th>
 </tr>
-
 <tr>
-
 <td>
-<pre>
+
+```javascript
+// left.json
 
 {
     "l": {},
@@ -75,11 +73,13 @@ Json-den-java is under BSD-2 license.
         [ 10, 20, 30 ]
     ]   
 }      
-</pre>   
+```
+
 </td>
-<td> </td>
 <td>
-<pre>
+
+```javascript
+// right.json
 
 {
     "r": [],
@@ -110,9 +110,9 @@ Json-den-java is under BSD-2 license.
         }
     ]
 }
-</pre>
-</td>
+```
 
+</td>
 </tr>
 </table>
 
