@@ -20,19 +20,21 @@ Its distinctive features include
 * It supports binary operations `intersect`, `subtract` and `merge` on JSON objects and arrays.
 * It supports C-style line and block comments in JSON texts. Instead of the common approach,
     minifying JSON texts before parsing, its parser recognizes comments
-    so that it can preserve and report the original row and column offsets of tokens 
+    so that it can preserve and report the original row and column offsets of tokens
     on syntax errors, which is imposible in the minifying approach.
 * It preserves block comments that are specified so;
     start comments you want to preserve with "/\*\*", not just with "/\*".
-    Unlike the ordinary ones, such comments are not erased while parsing, 
+    Unlike the ordinary ones, such comments are not erased while parsing,
     kept in internal representation, and printed back when stringified.
 
-For more information, download the source code, run `gen-apidocs.sh` included, 
+For more information, download the source code, run `gen-apidocs.sh` included,
 and see the generated API documentation.
 
 Json-den-java is under BSD-2 license.
 
 ## Examples
+Following are code snippets in com.github.hyunikn.jsonden.example.Example class and their console
+outputs when run.
 
 ### Sample JSON files
 
@@ -46,8 +48,6 @@ Json-den-java is under BSD-2 license.
 <td>
 
 ```javascript
-// left.json
-
 {
     "l": {},
     "c": 7,
@@ -59,7 +59,7 @@ Json-den-java is under BSD-2 license.
         "d2": [ false, true ]
     },
     "a": [
-        {   
+        {
             "r": {
                 "R": "R"
             },
@@ -72,8 +72,8 @@ Json-den-java is under BSD-2 license.
         },
         [ 1, 2, 3 ],
         [ 10, 20, 30 ]
-    ]   
-}      
+    ]
+}
 ```
 
 </td>
@@ -83,8 +83,6 @@ Json-den-java is under BSD-2 license.
 <td>
 
 ```javascript
-// right.json
-
 {
     "r": [],
     "c": 7,
@@ -96,7 +94,7 @@ Json-den-java is under BSD-2 license.
         "d2": [ true, false ]
     },
     "a": [
-        {   
+        {
             "l": {
                 "L": "L"
             },
@@ -122,13 +120,281 @@ Json-den-java is under BSD-2 license.
 
 ### Parse and stringify
 
+**Code:**:
+```java
+package com.github.hyunikn.jsonden.example;
+
+import com.github.hyunikn.jsonden.*;
+import com.github.hyunikn.jsonden.exception.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+public class Example {
+
+    public static void main(String[] argv) throws ParseError, UnreachablePath {
+
+        String leftText = readFile("left.json");
+        String rightText = readFile("right.json");
+
+        // parse
+        JsonObj left = JsonObj.parse(leftText);
+        JsonObj right = JsonObj.parse(rightText);
+
+        // stringify
+        System.out.println("# stringify with indent size 0");
+        System.out.println(left.stringify(0));
+        System.out.println("# stringify with indent size 2");
+        System.out.println(left.stringify(2));
+```
+
+**Output:**:
+
+```
+# stringify with indent size 0
+{"l":{},"c":7,"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"r":{"R":"R"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
+# stringify with indent size 2
+{
+  "l": {},
+  "c": 7,
+  "d": true,
+  "o": {
+    "l": "left",
+    "c": [
+      true,
+      false
+    ],
+    "d": 1.1,
+    "d2": [
+      false,
+      true
+    ]
+  },
+  "a": [
+    {
+      "r": {
+        "R": "R"
+      },
+      "c": {
+        "C": null
+      },
+      "d": {
+        "D": "O"
+      }
+    },
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      10,
+      20,
+      30
+    ]
+  ]
+}
+```
+
 ### Diff
+
+**Code:**
+```java
+        // diff
+        System.out.print("# diff");
+        System.out.println(Jsons.prettyPrintDiff(left.diff(right)));
+```
+
+**Output:**
+```
+# diff
+
+l:
+L: {}
+R: <none>
+
+d:
+L: true
+R: false
+
+o.l:
+L: "left"
+R: <none>
+
+o.d:
+L: 1.1
+R: 3.3
+
+o.d2.#0:
+L: false
+R: true
+
+o.d2.#1:
+L: true
+R: false
+
+a.#0.r.R:
+L: "R"
+R: <none>
+
+a.#0.d.D:
+L: "O"
+R: "X"
+
+a.#2.#0:
+L: 10
+R: 30
+
+a.#2.#2:
+L: 30
+R: 10
+
+r:
+L: <none>
+R: []
+
+o.r:
+L: <none>
+R: "right"
+
+a.#0.l.L:
+L: <none>
+R: "L"
+
+a.#2.#3:
+L: <none>
+R: 0
+
+a.#3.r:
+L: <none>
+R: "R"
+```
 
 ### Intersect, subtract and merge
 
+**Code:**
+```java
+        // intersect, subtract and merge
+        System.out.println("# intersect");
+        System.out.println(Jsons.intersect(left, right).stringify(4));
+        System.out.println("# subtract");
+        System.out.println(Jsons.subtract(left, right).stringify(4));
+        System.out.println("# merge");
+        System.out.println(Jsons.merge(left, right).stringify(4));
+```
+
+**Output:**
+```
+# intersect
+{
+    "c": 7,
+    "o": {
+        "c": [
+            true,
+            false
+        ]
+    },
+    "a": [
+        {
+            "c": {
+                "C": null
+            }
+        },
+        [
+            1,
+            2,
+            3
+        ],
+        [
+            null,
+            20
+        ]
+    ]
+}
+# subtract
+{
+    "l": {},
+    "d": true,
+    "o": {
+        "l": "left",
+        "d": 1.1,
+        "d2": [
+            false,
+            true
+        ]
+    },
+    "a": [
+        {
+            "r": {
+                "R": "R"
+            },
+            "d": {
+                "D": "O"
+            }
+        },
+        null,
+        [
+            10,
+            null,
+            30
+        ]
+    ]
+}
+# merge
+{
+    "l": {},
+    "c": 7,
+    "d": false,
+    "o": {
+        "l": "left",
+        "c": [
+            true,
+            false
+        ],
+        "d": 3.3,
+        "d2": [
+            true,
+            false
+        ],
+        "r": "right"
+    },
+    "a": [
+        {
+            "r": {
+                "R": "R"
+            },
+            "c": {
+                "C": null
+            },
+            "d": {
+                "D": "X"
+            },
+            "l": {
+                "L": "L"
+            }
+        },
+        [
+            1,
+            2,
+            3
+        ],
+        [
+            30,
+            20,
+            10,
+            0
+        ],
+        {
+            "r": "R"
+        }
+    ],
+    "r": []
+}
+```
+
 ## Maven Configuration
 
-You can get the latest stable version from Maven Central by adding the following dependency 
+You can get the latest stable version from Maven Central by adding the following dependency
 in your pom.xml:
 ```xml
     <dependency>

@@ -256,7 +256,15 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Gets the leaf nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets diff of this and that {@code JsonObj}s.
+      * @return map of paths to the different values.
+      */
+    public Map<String, List<Json>> diff(JsonObj that) {
+        return super.diff(that);
+    }
+
+    /**
+      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonObj that) {
