@@ -5,6 +5,7 @@ import com.github.hyunikn.jsonden.exception.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.LinkedHashMap;
 
 public class Example {
 
@@ -34,6 +35,17 @@ public class Example {
         System.out.println(Jsons.subtract(left, right).stringify(4));
         System.out.println("# merge");
         System.out.println(Jsons.merge(left, right).stringify(4));
+
+        // flatten and loadFlattened
+        System.out.println("# flatten");
+        LinkedHashMap<String, Json> flattened = left.flatten();
+        System.out.println(Jsons.prettyPrintFlattened(flattened));
+        JsonObj restored = JsonObj.instance().loadFlattened(flattened);
+        if (left.equals(restored)) {
+            System.out.println("# the original and the restored are equal");
+        } else {
+            assert false;
+        }
     }
 
 

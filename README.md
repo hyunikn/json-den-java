@@ -129,8 +129,8 @@ package com.github.hyunikn.jsonden.example;
 import com.github.hyunikn.jsonden.*;
 import com.github.hyunikn.jsonden.exception.*;
 
-import java.io.File;
-import java.io.FileInputStream;
+...
+...
 
 public class Example {
 
@@ -392,6 +392,47 @@ R: "R"
     ],
     "r": []
 }
+```
+
+### Flatten and loadFlattened
+
+**Code:**
+```java
+        // flatten and loadFlattened
+        System.out.println("# flatten");
+        LinkedHashMap<String, Json> flattened = left.flatten();
+        System.out.println(Jsons.prettyPrintFlattened(flattened));
+        JsonObj restored = JsonObj.instance().loadFlattened(flattened);
+        if (left.equals(restored)) {
+            System.out.println("# the original and the restored are equal");
+        } else {
+            assert false;
+        }
+```
+
+**Output:**
+```
+# flatten
+
+l: {}
+c: 7
+d: true
+o.l: "left"
+o.c.#0: true
+o.c.#1: false
+o.d: 1.1
+o.d2.#0: false
+o.d2.#1: true
+a.#0.l.L: "L"
+a.#0.c.C: null
+a.#0.d.D: "O"
+a.#1.#0: 1
+a.#1.#1: 2
+a.#1.#2: 3
+a.#2.#0: 10
+a.#2.#1: 20
+a.#2.#2: 30
+# the original and the restored are equal
 ```
 
 ## Maven Configuration
