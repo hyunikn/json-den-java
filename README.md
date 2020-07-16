@@ -120,7 +120,7 @@ outputs when run.
 
 ### Parse and stringify
 
-**Code:**:
+**Code:**
 ```java
 package com.github.hyunikn.jsonden.example;
 
@@ -148,7 +148,7 @@ public class Example {
         System.out.println(left.stringify(2));
 ```
 
-**Output:**:
+**Output:**
 
 ```
 # stringify with indent size 0
