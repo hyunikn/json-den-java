@@ -38,8 +38,9 @@ Json-den-java is under BSD-2 license.
 
 <table>
 <tr>
-<th> Good </th>
-<th> Bad </th>
+<th> left.json </th>
+<th> </th>
+<th> right.json </th>
 </tr>
 <tr>
 <td>
@@ -76,6 +77,9 @@ Json-den-java is under BSD-2 license.
 ```
 
 </td>
+
+<td> </td>
+
 <td>
 
 ```javascript
