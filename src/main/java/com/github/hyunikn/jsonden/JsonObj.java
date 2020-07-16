@@ -361,7 +361,6 @@ public class JsonObj extends JsonNonLeaf {
       * by the one in {@code flattened}.
       * @param flattened a flattened {@code Json} value obtained by
       *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten2 flatten2},
       *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
       *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
       * @param clone whether to clone the {@code Json} values while loading or not.
