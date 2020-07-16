@@ -25,7 +25,7 @@
           <show>public</show>
           <nohelp>true</nohelp>
           <reportOutputDirectory>${basedir}/apidocs</reportOutputDirectory>
-          <excludePackageNames>com.github.hyunikn.jsonden.parser;com.github.hyunikn.jsonden.parser.antlrgen</excludePackageNames>
+          <excludePackageNames>com.github.hyunikn.jsonden.example;com.github.hyunikn.jsonden.parser;com.github.hyunikn.jsonden.parser.antlrgen</excludePackageNames>
         </configuration>
       </plugin>
     </plugins>
