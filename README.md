@@ -35,6 +35,8 @@ Json-den-java is under BSD-2 license.
 ## Examples
 Following are code snippets in com.github.hyunikn.jsonden.example.Example class and their console
 outputs when run.
+You can run `mvn exec:java -Dexec.mainClass=com.github.hyunikn.jsonden.example.Example` in the
+project root directory to get the outputs.
 
 ### Sample JSON files
 
