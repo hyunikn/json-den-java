@@ -26,6 +26,10 @@ Its distinctive features include
     start comments you want to preserve with "/\*\*", not just with "/\*".
     Unlike the ordinary ones, such comments are not erased while parsing,
     kept in internal representation, and printed back when stringified.
+    This feature might be valuable when you use JSON for a configuration file format.
+    You might want to annotate who, when, why etc of of each configuration item and keep 
+    those annotations intact after several items are updated during run-time and 
+    the updated configuration is saved back to hard disk.
 
 For more information, download the source code, run `gen-apidocs.sh` included,
 and see the generated API documentation.
