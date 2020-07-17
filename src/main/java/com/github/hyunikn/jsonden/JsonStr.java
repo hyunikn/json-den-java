@@ -51,12 +51,7 @@ public class JsonStr extends JsonLeaf {
     @Override
     public JsonStr clone() {
         JsonStr clone = new JsonStr(this.text);
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
+        clone.copyAnnotationsOf(this);
         return clone;
     }
 

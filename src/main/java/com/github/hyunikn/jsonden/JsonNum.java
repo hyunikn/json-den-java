@@ -102,12 +102,7 @@ public class JsonNum extends JsonLeaf {
     @Override
     public JsonNum clone() {
         JsonNum clone = new JsonNum(this.text);
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
+        clone.copyAnnotationsOf(this);
         return clone;
     }
 

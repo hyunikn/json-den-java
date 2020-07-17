@@ -46,12 +46,7 @@ public class JsonBool extends JsonLeaf {
     @Override
     public JsonBool clone() {
         JsonBool clone = new JsonBool(this.val);
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
+        clone.copyAnnotationsOf(this);
         return clone;
     }
 

@@ -43,6 +43,7 @@ abstract class JsonLeaf extends Json {
             // negative indent size indicates that we are right after a key of an object
             indentLevel *= -1;
         } else {
+            writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeRemark(sbuf, remarkLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }

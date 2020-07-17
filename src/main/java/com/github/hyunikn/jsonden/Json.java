@@ -41,6 +41,11 @@ public abstract class Json {
       * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json value.
       */
     public static Json parse(String s) throws ParseError {
+
+        if (s == null) {
+            throw new IllegalArgumentException("s must not be null");
+        }
+
         ANTLRInputStream ais;
         try {
             ais = new ANTLRInputStream(new StringReader('\r' + s)); // \r: detecting remark requires it.
@@ -110,6 +115,20 @@ public abstract class Json {
       */
     public void setRemarkLines(String[] remarkLines) {
         this.remarkLines = remarkLines;
+    }
+
+    /**
+      * Gets the comment lines.
+      */
+    public String[] commentLines() {
+        return commentLines;
+    }
+
+    /**
+      * Sets the comment lines.
+      */
+    public void setCommentLines(String[] commentLines) {
+        this.commentLines = commentLines;
     }
 
     /**
@@ -209,6 +228,7 @@ public abstract class Json {
     protected static final int TYPE_STRING  = 5;
 
     protected String[] remarkLines;
+    protected String[] commentLines;
 
     protected Json() { }
 
@@ -232,18 +252,31 @@ public abstract class Json {
         }
     }
 
-    protected static void writeRemark(StringBuffer sbuf, String[] remarkLines, int indentSize, int indentLevel) {
+    protected static void writeRemark(StringBuffer sbuf, String[] lines, int indentSize, int indentLevel) {
 
-        if (remarkLines == null) {
+        if (lines == null) {
             return;
         }
+        writeAnnot(sbuf, lines, indentSize, indentLevel, true);
+    }
+
+    protected static void writeComment(StringBuffer sbuf, String[] lines, int indentSize, int indentLevel) {
+
+        if (lines == null) {
+            return;
+        }
+        writeAnnot(sbuf, lines, indentSize, indentLevel, false);
+    }
+
+    protected static void writeAnnot(StringBuffer sbuf, String[] lines, int indentSize, int indentLevel,
+            boolean isRemark) {
 
         boolean useIndent = indentSize != 0;
 
         writeIndent(sbuf, indentSize, indentLevel);
-        sbuf.append("/**\n");
+        sbuf.append(isRemark ? "/**\n" : "/*\n");
 
-        for (String s: remarkLines) {
+        for (String s: lines) {
             writeIndent(sbuf, indentSize, indentLevel);
             sbuf.append(s);
             sbuf.append("\n");
@@ -255,6 +288,21 @@ public abstract class Json {
             sbuf.append("\n");
         }
 
+    }
+
+    protected void copyAnnotationsOf(Json that) {
+
+        String[] cl;
+
+        cl = that.remarkLines();
+        if (cl != null) {
+            setRemarkLines(cl);
+        }
+
+        cl = that.commentLines();
+        if (cl != null) {
+            setCommentLines(cl);
+        }
     }
 
     // ===================================================

@@ -38,6 +38,9 @@ public class JsonObj extends JsonNonLeaf {
       * @param map must not be null.
       */
     public static JsonObj instance(LinkedHashMap<String, Json> map) {
+        if (map == null) {
+            throw new IllegalArgumentException("map must not be null");
+        }
         return new JsonObj(map);
     }
 
@@ -75,10 +78,7 @@ public class JsonObj extends JsonNonLeaf {
             clone.myMap.put(key, val.clone());    // deep copy
         }
 
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
+        clone.copyAnnotationsOf(this);
 
         return clone;
     }
@@ -396,9 +396,6 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     protected JsonObj(LinkedHashMap<String, Json> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("source map cannot be null");
-        }
         this.myMap = new LinkedHashMap<>(map);
     }
 
@@ -441,6 +438,7 @@ public class JsonObj extends JsonNonLeaf {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
+            writeComment(sbuf, commentLines, indentSize, indentLevel);
             writeRemark(sbuf, remarkLines, indentSize, indentLevel);
             writeIndent(sbuf, indentSize, indentLevel);
         }
@@ -468,6 +466,7 @@ public class JsonObj extends JsonNonLeaf {
                 }
             }
 
+            writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
             writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
 
             writeIndent(sbuf, indentSize, indentLevel + 1);

@@ -41,12 +41,7 @@ public class JsonNull extends JsonLeaf {
     @Override
     public JsonNull clone() {
         JsonNull clone = new JsonNull();
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
+        clone.copyAnnotationsOf(this);
         return clone;
     }
 
