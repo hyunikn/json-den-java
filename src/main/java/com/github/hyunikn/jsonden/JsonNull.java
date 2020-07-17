@@ -36,7 +36,7 @@ public class JsonNull extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
     public JsonNull clone() {

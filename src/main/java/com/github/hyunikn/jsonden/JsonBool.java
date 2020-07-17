@@ -41,7 +41,7 @@ public class JsonBool extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
     public JsonBool clone() {

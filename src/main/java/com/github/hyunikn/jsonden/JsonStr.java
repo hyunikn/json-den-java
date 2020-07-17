@@ -46,7 +46,7 @@ public class JsonStr extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
     public JsonStr clone() {

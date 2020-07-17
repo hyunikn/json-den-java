@@ -97,7 +97,7 @@ public class JsonNum extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
     public JsonNum clone() {
