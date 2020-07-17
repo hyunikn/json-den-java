@@ -28,8 +28,8 @@ Its distinctive features include
     kept in internal representation, and printed back when stringified.
     This feature might be valuable when you use JSON for a configuration file format.
     You might want to annotate who, when, why etc about each configuration item
-    in the configuration file. In such cases, you would like to keep those annotations intact, 
-    of course for the unchanged items, after some others are updated during run-time and 
+    in the configuration file. In such cases, you would like to keep those annotations intact 
+    for unchanged items after some others are updated during run-time and 
     the whole configuration is saved back to hard disk.
 
 For more information, download the source code, run `gen-apidocs.sh` included,
