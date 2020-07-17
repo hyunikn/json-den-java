@@ -116,7 +116,7 @@ public abstract class Json {
       * Deep clone.
       */
     @Override
-    public abstract Object clone();
+    public abstract Json clone();
 
     // --------------------------------------------------
     // convenience methods

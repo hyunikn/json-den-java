@@ -99,7 +99,8 @@ public class JsonNum extends JsonLeaf {
     /**
       * Deep copy
       */
-    public Object clone() {
+    @Override
+    public JsonNum clone() {
         JsonNum clone = new JsonNum(this.text);
 
         String[] cl = this.remarkLines();

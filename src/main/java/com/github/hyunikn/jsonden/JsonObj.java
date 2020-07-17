@@ -66,7 +66,7 @@ public class JsonObj extends JsonNonLeaf {
       * Deep copy
       */
     @Override
-    public Object clone() {
+    public JsonObj clone() {
         String[] cl;
         JsonObj clone = new JsonObj();  // What if Json.clone() or just clone() where clone uses This constructor?
                                         // Shoud This constructor call its parent's (and hence all its aoncestors')
@@ -384,6 +384,14 @@ public class JsonObj extends JsonNonLeaf {
     @Override
     public boolean isTerminal() {
         return myMap.isEmpty();
+    }
+
+    /**
+      * Deletes a subnode at {@code path} if any, and returns itself for method chaining.
+      */
+    @Override
+    public JsonObj delx(String path) {
+        return (JsonObj) super.delx(path);
     }
 
     // ===================================================

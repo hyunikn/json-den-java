@@ -43,7 +43,8 @@ public class JsonBool extends JsonLeaf {
     /**
       * Deep copy
       */
-    public Object clone() {
+    @Override
+    public JsonBool clone() {
         JsonBool clone = new JsonBool(this.val);
 
         String[] cl = this.remarkLines();

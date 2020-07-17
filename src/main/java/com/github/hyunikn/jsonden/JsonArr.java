@@ -63,7 +63,7 @@ public class JsonArr extends JsonNonLeaf {
       * Deep copy
       */
     @Override
-    public Object clone() {
+    public JsonArr clone() {
         JsonArr clone = new JsonArr();
         for (Json elem: myList) {
             clone.myList.add((Json) elem.clone());  // deep copy
@@ -511,6 +511,14 @@ public class JsonArr extends JsonNonLeaf {
     @Override
     public boolean isTerminal() {
         return myList.isEmpty();
+    }
+
+    /**
+      * Deletes a subnode at {@code path} if any, and returns itself for method chaining.
+      */
+    @Override
+    public JsonArr delx(String path) {
+        return (JsonArr) super.delx(path);
     }
 
     // ===================================================

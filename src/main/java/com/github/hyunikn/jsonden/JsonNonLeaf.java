@@ -96,6 +96,37 @@ abstract class JsonNonLeaf extends Json {
 
     protected abstract void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe);
 
+    protected JsonNonLeaf delx(String path) {
+
+        if (path == null) {
+            throw new IllegalArgumentException("path cannot be null");
+        }
+
+        String[] divided = Jsons.dividePath(path);
+        assert divided != null;
+        String parentPath = divided[0];
+        Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(divided[1]);
+
+        Json parent;
+        if (parentPath == null) {
+            parent = this;
+        } else {
+            parent = getx(parentPath);
+        }
+
+        if (parent != null) {
+            if (parent.isObj()) {
+                parent.asObj().delete(divided[1]);
+            } else if (parent.isArr()) {
+                if (arrElemIndex != null) {
+                    parent.asArr().delete(arrElemIndex.intValue());
+                }
+            }
+        }
+
+        return this;
+    }
+
     protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone)
             throws UnreachablePath {
 

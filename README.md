@@ -26,11 +26,10 @@ Its distinctive features include
     start comments you want to preserve with "/\*\*", not just with "/\*".
     Unlike the ordinary ones, such comments are not erased while parsing,
     kept in internal representation, and printed back when stringified.
-    This feature might be valuable when you use JSON for a configuration file format.
-    You might want to annotate who, when, why etc about each configuration item
-    in the configuration file. In such cases, you would like to keep those annotations intact 
-    for unchanged items after some others are updated during run-time and 
-    the whole configuration is saved back to hard disk.
+    This feature might be valuable when you use JSON for a configuration file of your app and
+    you want to annotate who, when, why, etc of each configuration item in the file.
+    With Json-den-java, you does not lose the annotation over times when you load, update
+    and save some of the configuration at run-time.
 
 For more information, download the source code, run `gen-apidocs.sh` included,
 and see the generated API documentation.
