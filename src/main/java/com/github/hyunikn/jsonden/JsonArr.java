@@ -60,14 +60,18 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /**
-      * Deep copy.
-      * Remarks and comments are not copied.
+      * Deep copy
       */
     @Override
     public JsonArr clone() {
         JsonArr clone = new JsonArr();
         for (Json elem: myList) {
-            clone.myList.add(elem.clone());  // deep copy
+            clone.myList.add((Json) elem.clone());  // deep copy
+        }
+
+        String[] cl = this.remarkLines();
+        if (cl != null) {
+            clone.setRemarkLines(cl);
         }
 
         return clone;

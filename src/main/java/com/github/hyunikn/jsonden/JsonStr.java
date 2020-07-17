@@ -46,12 +46,18 @@ public class JsonStr extends JsonLeaf {
     }
 
     /**
-      * Deep copy.
-      * Remarks and comments are not copied.
+      * Deep copy
       */
     @Override
     public JsonStr clone() {
-        return new JsonStr(this.text);
+        JsonStr clone = new JsonStr(this.text);
+
+        String[] cl = this.remarkLines();
+        if (cl != null) {
+            clone.setRemarkLines(cl);
+        }
+
+        return clone;
     }
 
     /**

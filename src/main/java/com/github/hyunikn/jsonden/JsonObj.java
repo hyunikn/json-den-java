@@ -63,16 +63,29 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Deep copy.
-      * Remarks and comments are not copied.
+      * Deep copy
       */
     @Override
     public JsonObj clone() {
+        String[] cl;
         JsonObj clone = new JsonObj();  // What if Json.clone() or just clone() where clone uses This constructor?
                                         // Shoud This constructor call its parent's (and hence all its aoncestors')
                                         // automatically?
         for (String key: myMap.keySet()) {
-            clone.myMap.put(key, myMap.get(key).clone());    // deep copy
+            Json val = myMap.get(key);
+            Json valClone = (Json) val.clone();
+
+            cl = val.remarkLines();
+            if (cl != null) {
+                valClone.setRemarkLines(cl);
+            }
+
+            clone.myMap.put(key, valClone);    // deep copy
+        }
+
+        cl = this.remarkLines();
+        if (cl != null) {
+            clone.setRemarkLines(cl);
         }
 
         return clone;
