@@ -97,18 +97,12 @@ public class JsonNum extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
+      * Remarks and comments are not copied.
       */
     @Override
     public JsonNum clone() {
-        JsonNum clone = new JsonNum(this.text);
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
-        return clone;
+        return new JsonNum(this.text);
     }
 
     /**

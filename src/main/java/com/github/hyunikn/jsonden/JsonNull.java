@@ -36,18 +36,12 @@ public class JsonNull extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
+      * Remarks and comments are not copied.
       */
     @Override
     public JsonNull clone() {
-        JsonNull clone = new JsonNull();
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
-        return clone;
+        return new JsonNull();
     }
 
     /**

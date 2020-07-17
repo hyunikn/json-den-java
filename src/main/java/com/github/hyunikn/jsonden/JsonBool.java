@@ -41,18 +41,12 @@ public class JsonBool extends JsonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
+      * Remarks and comments are not copied.
       */
     @Override
     public JsonBool clone() {
-        JsonBool clone = new JsonBool(this.val);
-
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
-
-        return clone;
+        return new JsonBool(this.val);
     }
 
     /**

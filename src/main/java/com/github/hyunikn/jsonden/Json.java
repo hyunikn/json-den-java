@@ -114,6 +114,7 @@ public abstract class Json {
 
     /**
       * Deep clone.
+      * Remarks and comments are not copied.
       */
     @Override
     public abstract Json clone();
