@@ -7,7 +7,7 @@ Its distinctive features include
 * Method `equals` checks the value equality (not the reference equality).
     `clone` deeply copies JSON values.
     `diff` identifies different parts of two JSON values.
-    These methods properly handle hierarchical structure of JSON values.
+    These and the following methods properly handle hierarchical structure of JSON values.
 * It provides a method `getx` which can query JSON nodes
     located deep in hierarchical structures with a single path.
     For example, you can use `json.getx("how.deep.is.your.love")`
