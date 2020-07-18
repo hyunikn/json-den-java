@@ -256,25 +256,42 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonObj that) {
         return super.diffAtCommonPaths(that);
     }
 
+    /** Intersects two sets of flatten results of this and that {@code JsonObj}s.
+      * Result consists of terminal nodes that are in both this and that {@code JsonObj}s,
+      */
+    public LinkedHashMap<String, Json> intersectFlattened(JsonObj that) throws UnreachablePath {
+        return super.intersectFlattened(that);
+    }
+
     /** Intersects this and that {@code JsonObj}s.
-      * Result {@code JsonObj} consists of the terminal nodes that are in both this and that
-      * {@code JsonObj}s
+      * Result {@code JsonObj} consists of terminal nodes that are in both this and that {@code JsonObj}s,
+      * and possibly null nodes in arrays which are not actually included in the intersection result but
+      * are there to fill the holes in the arrays.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj intersect(JsonObj that) throws UnreachablePath {
         return (JsonObj) super.intersect(that);
     }
 
+    /** Subtracts two sets of flatten results of this and that {@code JsonObj}s.
+      * Result consists of terminal nodes that are in this {@code JsonObj} but not in that {@code JsonObj},
+      */
+    public LinkedHashMap<String, Json> subtractFlattened(JsonObj that) throws UnreachablePath {
+        return super.subtractFlattened(that);
+    }
+
     /** Subtracts that {@code JsonObj} from this.
-      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
-      * not in that {@code JsonObj}.
+      * Result {@code JsonObj} consists of terminal nodes that are in this {@code JsonObj} but
+      * not in that {@code JsonObj},
+      * and possibly null nodes in arrays which are not actually included in the subtraction result but
+      * are there to fill the holes in the arrays.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj subtract(JsonObj that) throws UnreachablePath {
@@ -282,7 +299,7 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /** Merges (overwrites) that {@code JsonObj} into this.
-      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
+      * Result {@code JsonObj} consists of terminal nodes that are in this {@code JsonObj} but
       * not in that {@code JsonObj} in addition to those in that {@code JsonObj}.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
@@ -411,7 +428,9 @@ public class JsonObj extends JsonNonLeaf {
 
         Set<String> keys = myMap.keySet();
         if (keys.isEmpty()) {
-            accum.put(pathToMe, this);
+            if (pathToMe != null) {
+                accum.put(pathToMe, this);
+            }
         } else {
             for (String key: keys) {
                 Json val = myMap.get(key);

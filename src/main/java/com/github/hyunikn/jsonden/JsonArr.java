@@ -388,15 +388,22 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /**
-      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonArr that) {
         return super.diffAtCommonPaths(that);
     }
 
+    /** Intersects two sets of flatten results of this and that {@code JsonArr}s.
+      * Result consists of terminal nodes that are in both this and that {@code JsonArr}s,
+      */
+    public LinkedHashMap<String, Json> intersectFlattened(JsonArr that) throws UnreachablePath {
+        return super.intersectFlattened(that);
+    }
+
     /** Intersects this and that {@code JsonArr}s.
-      * Result {@code JsonArr} consists of the terminal nodes that are in both this and that
+      * Result {@code JsonArr} consists of terminal nodes that are in both this and that
       * {@code JsonArr}s
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -404,8 +411,15 @@ public class JsonArr extends JsonNonLeaf {
         return (JsonArr) super.intersect(that);
     }
 
+    /** Subtracts two sets of flatten results of this and that {@code JsonArr}s.
+      * Result consists of terminal nodes that are in this {@code JsonArr} but not in that {@code JsonArr},
+      */
+    public LinkedHashMap<String, Json> subtractFlattened(JsonArr that) throws UnreachablePath {
+        return super.subtractFlattened(that);
+    }
+
     /** Subtracts that {@code JsonArr} from this.
-      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * Result {@code JsonArr} consists of terminal nodes that are in this {@code JsonArr} but
       * not in that {@code JsonArr}.
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -414,7 +428,7 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /** Merges (overwrites) that {@code JsonArr} into this.
-      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * Result {@code JsonArr} consists of terminal nodes that are in this {@code JsonArr} but
       * not in that {@code JsonArr} in addition to those in that {@code JsonArr}.
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -545,7 +559,9 @@ public class JsonArr extends JsonNonLeaf {
         }
 
         if (myList.isEmpty()) {
-            accum.put(pathToMe, this);
+            if (pathToMe != null) {
+                accum.put(pathToMe, this);
+            }
         } else {
             int i = 0;
             for (Json val: myList) {
