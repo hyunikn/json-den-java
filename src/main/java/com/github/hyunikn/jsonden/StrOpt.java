@@ -5,6 +5,7 @@ package com.github.hyunikn.jsonden;
   *  (2) initialIndentLevel (int)
   *  (3) omitRemarks (boolean)
   *  (4) omitComments (boolean)
+  *  (5) sortObjectMembers(int: 1=ascending, -1=descending, 0=no-sorting)
   */
 public class StrOpt {
 

@@ -405,6 +405,20 @@ public class JsonObj extends JsonNonLeaf {
         return (JsonObj) super.delx(path);
     }
 
+    /** Sorts members in ascending or descending order of keys.
+      * In-place modification.
+      */
+    public void sort(boolean ascending) {
+
+        Set<Map.Entry<String, Json>> sorted = new TreeSet<>(ascending ? ascComparator : descComparator);
+        myMap.entrySet().stream().forEach(x -> sorted.add(x));
+        myMap.clear();
+
+        for (Map.Entry<String, Json> e: sorted) {
+            myMap.put(e.getKey(), e.getValue());
+        }
+    }
+
     // ===================================================
     // Protected
 
@@ -480,12 +494,9 @@ public class JsonObj extends JsonNonLeaf {
         }
 
         Set<Map.Entry<String, Json>> entries = myMap.entrySet();
-        if (opt.sortObjectMembers > 0) {
-            Set<Map.Entry<String, Json>> sorted = new TreeSet<>(ascComparator);
-            entries.stream().forEach(x -> sorted.add(x));
-            entries = sorted;
-        } else if (opt.sortObjectMembers < 0) {
-            Set<Map.Entry<String, Json>> sorted = new TreeSet<>(descComparator);
+        if (opt.sortObjectMembers != 0) {
+            Set<Map.Entry<String, Json>> sorted =
+                new TreeSet<>(opt.sortObjectMembers > 0 ? ascComparator : descComparator);
             entries.stream().forEach(x -> sorted.add(x));
             entries = sorted;
         }

@@ -70,4 +70,30 @@ public class ObjTest {
         //System.out.println(obj.toString());
         assertEquals(JsonObj.parse(Util.readFile("results/_obj_method_chain.json")), obj);
     }
+
+    @Test
+    public void sortedStringify() {
+        JsonObj o = JsonObj.instance()
+            .set("c", false).set("e", 0).set("a", "hello").set("d", 1.1).set("b", (Json ) null);
+        StrOpt asc = new StrOpt().sortObjectMembers(1);
+        StrOpt desc = new StrOpt().sortObjectMembers(-1);
+        //System.out.println(o.stringify(4) + "\n" + o.stringify(asc) + "\n" + o.stringify(desc));
+        assertEquals(Util.readFile("results/_sort.out"),
+                o.stringify(4) + "\n" + o.stringify(asc) + "\n" + o.stringify(desc));
+    }
+
+    @Test
+    public void sortTest() {
+        JsonObj o = JsonObj.instance()
+            .set("c", false).set("e", 0).set("a", "hello").set("d", 1.1).set("b", (Json ) null);
+        JsonObj o2 = (JsonObj) o.clone();
+        JsonObj o3 = (JsonObj) o.clone();
+        o2.sort(true);
+        o3.sort(false);
+        //System.out.println(o.stringify(4) + "\n" + o2.stringify(4) + "\n" + o3.stringify(4));
+        assertEquals(Util.readFile("results/_sort.out"),
+                o.stringify(4) + "\n" + o2.stringify(4) + "\n" + o3.stringify(4));
+        assertEquals(o, o2);    // order of keys does not affect equality
+        assertEquals(o, o3);    // order of keys does not affect equality
+    }
 }
