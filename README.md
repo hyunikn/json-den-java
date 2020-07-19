@@ -22,11 +22,11 @@ Its distinctive features include
     minifying JSON texts before parsing, its parser recognizes comments
     so that it can preserve and report the original row and column offsets of tokens
     on syntax errors, which is imposible in the minifying approach.
-* It preserves block comments that are specified so;
+* It preserves block comments that are indicated so;
     start comments you want to preserve with "/\*\*", not just with "/\*".
     Unlike the ordinary ones, such comments are not erased while parsing,
     kept in internal representation, and printed back when stringified.
-    This feature might be valuable when you use JSON for a configuration file of your app and
+    This feature might be useful when you use JSON for a configuration file of your app and
     you want to annotate who, when, why, etc of each configuration item in the file.
     With Json-den-java, you does not lose the annotation over times when you load, update
     and save some of the configuration at run-time.
