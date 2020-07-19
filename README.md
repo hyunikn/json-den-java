@@ -54,12 +54,18 @@ project root directory to get the outputs.
 <td>
 
 ```javascript
+/** comment preserved */
+/* comment dropped */
+// comment dropped too
 {
+    /** left only */
     "l": {},
+    /** common */
     "c": 7,
+    /** different */
     "d": true,
     "o": {
-        "l": "left",
+        "l": "left", /** comment dropped because it does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
@@ -158,11 +164,15 @@ public class Example {
 
 ```
 # stringify with indent size 0
-{"l":{},"c":7,"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
+/** comment preserved */{/** left only */"l":{},/** common */"c":7,/** different */"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
 # stringify with indent size 2
+/** comment preserved */
 {
+  /** left only */
   "l": {},
+  /** common */
   "c": 7,
+  /** different */
   "d": true,
   "o": {
     "l": "left",
@@ -282,11 +292,11 @@ R: "R"
 ```java
         // intersect, subtract and merge
         System.out.println("# intersect");
-        System.out.println(Jsons.intersect(left, right).stringify(4));
+        System.out.println(Jsons.intersect(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# subtract");
-        System.out.println(Jsons.subtract(left, right).stringify(4));
+        System.out.println(Jsons.subtract(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# merge");
-        System.out.println(Jsons.merge(left, right).stringify(4));
+        System.out.println(Jsons.merge(left, right).stringify(StrOpt.VALUES_ONLY));
 ```
 
 **Output:**

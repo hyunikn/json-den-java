@@ -449,16 +449,21 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, StrOpt opt, int indentLevel) {
 
+        int indentSize = opt.indentSize;
         boolean useIndents = indentSize != 0;
 
         if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeComment(sbuf, commentLines, indentSize, indentLevel);
-            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            if (!opt.omitComments) {
+                writeComment(sbuf, commentLines, indentSize, indentLevel);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            }
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -485,8 +490,12 @@ public class JsonObj extends JsonNonLeaf {
                 }
             }
 
-            writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
-            writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
+            if (!opt.omitComments) {
+                writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
+            }
 
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');
@@ -495,7 +504,7 @@ public class JsonObj extends JsonNonLeaf {
             if (useIndents) {
                 sbuf.append(' ');
             }
-            val.write(sbuf, indentSize, -(indentLevel + 1));
+            val.write(sbuf, opt, -(indentLevel + 1));
         }
 
         if (useIndents) {

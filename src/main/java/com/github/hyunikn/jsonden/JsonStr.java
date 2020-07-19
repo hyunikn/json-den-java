@@ -101,13 +101,16 @@ public class JsonStr extends JsonLeaf {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, StrOpt opt, int indentLevel) {
 
-        if (indentSize < 0) {
-            // negative indent size indicates that we are right after a key in an object
-            indentSize *= -1;
-        } else {
-            writeIndent(sbuf, indentSize, indentLevel);
+        if (indentLevel >= 0) {
+            if (!opt.omitComments) {
+                writeComment(sbuf, commentLines, opt.indentSize, indentLevel);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, remarkLines, opt.indentSize, indentLevel);
+            }
+            writeIndent(sbuf, opt.indentSize, indentLevel);
         }
 
         sbuf.append('"');

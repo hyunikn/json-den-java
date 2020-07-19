@@ -581,16 +581,21 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, StrOpt opt, int indentLevel) {
 
+        int indentSize = opt.indentSize;
         boolean useIndents = indentSize != 0;
 
         if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeComment(sbuf, commentLines, indentSize, indentLevel);
-            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            if (!opt.omitComments) {
+                writeComment(sbuf, commentLines, indentSize, indentLevel);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            }
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -615,7 +620,7 @@ public class JsonArr extends JsonNonLeaf {
                     sbuf.append(",");
                 }
             }
-            val.write(sbuf, indentSize, indentLevel + 1);
+            val.write(sbuf, opt, indentLevel + 1);
         }
 
         if (useIndents) {

@@ -85,24 +85,33 @@ public abstract class Json {
     }
 
     /**
-      * Produces a string which represents this {@code Json}.
-      * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
-      *   Zero indentSize results in a minified (except for remarks and comments, if any) JSON text.
+      * Produces a string which represents this {@code Json} with the option.
       */
-    public String stringify(int indentSize) {
-
-        checkStringifyOptions(indentSize);
+    public String stringify(StrOpt opt) {
+        checkStringifyOptions(opt);
         StringBuffer sbuf = new StringBuffer();
-        write(sbuf, indentSize, 0);
+        write(sbuf, opt, opt.initialIndentLevel);
         return sbuf.toString();
     }
 
     /**
-      * Same as {@code stringify(0, 0)}. That is, produces a minified (except for remarks and comments, if any)
-      * JSON text.
+      * Produces a string which represents this {@code Json} with {@code indentSize}.
+      * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
+      *   Zero indentSize results in a minified JSON text except for remarks and comments, if any.
+      */
+    public String stringify(int indentSize) {
+        StrOpt opt = (indentSize == 4) ? StrOpt.DEFAULT :
+                     (indentSize == 0) ? StrOpt.SERIALIZING :
+                     new StrOpt().indentSize(indentSize);
+        return stringify(opt);
+    }
+
+    /**
+      * Same as {@code stringify(StrOpt.SERIALIZING)}. That is, produces a minified JSON text
+      * except for remarks and comments, if any.
       */
     @Override
-    public String toString() { return stringify(0); }
+    public String toString() { return stringify(StrOpt.SERIALIZING); }
 
     /**
       * Gets the remark lines.
@@ -235,7 +244,7 @@ public abstract class Json {
 
     // overriden by all
     protected abstract String getTypeName();
-    protected abstract void write(StringBuffer sbuf, int indentSize, int indentLevel);
+    protected abstract void write(StringBuffer sbuf, StrOpt opt, int indentLevel);
     protected abstract Json getChild(String key);
 
     // --------------------------------------------------
@@ -373,12 +382,18 @@ public abstract class Json {
         "        "
     };
 
-    private void checkStringifyOptions(int indentSize) {
+    private void checkStringifyOptions(StrOpt opt) {
+        int indentSize = opt.indentSize;
+
         if (indentSize > 8) {
             throw new IllegalArgumentException("indentSize cannot be larger than eight");
         }
         if (indentSize < 0) {
             throw new IllegalArgumentException("indentSize cannot be a negative integer");
+        }
+
+        if (opt.initialIndentLevel < 0) {
+            throw new IllegalArgumentException("initialIndentLevel cannot be a negative integer");
         }
     }
 }

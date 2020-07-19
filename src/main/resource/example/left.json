@@ -1,6 +1,6 @@
-/** This will remain. */
-/* to be erased. */
-// to be erased too.
+/** comment preserved */
+/* comment dropped */
+// comment dropped too
 {
     /** left only */
     "l": {},
@@ -9,7 +9,7 @@
     /** different */
     "d": true,
     "o": {
-        "l": "left", /** to be erased because this does not start a line */
+        "l": "left", /** comment dropped because it does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
