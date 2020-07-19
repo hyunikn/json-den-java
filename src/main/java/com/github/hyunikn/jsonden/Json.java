@@ -74,7 +74,7 @@ public abstract class Json {
             if (msg != null) {
                 if (msg.startsWith("a duplicate key")) {
                     throw new ParseError(ParseError.CASE_DUPLICATE_KEY, msg);
-                } else if (msg.startsWith("insufficient leading white spaces of a remark line at")) {
+                } else if (msg.startsWith("insufficient leading space characters in a remark at line")) {
                     throw new ParseError(ParseError.CASE_INSUFFICIENT_INDENT, msg);
                 } else if (msg.startsWith("Json-den does not allow dot")) {
                     throw new ParseError(ParseError.CASE_DOT_IN_MEMBER_KEY, msg);
@@ -87,7 +87,7 @@ public abstract class Json {
     /**
       * Produces a string which represents this {@code Json}.
       * @param indentSize size of one level of indentation. It must be between zero and eight inclusive.
-      *   Zero indentSize results in a minified JSON text.
+      *   Zero indentSize results in a minified (except for remarks and comments, if any) JSON text.
       */
     public String stringify(int indentSize) {
 
@@ -98,7 +98,8 @@ public abstract class Json {
     }
 
     /**
-      * Same as {@code stringify(0, 0)}. That is, stringifies into a minified JSON text.
+      * Same as {@code stringify(0, 0)}. That is, produces a minified (except for remarks and comments, if any)
+      * JSON text.
       */
     @Override
     public String toString() { return stringify(0); }
@@ -274,15 +275,21 @@ public abstract class Json {
         boolean useIndent = indentSize != 0;
 
         writeIndent(sbuf, indentSize, indentLevel);
-        sbuf.append(isRemark ? "/**\n" : "/*\n");
+        sbuf.append(isRemark ? "/**" : "/* ");
 
+        boolean first = true;
         for (String s: lines) {
-            writeIndent(sbuf, indentSize, indentLevel);
+
+            if (first) {
+                first = false;
+            } else {
+                sbuf.append("\n");
+                writeIndent(sbuf, indentSize, indentLevel);
+            }
+
             sbuf.append(s);
-            sbuf.append("\n");
         }
-        writeIndent(sbuf, indentSize, indentLevel);
-        sbuf.append(" */");
+        sbuf.append(isRemark ? "*/" : " */");
 
         if (useIndent) {
             sbuf.append("\n");

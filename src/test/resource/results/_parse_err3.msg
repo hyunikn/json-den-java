@@ -1,1 +1,1 @@
-parse error 3: insufficient leading white spaces of a remark line at 2
+parse error 3: insufficient leading space characters in a remark at line 2

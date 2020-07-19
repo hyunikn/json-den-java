@@ -1,9 +1,15 @@
+/** This will remain. */
+/* to be erased. */
+// to be erased too.
 {
+    /** left only */
     "l": {},
+    /** common */
     "c": 7,
+    /** different */
     "d": true,
     "o": {
-        "l": "left",
+        "l": "left", /** to be erased because this does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
