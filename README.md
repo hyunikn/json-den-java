@@ -65,7 +65,8 @@ project root directory to get the outputs.
     /** different */
     "d": true,
     "o": {
-        "l": "left", /** comment dropped because it does not start a line */
+        "l": "left", /** comment dropped because 
+                        it does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
