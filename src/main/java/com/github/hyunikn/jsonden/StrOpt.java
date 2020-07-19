@@ -23,47 +23,61 @@ public class StrOpt {
      */
     public static StrOpt VALUES_ONLY = new StrOpt().omitRemarks(true).omitComments(true);
 
-    /** Getter */
+    /** Getter. */
     public int indentSize() {
         return indentSize;
     }
 
-    /** Getter */
+    /** Getter. */
     public int initialIndentLevel() {
         return initialIndentLevel;
     }
 
-    /** Getter */
+    /** Getter. */
     public boolean omitRemarks() {
         return omitRemarks;
     }
 
-    /** Getter */
+    /** Getter. */
     public boolean omitComments() {
         return omitComments;
     }
 
-    /** Setter */
+    /** Getter. */
+    public int sortObjectMembers() {
+        return sortObjectMembers;
+    }
+
+    /** Setter. */
     public StrOpt indentSize(int indentSize) {
         this.indentSize = indentSize;
         return this;
     }
 
-    /** Setter */
+    /** Setter. */
     public StrOpt initialIndentLevel(int initialIndentLevel) {
         this.initialIndentLevel = initialIndentLevel;
         return this;
     }
 
-    /** Setter */
+    /** Setter. */
     public StrOpt omitRemarks(boolean omitRemarks) {
         this.omitRemarks = omitRemarks;
         return this;
     }
 
-    /** Setter */
+    /** Setter. */
     public StrOpt omitComments(boolean omitComments) {
         this.omitComments = omitComments;
+        return this;
+    }
+
+    /** Setter.
+      * @param sortObjectMember (1) value larger than 0 indicates sorting in ascending order
+      * (2) value less than 0 indicates sorting in descending order (3) value zero indicates no sorting.
+     */
+    public StrOpt sortObjectMembers(int sortObjectMembers) {
+        this.sortObjectMembers = sortObjectMembers;
         return this;
     }
 
@@ -71,5 +85,6 @@ public class StrOpt {
     int initialIndentLevel = 0;
     boolean omitRemarks = false;
     boolean omitComments = false;
+    int sortObjectMembers = 0;
 }
 

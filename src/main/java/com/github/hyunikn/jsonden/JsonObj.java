@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -477,9 +479,21 @@ public class JsonObj extends JsonNonLeaf {
             sbuf.append('\n');
         }
 
+        Set<Map.Entry<String, Json>> entries = myMap.entrySet();
+        if (opt.sortObjectMembers > 0) {
+            Set<Map.Entry<String, Json>> sorted = new TreeSet<>(ascComparator);
+            entries.stream().forEach(x -> sorted.add(x));
+            entries = sorted;
+        } else if (opt.sortObjectMembers < 0) {
+            Set<Map.Entry<String, Json>> sorted = new TreeSet<>(descComparator);
+            entries.stream().forEach(x -> sorted.add(x));
+            entries = sorted;
+        }
+
         boolean first = true;
-        for (String key: myMap.keySet()) {
-            Json val = myMap.get(key);
+        for (Map.Entry<String, Json> e: entries) {
+            String key = e.getKey();
+            Json val = e.getValue();
             if (first) {
                 first = false;
             } else {
@@ -521,6 +535,18 @@ public class JsonObj extends JsonNonLeaf {
 
     // ===================================================
     // Private
+
+    private static Comparator<Map.Entry<String, Json>> ascComparator = new Comparator<Map.Entry<String, Json>>() {
+        public int compare(Map.Entry<String, Json> e1, Map.Entry<String, Json> e2) {
+            return e1.getKey().compareTo(e2.getKey());
+        }
+    };
+
+    private static Comparator<Map.Entry<String, Json>> descComparator = new Comparator<Map.Entry<String, Json>>() {
+        public int compare(Map.Entry<String, Json> e1, Map.Entry<String, Json> e2) {
+            return e2.getKey().compareTo(e1.getKey());
+        }
+    };
 
 
 }
