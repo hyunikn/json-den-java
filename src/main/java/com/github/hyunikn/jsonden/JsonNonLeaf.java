@@ -81,7 +81,7 @@ abstract class JsonNonLeaf extends Json {
     }
 
     /** Converts its hierarchical structure into a single map.
-      * The keys of the resulting map are paths to all the terminal subnodes.
+      * The keys of result map are paths to all the terminal proper subnodes.
       */
     public LinkedHashMap<String, Json> flatten() {
         LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
@@ -95,6 +95,37 @@ abstract class JsonNonLeaf extends Json {
     // Protected
 
     protected abstract void flattenInner(LinkedHashMap<String, Json> accum, String pathToMe);
+
+    protected JsonNonLeaf delx(String path) {
+
+        if (path == null) {
+            throw new IllegalArgumentException("path cannot be null");
+        }
+
+        String[] divided = Jsons.dividePath(path);
+        assert divided != null;
+        String parentPath = divided[0];
+        Integer arrElemIndex = MyParseTreeVisitor.getArrElemIndex(divided[1]);
+
+        Json parent;
+        if (parentPath == null) {
+            parent = this;
+        } else {
+            parent = getx(parentPath);
+        }
+
+        if (parent != null) {
+            if (parent.isObj()) {
+                parent.asObj().delete(divided[1]);
+            } else if (parent.isArr()) {
+                if (arrElemIndex != null) {
+                    parent.asArr().delete(arrElemIndex.intValue());
+                }
+            }
+        }
+
+        return this;
+    }
 
     protected JsonNonLeaf loadFlattened(LinkedHashMap<String, Json> flattened, boolean clone)
             throws UnreachablePath {
@@ -215,7 +246,7 @@ abstract class JsonNonLeaf extends Json {
         return ret;
     }
 
-    protected JsonNonLeaf intersect(JsonNonLeaf that) throws UnreachablePath {
+    protected LinkedHashMap<String, Json> intersectFlattened(JsonNonLeaf that) throws UnreachablePath {
 
         LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
 
@@ -229,10 +260,14 @@ abstract class JsonNonLeaf extends Json {
             }
         }
 
-        return this.clear().loadFlattened(accum, false);
+        return accum;
+    }
+    protected JsonNonLeaf intersect(JsonNonLeaf that) throws UnreachablePath {
+        LinkedHashMap<String, Json> intersect = intersectFlattened(that);
+        return this.clear().loadFlattened(intersect, false);
     }
 
-    protected JsonNonLeaf subtract(JsonNonLeaf that) throws UnreachablePath {
+    protected LinkedHashMap<String, Json> subtractFlattened(JsonNonLeaf that) throws UnreachablePath {
 
         LinkedHashMap<String, Json> accum = new LinkedHashMap<>();
 
@@ -246,7 +281,11 @@ abstract class JsonNonLeaf extends Json {
             }
         }
 
-        return this.clear().loadFlattened(accum, false);
+        return accum;
+    }
+    protected JsonNonLeaf subtract(JsonNonLeaf that) throws UnreachablePath {
+        LinkedHashMap<String, Json> subtract = subtractFlattened(that);
+        return this.clear().loadFlattened(subtract, false);
     }
 
     protected JsonNonLeaf merge(JsonNonLeaf that) throws UnreachablePath {

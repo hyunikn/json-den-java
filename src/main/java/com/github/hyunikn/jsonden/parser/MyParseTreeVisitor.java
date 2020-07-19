@@ -45,36 +45,35 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         int col = text.substring(1).indexOf("/"); // 0..
 
         String remark = stripRemarkMarks(text);
-        String[] lines = remark.split("\n");
+        String[] lines = remark.split("\n", -1);
         int nLines = lines.length;
 
         List<String> lineList = new LinkedList<>();
 
-        String firstLine = lines[0].trim();
-        if (firstLine.length() > 0) {
-            lineList.add(firstLine);
-        }
-
-        for (int i = 1; i < nLines; i++) {
+        for (int i = 0; i < nLines; i++) {
             String line = lines[i];
 
-            if (line.length() <= col) {
+            if (i == 0) {
+                lineList.add(line);
+                continue;
+            }
+
+            if (line.length() < col) {
                 if (line.trim().length() == 0) {
                     if (i < nLines - 1) {
                         lineList.add("");
                     }
                 } else {
-                    throw new Error("insufficient leading white spaces of a remark line at " + (row + i));
+                    throw new Error("insufficient leading space characters in a remark at line " + (row + i));
                 }
             } else {
-                if (line.substring(0, col).trim().length() > 0) {
-                    throw new Error("insufficient leading white spaces of a remark line at " + (row + i));
+                for (int j = 0; j < col; j++) {
+                    if (line.charAt(j) != ' ') {
+                        throw new Error("insufficient leading space characters in a remark at line " + (row + i));
+                    }
                 }
 
-                String cutLine = ("." + (line.substring(col))).trim();
-                if (cutLine.length() > 1 || i < nLines - 1) {
-                    lineList.add(cutLine.substring(1));
-                }
+                lineList.add(line.substring(col));
             }
         }
 

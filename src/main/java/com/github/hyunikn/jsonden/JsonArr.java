@@ -60,19 +60,16 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
-    public Object clone() {
+    public JsonArr clone() {
         JsonArr clone = new JsonArr();
         for (Json elem: myList) {
-            clone.myList.add((Json) elem.clone());  // deep copy
+            clone.myList.add(elem.clone());  // deep copy
         }
 
-        String[] cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
+        clone.copyAnnotationsOf(this);
 
         return clone;
     }
@@ -391,15 +388,22 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /**
-      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonArr that) {
         return super.diffAtCommonPaths(that);
     }
 
+    /** Intersects two sets of flatten results of this and that {@code JsonArr}s.
+      * Result consists of terminal nodes that are in both this and that {@code JsonArr}s,
+      */
+    public LinkedHashMap<String, Json> intersectFlattened(JsonArr that) throws UnreachablePath {
+        return super.intersectFlattened(that);
+    }
+
     /** Intersects this and that {@code JsonArr}s.
-      * Result {@code JsonArr} consists of the terminal nodes that are in both this and that
+      * Result {@code JsonArr} consists of terminal nodes that are in both this and that
       * {@code JsonArr}s
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -407,8 +411,15 @@ public class JsonArr extends JsonNonLeaf {
         return (JsonArr) super.intersect(that);
     }
 
+    /** Subtracts two sets of flatten results of this and that {@code JsonArr}s.
+      * Result consists of terminal nodes that are in this {@code JsonArr} but not in that {@code JsonArr},
+      */
+    public LinkedHashMap<String, Json> subtractFlattened(JsonArr that) throws UnreachablePath {
+        return super.subtractFlattened(that);
+    }
+
     /** Subtracts that {@code JsonArr} from this.
-      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * Result {@code JsonArr} consists of terminal nodes that are in this {@code JsonArr} but
       * not in that {@code JsonArr}.
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -417,7 +428,7 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /** Merges (overwrites) that {@code JsonArr} into this.
-      * Result {@code JsonArr} consists of the terminal nodes that are in this {@code JsonArr} but
+      * Result {@code JsonArr} consists of terminal nodes that are in this {@code JsonArr} but
       * not in that {@code JsonArr} in addition to those in that {@code JsonArr}.
       * The update is in-place, that is, changes this {@code JsonArr}.
       */
@@ -513,6 +524,14 @@ public class JsonArr extends JsonNonLeaf {
         return myList.isEmpty();
     }
 
+    /**
+      * Deletes a subnode at {@code path} if any, and returns itself for method chaining.
+      */
+    @Override
+    public JsonArr delx(String path) {
+        return (JsonArr) super.delx(path);
+    }
+
     // ===================================================
     // Protected
 
@@ -540,7 +559,9 @@ public class JsonArr extends JsonNonLeaf {
         }
 
         if (myList.isEmpty()) {
-            accum.put(pathToMe, this);
+            if (pathToMe != null) {
+                accum.put(pathToMe, this);
+            }
         } else {
             int i = 0;
             for (Json val: myList) {
@@ -560,15 +581,21 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, StrOpt opt, int indentLevel) {
 
+        int indentSize = opt.indentSize;
         boolean useIndents = indentSize != 0;
 
         if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            if (!opt.omitComments) {
+                writeComment(sbuf, commentLines, indentSize, indentLevel);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            }
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -593,7 +620,7 @@ public class JsonArr extends JsonNonLeaf {
                     sbuf.append(",");
                 }
             }
-            val.write(sbuf, indentSize, indentLevel + 1);
+            val.write(sbuf, opt, indentLevel + 1);
         }
 
         if (useIndents) {

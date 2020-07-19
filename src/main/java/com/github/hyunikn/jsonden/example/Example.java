@@ -30,11 +30,11 @@ public class Example {
 
         // intersect, subtract and merge
         System.out.println("# intersect");
-        System.out.println(Jsons.intersect(left, right).stringify(4));
+        System.out.println(Jsons.intersect(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# subtract");
-        System.out.println(Jsons.subtract(left, right).stringify(4));
+        System.out.println(Jsons.subtract(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# merge");
-        System.out.println(Jsons.merge(left, right).stringify(4));
+        System.out.println(Jsons.merge(left, right).stringify(StrOpt.VALUES_ONLY));
 
         // flatten and loadFlattened
         System.out.println("# flatten");

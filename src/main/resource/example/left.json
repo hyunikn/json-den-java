@@ -1,9 +1,16 @@
+/** comment preserved */
+/* comment dropped */
+// comment dropped too
 {
+    /** left only */
     "l": {},
+    /** common */
     "c": 7,
+    /** different */
     "d": true,
     "o": {
-        "l": "left",
+        "l": "left", /** comment dropped because 
+                        it does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]

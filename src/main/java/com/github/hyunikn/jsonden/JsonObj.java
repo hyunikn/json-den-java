@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -38,6 +40,9 @@ public class JsonObj extends JsonNonLeaf {
       * @param map must not be null.
       */
     public static JsonObj instance(LinkedHashMap<String, Json> map) {
+        if (map == null) {
+            throw new IllegalArgumentException("map must not be null");
+        }
         return new JsonObj(map);
     }
 
@@ -63,30 +68,19 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Deep copy
+      * Deep copy.
       */
     @Override
-    public Object clone() {
-        String[] cl;
+    public JsonObj clone() {
         JsonObj clone = new JsonObj();  // What if Json.clone() or just clone() where clone uses This constructor?
                                         // Shoud This constructor call its parent's (and hence all its aoncestors')
                                         // automatically?
         for (String key: myMap.keySet()) {
             Json val = myMap.get(key);
-            Json valClone = (Json) val.clone();
-
-            cl = val.remarkLines();
-            if (cl != null) {
-                valClone.setRemarkLines(cl);
-            }
-
-            clone.myMap.put(key, valClone);    // deep copy
+            clone.myMap.put(key, val.clone());    // deep copy
         }
 
-        cl = this.remarkLines();
-        if (cl != null) {
-            clone.setRemarkLines(cl);
-        }
+        clone.copyAnnotationsOf(this);
 
         return clone;
     }
@@ -264,25 +258,42 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Gets the terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
+      * Gets terminal nodes whose paths are common of this and that {@code Json}s and whose values are different.
       * @return map of paths to the different values.
       */
     public Map<String, List<Json>> diffAtCommonPaths(JsonObj that) {
         return super.diffAtCommonPaths(that);
     }
 
+    /** Intersects two sets of flatten results of this and that {@code JsonObj}s.
+      * Result consists of terminal nodes that are in both this and that {@code JsonObj}s,
+      */
+    public LinkedHashMap<String, Json> intersectFlattened(JsonObj that) throws UnreachablePath {
+        return super.intersectFlattened(that);
+    }
+
     /** Intersects this and that {@code JsonObj}s.
-      * Result {@code JsonObj} consists of the terminal nodes that are in both this and that
-      * {@code JsonObj}s
+      * Result {@code JsonObj} consists of terminal nodes that are in both this and that {@code JsonObj}s,
+      * and possibly null nodes in arrays which are not actually included in the intersection result but
+      * are there to fill the holes in the arrays.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj intersect(JsonObj that) throws UnreachablePath {
         return (JsonObj) super.intersect(that);
     }
 
+    /** Subtracts two sets of flatten results of this and that {@code JsonObj}s.
+      * Result consists of terminal nodes that are in this {@code JsonObj} but not in that {@code JsonObj},
+      */
+    public LinkedHashMap<String, Json> subtractFlattened(JsonObj that) throws UnreachablePath {
+        return super.subtractFlattened(that);
+    }
+
     /** Subtracts that {@code JsonObj} from this.
-      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
-      * not in that {@code JsonObj}.
+      * Result {@code JsonObj} consists of terminal nodes that are in this {@code JsonObj} but
+      * not in that {@code JsonObj},
+      * and possibly null nodes in arrays which are not actually included in the subtraction result but
+      * are there to fill the holes in the arrays.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
     public JsonObj subtract(JsonObj that) throws UnreachablePath {
@@ -290,7 +301,7 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /** Merges (overwrites) that {@code JsonObj} into this.
-      * Result {@code JsonObj} consists of the terminal nodes that are in this {@code JsonObj} but
+      * Result {@code JsonObj} consists of terminal nodes that are in this {@code JsonObj} but
       * not in that {@code JsonObj} in addition to those in that {@code JsonObj}.
       * The update is in-place, that is, changes this {@code JsonObj}.
       */
@@ -386,6 +397,28 @@ public class JsonObj extends JsonNonLeaf {
         return myMap.isEmpty();
     }
 
+    /**
+      * Deletes a subnode at {@code path} if any, and returns itself for method chaining.
+      */
+    @Override
+    public JsonObj delx(String path) {
+        return (JsonObj) super.delx(path);
+    }
+
+    /** Sorts members in ascending or descending order of keys.
+      * In-place modification.
+      */
+    public void sort(boolean ascending) {
+
+        Set<Map.Entry<String, Json>> sorted = new TreeSet<>(ascending ? ascComparator : descComparator);
+        myMap.entrySet().stream().forEach(x -> sorted.add(x));
+        myMap.clear();
+
+        for (Map.Entry<String, Json> e: sorted) {
+            myMap.put(e.getKey(), e.getValue());
+        }
+    }
+
     // ===================================================
     // Protected
 
@@ -396,9 +429,6 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     protected JsonObj(LinkedHashMap<String, Json> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("source map cannot be null");
-        }
         this.myMap = new LinkedHashMap<>(map);
     }
 
@@ -414,7 +444,9 @@ public class JsonObj extends JsonNonLeaf {
 
         Set<String> keys = myMap.keySet();
         if (keys.isEmpty()) {
-            accum.put(pathToMe, this);
+            if (pathToMe != null) {
+                accum.put(pathToMe, this);
+            }
         } else {
             for (String key: keys) {
                 Json val = myMap.get(key);
@@ -433,15 +465,21 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     @Override
-    protected void write(StringBuffer sbuf, int indentSize, int indentLevel) {
+    protected void write(StringBuffer sbuf, StrOpt opt, int indentLevel) {
 
+        int indentSize = opt.indentSize;
         boolean useIndents = indentSize != 0;
 
         if (indentLevel < 0) {
             // negative indent size indicates that we are right after a key in an object
             indentLevel *= -1;
         } else {
-            writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            if (!opt.omitComments) {
+                writeComment(sbuf, commentLines, indentSize, indentLevel);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, remarkLines, indentSize, indentLevel);
+            }
             writeIndent(sbuf, indentSize, indentLevel);
         }
 
@@ -455,9 +493,18 @@ public class JsonObj extends JsonNonLeaf {
             sbuf.append('\n');
         }
 
+        Set<Map.Entry<String, Json>> entries = myMap.entrySet();
+        if (opt.sortObjectMembers != 0) {
+            Set<Map.Entry<String, Json>> sorted =
+                new TreeSet<>(opt.sortObjectMembers > 0 ? ascComparator : descComparator);
+            entries.stream().forEach(x -> sorted.add(x));
+            entries = sorted;
+        }
+
         boolean first = true;
-        for (String key: myMap.keySet()) {
-            Json val = myMap.get(key);
+        for (Map.Entry<String, Json> e: entries) {
+            String key = e.getKey();
+            Json val = e.getValue();
             if (first) {
                 first = false;
             } else {
@@ -468,7 +515,12 @@ public class JsonObj extends JsonNonLeaf {
                 }
             }
 
-            writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
+            if (!opt.omitComments) {
+                writeComment(sbuf, val.commentLines(), indentSize, indentLevel + 1);
+            }
+            if (!opt.omitRemarks) {
+                writeRemark(sbuf, val.remarkLines(), indentSize, indentLevel + 1);
+            }
 
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');
@@ -477,7 +529,7 @@ public class JsonObj extends JsonNonLeaf {
             if (useIndents) {
                 sbuf.append(' ');
             }
-            val.write(sbuf, indentSize, -(indentLevel + 1));
+            val.write(sbuf, opt, -(indentLevel + 1));
         }
 
         if (useIndents) {
@@ -494,6 +546,18 @@ public class JsonObj extends JsonNonLeaf {
 
     // ===================================================
     // Private
+
+    private static Comparator<Map.Entry<String, Json>> ascComparator = new Comparator<Map.Entry<String, Json>>() {
+        public int compare(Map.Entry<String, Json> e1, Map.Entry<String, Json> e2) {
+            return e1.getKey().compareTo(e2.getKey());
+        }
+    };
+
+    private static Comparator<Map.Entry<String, Json>> descComparator = new Comparator<Map.Entry<String, Json>>() {
+        public int compare(Map.Entry<String, Json> e1, Map.Entry<String, Json> e2) {
+            return e2.getKey().compareTo(e1.getKey());
+        }
+    };
 
 
 }

@@ -1,94 +1,63 @@
 /** the outermost obj
-  one,
-  two,
-  three
-  */
-/*
-   to disappear
-   */
-// to disappear
+ one,
+ two,
+ three
+*/
+/* X */
+// X
 {
-    /**
-      obj o
-      */
-    /*
-       to disappear
-       */
-    // to disappear
+    /** obj o */
+    /* X */
+    // X
     "o": {
-        "n": 1.1,   // to disappar
-        "m": 1.2    // to disappar
+        /** first */
+        "n": 1.1,   /** X */
+        /** second */
+        "m": 1.2    // X
     },
 
     /** boolean bt */
-    /*
-       to disappear
-       */
-    // to disappear
-    "bt": true, // to disappar
+    /* X */
+    // X
+    "bt": true, /* X */
 
-    /** array a
-      */
-    /*
-       to disappear
-       */
-    // to disappear
+    /** array a */
+    /* X */
+    // X
     "a": [
+        /** first */
         1.1,
+        /** second */
         1.2
     ],
 
-    /**
-      boolean bf
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "bf": false,    // to disappar
+    /** boolean bf */
+    /* X */
+    // X
+    "bf": false,    // X
 
-    /**
-      null
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "null": null,   // to disappar
+    /** null */
+    /* X */
+    // X
+    "null": null,   // X
 
-    /**
-      number i
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "i": 33,    // to disappar
+    /** number i */ 
+    /* X */
+    // X
+    "i": 33,    // X
 
-    /**
-      number f
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "f": 33.33, // to disappar
+    /** number f */
+    /* X */
+    // X
+    "f": 33.33, // X
 
-    /**
-      number fe
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "fe": 33.33e10, // to disappar
+    /** number fe */
+    /* X */
+    // X
+    "fe": 33.33e10, // X
 
-    /**
-      string s
-      */
-    /*
-       to disappear
-       */
-    // to disappear
-    "s": "abcde"    // to disappar
+    /** string s */
+    /* X */
+    // X
+    "s": "abcde"    // X
 }

@@ -7,7 +7,7 @@ Its distinctive features include
 * Method `equals` checks the value equality (not the reference equality).
     `clone` deeply copies JSON values.
     `diff` identifies different parts of two JSON values.
-    These methods properly handle hierarchical structure of JSON values.
+    These and the following methods properly handle hierarchical structure of JSON values.
 * It provides a method `getx` which can query JSON nodes
     located deep in hierarchical structures with a single path.
     For example, you can use `json.getx("how.deep.is.your.love")`
@@ -22,10 +22,14 @@ Its distinctive features include
     minifying JSON texts before parsing, its parser recognizes comments
     so that it can preserve and report the original row and column offsets of tokens
     on syntax errors, which is imposible in the minifying approach.
-* It preserves block comments that are specified so;
+* It preserves block comments that are indicated so;
     start comments you want to preserve with "/\*\*", not just with "/\*".
     Unlike the ordinary ones, such comments are not erased while parsing,
     kept in internal representation, and printed back when stringified.
+    This feature might be useful when you use JSON for a configuration file of your app and
+    you want to annotate who, when, why, etc of each configuration item in the file.
+    With Json-den-java, you does not lose the annotation over times when you load, update
+    and save some of the configuration at run-time.
 
 For more information, download the source code, run `gen-apidocs.sh` included,
 and see the generated API documentation.
@@ -50,12 +54,19 @@ project root directory to get the outputs.
 <td>
 
 ```javascript
+/** comment preserved */
+/* comment dropped */
+// comment dropped too
 {
+    /** left only */
     "l": {},
+    /** common */
     "c": 7,
+    /** different */
     "d": true,
     "o": {
-        "l": "left",
+        "l": "left", /** comment dropped because 
+                        it does not start a line */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
@@ -154,11 +165,15 @@ public class Example {
 
 ```
 # stringify with indent size 0
-{"l":{},"c":7,"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
+/** comment preserved */{/** left only */"l":{},/** common */"c":7,/** different */"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
 # stringify with indent size 2
+/** comment preserved */
 {
+  /** left only */
   "l": {},
+  /** common */
   "c": 7,
+  /** different */
   "d": true,
   "o": {
     "l": "left",
@@ -278,11 +293,11 @@ R: "R"
 ```java
         // intersect, subtract and merge
         System.out.println("# intersect");
-        System.out.println(Jsons.intersect(left, right).stringify(4));
+        System.out.println(Jsons.intersect(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# subtract");
-        System.out.println(Jsons.subtract(left, right).stringify(4));
+        System.out.println(Jsons.subtract(left, right).stringify(StrOpt.VALUES_ONLY));
         System.out.println("# merge");
-        System.out.println(Jsons.merge(left, right).stringify(4));
+        System.out.println(Jsons.merge(left, right).stringify(StrOpt.VALUES_ONLY));
 ```
 
 **Output:**

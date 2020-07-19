@@ -36,7 +36,7 @@ public class Jsons {
 
         StringBuffer sbuf = new StringBuffer();
         for (Map.Entry<String, Json> e: flattened.entrySet()) {
-            sbuf.append(String.format("\n%s: %s", e.getKey(), e.getValue().stringify(4)));
+            sbuf.append(String.format("\n%s: %s", e.getKey(), e.getValue().stringify(StrOpt.VALUES_ONLY)));
         }
         return sbuf.toString();
     }
@@ -56,8 +56,8 @@ public class Jsons {
             Json left = list.get(0);
             Json right = list.get(1);
             sbuf.append(String.format("\n\n%s:\nL: %s\nR: %s", e.getKey(),
-                        left == null ? "<none>" : left.stringify(4),
-                        right == null ? "<none>" : right.stringify(4)));
+                        left == null ? "<none>" : left.stringify(StrOpt.VALUES_ONLY),
+                        right == null ? "<none>" : right.stringify(StrOpt.VALUES_ONLY)));
         }
         return sbuf.toString();
     }

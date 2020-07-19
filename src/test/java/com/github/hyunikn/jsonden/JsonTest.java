@@ -148,8 +148,8 @@ public class JsonTest {
         String text = Util.readFile("remark.json");
         Json json = Json.parse(text);
         //System.out.println(json.stringify(4));
-        //System.out.println(json.stringify(0));
         assertEquals(Util.readFile("results/_4_remark.json"), json.stringify(4));
+        //System.out.println(json.stringify(0));
         assertEquals(Util.readFile("results/_0_remark.json"), json.stringify(0));
     }
 

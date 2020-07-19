@@ -1,50 +1,35 @@
-/**
-the outermost obj
-  one,
-  two,
-  three
- */
+/** the outermost obj
+ one,
+ two,
+ three
+*/
 {
-    /**
-      obj o
-     */
+    /** obj o */
     "o": {
+        /** first */
         "n": 1.1,
+        /** second */
         "m": 1.2
     },
-    /**
-    boolean bt
-     */
+    /** boolean bt */
     "bt": true,
-    /**
-    array a
-     */
+    /** array a */
     "a": [
+        /** first */
         1.1,
+        /** second */
         1.2
     ],
-    /**
-      boolean bf
-     */
+    /** boolean bf */
     "bf": false,
-    /**
-      null
-     */
+    /** null */
     "null": null,
-    /**
-      number i
-     */
+    /** number i */
     "i": 33,
-    /**
-      number f
-     */
+    /** number f */
     "f": 33.33,
-    /**
-      number fe
-     */
+    /** number fe */
     "fe": 33.33e10,
-    /**
-      string s
-     */
+    /** string s */
     "s": "abcde"
 }
