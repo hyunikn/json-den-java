@@ -1,0 +1,4 @@
+{/** single line */"a":1,/** empty last line */"b":1,/**
+  * empty first line */"c":1,/**
+  * empty first and last lines */"d":1,/** this goes to e,
+  * not d */"e":1}

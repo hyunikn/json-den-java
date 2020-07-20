@@ -1,6 +1,6 @@
 {
     /**
-  insufficient leading white spaces of a preserved remark line
+      this remark line does not start with '*'
       */
     "bf": false
 }

@@ -1,1 +1,1 @@
-parse error 3: insufficient leading space characters in a remark at line 2
+parse error 3: a remark line does not start with '*' at line 3

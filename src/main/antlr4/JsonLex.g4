@@ -54,7 +54,7 @@ FALSE: 'false';
 NULL: 'null';
 
 REMARK
-    : [\n\r\f] ' '*? '/**' .*? '*/'
+    : '/**' .*? '*/'
     ;
 
 BLOCK_COMMENT

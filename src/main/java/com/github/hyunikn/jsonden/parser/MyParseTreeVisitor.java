@@ -24,9 +24,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     private String stripRemarkMarks(String s) {
         int len = s.length();
         assert len >= 5;
-
-        int i = s.indexOf("/**");
-        return s.substring(i + 3, len - 2);
+        return s.substring(3, len - 2);
     }
 
     private String getLocation(TerminalNode tn) {
@@ -40,9 +38,9 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
 
     private List<String> getRemarkLineList(TerminalNode tn) {
         String text = tn.getText();
-        Token tk = tn.getSymbol();
-        int row = tk.getLine(); // 1...
-        int col = text.substring(1).indexOf("/"); // 0..
+        //Token tk = tn.getSymbol();
+        //int row = tk.getLine(); // 1...
+        //int col = text.substring(1).indexOf("/"); // 0..
 
         String remark = stripRemarkMarks(text);
         String[] lines = remark.split("\n", -1);
@@ -51,29 +49,26 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         List<String> lineList = new LinkedList<>();
 
         for (int i = 0; i < nLines; i++) {
-            String line = lines[i];
+            String line = lines[i].trim();
 
             if (i == 0) {
-                lineList.add(line);
+                if (line.length() == 0) {
+                    lineList.add("");
+                } else {
+                    lineList.add(" " + line);
+                }
                 continue;
             }
 
-            if (line.length() < col) {
-                if (line.trim().length() == 0) {
-                    if (i < nLines - 1) {
-                        lineList.add("");
-                    }
-                } else {
-                    throw new Error("insufficient leading space characters in a remark at line " + (row + i));
-                }
-            } else {
-                for (int j = 0; j < col; j++) {
-                    if (line.charAt(j) != ' ') {
-                        throw new Error("insufficient leading space characters in a remark at line " + (row + i));
-                    }
-                }
+            if (i == nLines - 1 && line.length() == 0) {
+                continue;
+            }
 
-                lineList.add(line.substring(col));
+            if (line.charAt(0) == '*') {
+                String line1 = line.substring(1);
+                lineList.add(line1);
+            } else {
+                throw new Error("a remark line does not start with '*' at line " + (tn.getSymbol().getLine() + i));
             }
         }
 

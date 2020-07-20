@@ -1,7 +1,7 @@
 /** the outermost obj
- one,
- two,
- three
+  * one,
+  * two,
+  * three
 */
 /* X */
 // X
@@ -11,15 +11,15 @@
     // X
     "o": {
         /** first */
-        "n": 1.1,   /** X */
+        "n": 1.1,
         /** second */
-        "m": 1.2    // X
+        "m": 1.2
     },
 
     /** boolean bt */
     /* X */
     // X
-    "bt": true, /* X */
+    "bt": true,
 
     /** array a */
     /* X */
@@ -34,30 +34,30 @@
     /** boolean bf */
     /* X */
     // X
-    "bf": false,    // X
+    "bf": false,
 
     /** null */
     /* X */
     // X
-    "null": null,   // X
+    "null": null,
 
     /** number i */ 
     /* X */
     // X
-    "i": 33,    // X
+    "i": 33,
 
     /** number f */
     /* X */
     // X
-    "f": 33.33, // X
+    "f": 33.33,
 
     /** number fe */
     /* X */
     // X
-    "fe": 33.33e10, // X
+    "fe": 33.33e10,
 
     /** string s */
     /* X */
     // X
-    "s": "abcde"    // X
+    "s": "abcde"
 }

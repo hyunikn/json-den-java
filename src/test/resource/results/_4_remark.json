@@ -1,8 +1,8 @@
 /** the outermost obj
- one,
- two,
- three
-*/
+  * one,
+  * two,
+  * three
+  */
 {
     /** obj o */
     "o": {
