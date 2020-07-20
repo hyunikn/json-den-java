@@ -7,7 +7,7 @@ package com.github.hyunikn.jsonden.exception;
   *  (1) wrong JSON syntax
   *  (2) unexpected JSON type
   *  (3) a duplicate key in a JSON object.
-  *  (4) insufficient indentation of a remark
+  *  (4) no beginning star at a remark line
   *  (5) dot in a JSON object member key, which is prohibited by Json-den.
   * A public final field {@code errCase} indicates one of these cases.
   * Method {@code getMessage()} will return more detailed description of the error.
@@ -17,7 +17,7 @@ public class ParseError extends Exception {
     public static final int CASE_WRONG_JSON_SYNTAX      = 0;
     public static final int CASE_UNEXPECTED_JSON_TYPE   = 1;
     public static final int CASE_DUPLICATE_KEY          = 2;
-    public static final int CASE_INSUFFICIENT_INDENT    = 3;
+    public static final int CASE_NO_BEGINNING_STAR      = 3;
     public static final int CASE_DOT_IN_MEMBER_KEY      = 4;
 
     final public int errCase;

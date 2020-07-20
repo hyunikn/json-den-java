@@ -154,6 +154,19 @@ public class JsonTest {
     }
 
     @Test
+    public void variousRemarkLines() throws ParseError {
+        String text = Util.readFile("various_remarks.json");
+        Json json = Json.parse(text);
+        //System.out.println(json.stringify(4));
+        assertEquals(Util.readFile("results/_4_var_remark.json"), json.stringify(4));
+        //System.out.println(json.stringify(0));
+        assertEquals(Util.readFile("results/_0_var_remark.json"), json.stringify(0));
+        Json json2 = Json.parse(json.stringify(0));
+        assertEquals(Util.readFile("results/_4_var_remark.json"), json2.stringify(4));
+
+    }
+
+    @Test
     public void testClone() throws ParseError {
         Json o = Json.parse(Util.readFile("obj.json"));
         Json a = Json.parse(Util.readFile("arr.json"));

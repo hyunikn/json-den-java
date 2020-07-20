@@ -65,8 +65,7 @@ project root directory to get the outputs.
     /** different */
     "d": true,
     "o": {
-        "l": "left", /** comment dropped because 
-                        it does not start a line */
+        "l": "left", /** this goes to c, not l */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
@@ -165,7 +164,7 @@ public class Example {
 
 ```
 # stringify with indent size 0
-/** comment preserved */{/** left only */"l":{},/** common */"c":7,/** different */"d":true,"o":{"l":"left","c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
+/** comment preserved */{/** left only */"l":{},/** common */"c":7,/** different */"d":true,"o":{"l":"left",/** this goes to c, not l */"c":[true,false],"d":1.1,"d2":[false,true]},"a":[{"l":{"L":"L"},"c":{"C":null},"d":{"D":"O"}},[1,2,3],[10,20,30]]}
 # stringify with indent size 2
 /** comment preserved */
 {
@@ -177,6 +176,7 @@ public class Example {
   "d": true,
   "o": {
     "l": "left",
+    /** this goes to c, not l */
     "c": [
       true,
       false

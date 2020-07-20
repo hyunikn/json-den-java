@@ -9,8 +9,7 @@
     /** different */
     "d": true,
     "o": {
-        "l": "left", /** comment dropped because 
-                        it does not start a line */
+        "l": "left", /** this goes to c, not l */
         "c": [ true, false ],
         "d": 1.1,
         "d2": [ false, true ]
