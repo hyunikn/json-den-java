@@ -4,7 +4,7 @@
   <groupId>com.github.hyunikn</groupId>
   <artifactId>jsonden</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.5-SNAPSHOT</version>
+  <version>0.9.6-SNAPSHOT</version>
 
   <name>jsonden</name>
   <description>a library that parses, stringifies and manipulates JSON</description>
