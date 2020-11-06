@@ -1,8 +1,8 @@
-package com.github.hyunikn.jsonden.parser;
+package io.github.hyunikn.jsonden.parser;
 
-import com.github.hyunikn.jsonden.*;
-import com.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
-import com.github.hyunikn.jsonden.parser.antlrgen.JsonParseBaseVisitor;
+import io.github.hyunikn.jsonden.*;
+import io.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
+import io.github.hyunikn.jsonden.parser.antlrgen.JsonParseBaseVisitor;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;

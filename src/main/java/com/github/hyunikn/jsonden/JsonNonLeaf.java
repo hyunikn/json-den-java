@@ -1,7 +1,7 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.UnreachablePath;
-import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
+import io.github.hyunikn.jsonden.exception.UnreachablePath;
+import io.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;

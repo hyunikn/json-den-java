@@ -4,7 +4,7 @@
 lexer grammar JsonLex;
 
 @header {
-package com.github.hyunikn.jsonden.parser.antlrgen;
+package io.github.hyunikn.jsonden.parser.antlrgen;
 }
 
 STRING

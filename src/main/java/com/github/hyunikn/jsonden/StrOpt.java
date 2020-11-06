@@ -1,4 +1,4 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
 /** Options of {@code stringify()} method.
   *  (1) indentSize (int)

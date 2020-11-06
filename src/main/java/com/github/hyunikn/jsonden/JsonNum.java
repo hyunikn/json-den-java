@@ -1,6 +1,6 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 
 /**
-  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON numbers.
+  * A subclass of {@link io.github.hyunikn.jsonden.Json Json} which represents JSON numbers.
   */
 public class JsonNum extends JsonLeaf {
 
@@ -110,7 +110,7 @@ public class JsonNum extends JsonLeaf {
       * Parses the string into a {@code JsonNum}.
       * @param s string to parse
       * @return a JsonNum if s legally represent a JSON number.
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json number.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json number.
       */
     public static JsonNum parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -123,13 +123,13 @@ public class JsonNum extends JsonLeaf {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isNum()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isNum()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isNum() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asNum()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asNum()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonNum asNum() { return this; }

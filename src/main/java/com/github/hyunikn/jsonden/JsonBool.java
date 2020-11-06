@@ -1,11 +1,11 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON booleans.
+  * A subclass of {@link io.github.hyunikn.jsonden.Json Json} which represents JSON booleans.
   */
 public class JsonBool extends JsonLeaf {
 
@@ -54,7 +54,7 @@ public class JsonBool extends JsonLeaf {
       * Parses the string into a {@code JsonBool}.
       * @param s string to parse
       * @return a JsonBool if s legally represent a JSON boolean.
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json boolean.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json boolean.
       */
     public static JsonBool parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -67,13 +67,13 @@ public class JsonBool extends JsonLeaf {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isBool()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isBool()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isBool() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asBool()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asBool()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonBool asBool() { return this; }

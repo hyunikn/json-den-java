@@ -1,11 +1,11 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.ParseError;
 
 import java.io.IOException;
 
 /**
-  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON strings.
+  * A subclass of {@link io.github.hyunikn.jsonden.Json Json} which represents JSON strings.
   */
 public class JsonStr extends JsonLeaf {
 
@@ -59,7 +59,7 @@ public class JsonStr extends JsonLeaf {
       * Parses the string into a {@code JsonStr}.
       * @param s string to parse
       * @return a JsonStr if s legally represent a JSON string.
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json string.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json string.
       */
     public static JsonStr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -72,13 +72,13 @@ public class JsonStr extends JsonLeaf {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isStr()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isStr()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isStr() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asStr()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asStr()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonStr asStr() { return this; }

@@ -1,7 +1,7 @@
-package com.github.hyunikn.jsonden.example;
+package io.github.hyunikn.jsonden.example;
 
-import com.github.hyunikn.jsonden.*;
-import com.github.hyunikn.jsonden.exception.*;
+import io.github.hyunikn.jsonden.*;
+import io.github.hyunikn.jsonden.exception.*;
 
 import java.io.File;
 import java.io.FileInputStream;

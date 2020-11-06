@@ -1,7 +1,7 @@
-package com.github.hyunikn.jsonden.exception;
+package io.github.hyunikn.jsonden.exception;
 
 /**
-  * Thrown when the {@code parse} method of {@link com.github.hyunikn.jsonden.Json Json}
+  * Thrown when the {@code parse} method of {@link io.github.hyunikn.jsonden.Json Json}
   * class or one of its subclasses fails.
   * Currently, there are five cases of this kind of failure:
   *  (1) wrong JSON syntax

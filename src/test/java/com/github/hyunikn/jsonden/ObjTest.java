@@ -1,6 +1,6 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.ParseError;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

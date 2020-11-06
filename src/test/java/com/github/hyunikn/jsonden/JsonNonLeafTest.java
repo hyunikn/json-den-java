@@ -1,7 +1,7 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.UnreachablePath;
+import io.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.UnreachablePath;
 
 import java.util.Map;
 import java.util.List;

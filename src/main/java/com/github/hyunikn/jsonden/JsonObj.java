@@ -1,9 +1,9 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.UnreachablePath;
+import io.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.UnreachablePath;
 
-import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
+import io.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
-  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON objects.
+  * A subclass of {@link io.github.hyunikn.jsonden.Json Json} which represents JSON objects.
   * It remembers the order of member addition, and prints them in that order when stringified.
   */
 public class JsonObj extends JsonNonLeaf {
@@ -92,7 +92,7 @@ public class JsonObj extends JsonNonLeaf {
       * (see {@code getx} and {@code setx}).
       * @param s string to parse
       * @return a JsonObj if s legally represent a JSON object.
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json object.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json object.
       */
     public static JsonObj parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -221,13 +221,13 @@ public class JsonObj extends JsonNonLeaf {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isObj()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isObj()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isObj() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asObj()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asObj()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonObj asObj() { return this; }
@@ -320,7 +320,7 @@ public class JsonObj extends JsonNonLeaf {
       * @param path dot delimited segments of a path to a subnode.
       *  Each segment represents either an object member key or an array element index (hash followed by an integer).
       * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
+      * @throws io.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
     public JsonObj setx(String path, Json val) throws UnreachablePath {
         return (JsonObj) super.setx(path, val);
@@ -379,9 +379,9 @@ public class JsonObj extends JsonNonLeaf {
       * If the current object already has a value at a path in {@code flattened} then the value is overwritten
       * by the one in {@code flattened}.
       * @param flattened a flattened {@code Json} value obtained by
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
       * @param clone whether to clone the {@code Json} values while loading or not.
       * @return the current object for method chaining.
       */

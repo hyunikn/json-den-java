@@ -1,11 +1,11 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.parser.antlrgen.JsonLex;
-import com.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
-import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
+import io.github.hyunikn.jsonden.parser.antlrgen.JsonLex;
+import io.github.hyunikn.jsonden.parser.antlrgen.JsonParse;
+import io.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.UnreachablePath;
+import io.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.UnreachablePath;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -38,7 +38,7 @@ public abstract class Json {
       * Parses the string into a {@code Json}.
       * @param s string to parse
       * @return a Json if s is a legal JSON text
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json value.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json value.
       */
     public static Json parse(String s) throws ParseError {
 
@@ -166,64 +166,64 @@ public abstract class Json {
     // for six individual JSON types
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonObj JsonObj} or not.
       */
     public boolean isObj()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonArr JsonArr} or not.
       */
     public boolean isArr()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonBool JsonBool} or not.
       */
     public boolean isBool() { return false; }
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonNum JsonNum} or not.
       */
     public boolean isNum()  { return false; }
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonNull JsonNull} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonNull JsonNull} or not.
       */
     public boolean isNull() { return false; }
 
     /**
-      * Returns whether this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr} or not.
+      * Returns whether this is a {@link io.github.hyunikn.jsonden.JsonStr JsonStr} or not.
       */
     public boolean isStr()  { return false; }
 
     //---------------------------------------------
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonObj JsonObj}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonObj JsonObj}, otherwise {@code null}.
       */
     public JsonObj  asObj()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonArr JsonArr}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonArr JsonArr}, otherwise {@code null}.
       */
     public JsonArr  asArr()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonBool JsonBool}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonBool JsonBool}, otherwise {@code null}.
       */
     public JsonBool asBool() { return null; }
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonNum JsonNum}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonNum JsonNum}, otherwise {@code null}.
       */
     public JsonNum  asNum()  { return null; }
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonNull JsonNull}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonNull JsonNull}, otherwise {@code null}.
       */
     public JsonNull asNull() { return null; }
 
     /**
-      * Returns itself if this is a {@link com.github.hyunikn.jsonden.JsonStr JsonStr}, otherwise {@code null}.
+      * Returns itself if this is a {@link io.github.hyunikn.jsonden.JsonStr JsonStr}, otherwise {@code null}.
       */
     public JsonStr asStr()  { return null; }
 

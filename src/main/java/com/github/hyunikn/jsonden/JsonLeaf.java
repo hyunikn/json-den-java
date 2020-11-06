@@ -1,4 +1,4 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
 import java.util.LinkedHashMap;
 

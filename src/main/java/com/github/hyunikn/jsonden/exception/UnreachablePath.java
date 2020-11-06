@@ -1,4 +1,4 @@
-package com.github.hyunikn.jsonden.exception;
+package io.github.hyunikn.jsonden.exception;
 
 /**
   * Thrown when a {@code Json} does not or cannot have a subnode at a required path.

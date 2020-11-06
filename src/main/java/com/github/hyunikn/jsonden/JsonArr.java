@@ -1,9 +1,9 @@
-package com.github.hyunikn.jsonden;
+package io.github.hyunikn.jsonden;
 
-import com.github.hyunikn.jsonden.exception.ParseError;
-import com.github.hyunikn.jsonden.exception.UnreachablePath;
+import io.github.hyunikn.jsonden.exception.ParseError;
+import io.github.hyunikn.jsonden.exception.UnreachablePath;
 
-import com.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
+import io.github.hyunikn.jsonden.parser.MyParseTreeVisitor;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.LinkedHashMap;
 
 /**
-  * A subclass of {@link com.github.hyunikn.jsonden.Json Json} which represents JSON arrays.
+  * A subclass of {@link io.github.hyunikn.jsonden.Json Json} which represents JSON arrays.
   */
 public class JsonArr extends JsonNonLeaf {
 
@@ -78,7 +78,7 @@ public class JsonArr extends JsonNonLeaf {
       * Parses the string into a {@code JsonArr}.
       * @param s string to parse
       * @return a JsonArr if s legally represent a JSON array.
-      * @throws com.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json array.
+      * @throws io.github.hyunikn.jsonden.exception.ParseError when s does not legally represent a Json array.
       */
     public static JsonArr parse(String s) throws ParseError {
         Json parsed = Json.parse(s);
@@ -363,13 +363,13 @@ public class JsonArr extends JsonNonLeaf {
     }
 
     /**
-      * Returns {@code true}, overriding {@code isArr()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code true}, overriding {@code isArr()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public boolean isArr() { return true; }
 
     /**
-      * Returns {@code this}, overriding {@code asArr()} of {@link com.github.hyunikn.jsonden.Json Json}.
+      * Returns {@code this}, overriding {@code asArr()} of {@link io.github.hyunikn.jsonden.Json Json}.
       */
     @Override
     public JsonArr asArr() { return this; }
@@ -447,7 +447,7 @@ public class JsonArr extends JsonNonLeaf {
       * @param path dot delimited segments of a path to a subnode.
       *  Each segment represents either an object member key or an array element index (hash followed by an integer).
       * @return this {@code Json} for method chaining
-      * @throws com.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
+      * @throws io.github.hyunikn.jsonden.exception.UnreachablePath when the missing parent nodes cannot be created.
       */
     public JsonArr setx(String path, Json val) throws UnreachablePath {
         return (JsonArr) super.setx(path, val);
@@ -506,9 +506,9 @@ public class JsonArr extends JsonNonLeaf {
       * If the current array already has a value at a path in {@code flattened} then the value is overwritten
       * by the one in {@code flattened}.
       * @param flattened a flattened {@code Json} value obtained by
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
-      *   {@link com.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#flatten flatten},
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#intersect intersect},
+      *   {@link io.github.hyunikn.jsonden.JsonNonLeaf#subtract subtract}, etc.
       * @param clone whether to clone the {@code Json} values while loading or not.
       * @return the current array for method chaining.
       */
