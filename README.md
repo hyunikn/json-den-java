@@ -37,9 +37,9 @@ and see the generated API documentation.
 Json-den-java is under BSD-2 license.
 
 ## Examples
-Following are code snippets in com.github.hyunikn.jsonden.example.Example class and their console
+Following are code snippets in io.github.hyunikn.jsonden.example.Example class and their console
 outputs when run.
-You can run `mvn exec:java -Dexec.mainClass=com.github.hyunikn.jsonden.example.Example` in the
+You can run `mvn exec:java -Dexec.mainClass=io.github.hyunikn.jsonden.example.Example` in the
 project root directory to get the outputs.
 
 ### Sample JSON files
@@ -134,10 +134,10 @@ project root directory to get the outputs.
 
 **Code:**
 ```java
-package com.github.hyunikn.jsonden.example;
+package io.github.hyunikn.jsonden.example;
 
-import com.github.hyunikn.jsonden.*;
-import com.github.hyunikn.jsonden.exception.*;
+import io.github.hyunikn.jsonden.*;
+import io.github.hyunikn.jsonden.exception.*;
 
 ...
 ...
@@ -456,8 +456,8 @@ You can get the latest stable version from Maven Central by adding the following
 in your pom.xml:
 ```xml
     <dependency>
-      <groupId>com.github.hyunikn</groupId>
+      <groupId>io.github.hyunikn</groupId>
       <artifactId>jsonden</artifactId>
-      <version>0.9.4</version>
+      <version>0.9.5</version>
     </dependency>
 ```

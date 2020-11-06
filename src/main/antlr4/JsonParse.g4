@@ -5,7 +5,7 @@ parser grammar JsonParse;
 options { tokenVocab = JsonLex; }
 
 @header {
-package com.github.hyunikn.jsonden.parser.antlrgen;
+package io.github.hyunikn.jsonden.parser.antlrgen;
 }
 
 @members {
