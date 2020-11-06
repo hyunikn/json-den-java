@@ -458,6 +458,6 @@ in your pom.xml:
     <dependency>
       <groupId>io.github.hyunikn</groupId>
       <artifactId>jsonden</artifactId>
-      <version>0.9.5</version>
+      <version>0.9.6</version>
     </dependency>
 ```
