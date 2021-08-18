@@ -15,6 +15,81 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
 
     private static final String[] RTT = new String[0];
 
+    private static String unescape(String s) {
+        StringBuffer sb = new StringBuffer();
+
+        int sLen = s.length();
+        for (int i = 0; i < sLen; i++) {
+            char c = s.charAt(i);
+            if (c == '\\' && (i + 1) < sLen) {
+                char c2 = s.charAt(i + 1);
+                switch (c2) {
+                    case '"':
+                        sb.append('"');
+                        i++;
+                        break;
+                    case '\\':
+                        sb.append('\\');
+                        i++;
+                        break;
+                    case '/':
+                        sb.append('/');
+                        i++;
+                        break;
+                    case 'b':
+                        sb.append('\b');
+                        i++;
+                        break;
+                    case 'f':
+                        sb.append('\f');
+                        i++;
+                        break;
+                    case 'n':
+                        sb.append('\n');
+                        i++;
+                        break;
+                    case 'r':
+                        sb.append('\r');
+                        i++;
+                        break;
+                    case 't':
+                        sb.append('\t');
+                        i++;
+                        break;
+                    case 'u':
+                        if (i + 5 < sLen) {
+                            int j;
+                            for (j = 2; j < 6; j++) {
+                                char c3 = s.charAt(i + j);
+                                if ('a' <= c3 && c3 <= 'f' || 'A' <= c3 && c3 <= 'F' || '0' <= c3 && c3 <= '9') {
+                                } else {
+                                    break;
+                                }
+                            }
+                            if (j == 6) {
+                                String hexStr = s.substring(i + 2, i + 6);
+                                int hex = Integer.parseInt(hexStr, 16);
+                                sb.append((char) hex);
+                                i += 5;
+                            } else {
+                                sb.append(c);
+                            }
+
+                        } else {
+                            sb.append(c);
+                        }
+                        break;
+                    default:
+                        sb.append(c);
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
     private String stripQuoteMarks(String s) {
         int len = s.length();
         assert len >= 2;
@@ -110,7 +185,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
     @Override public Json visitValue(JsonParse.ValueContext ctx) {
 
         if (ctx.STRING() != null) {
-            return JsonStr.instance(stripQuoteMarks(ctx.STRING().getText()));
+            return JsonStr.instance(unescape(stripQuoteMarks(ctx.STRING().getText())));
         } else if (ctx.NUMBER() != null) {
             return JsonNum.instance(ctx.NUMBER().getText());
         } else if (ctx.TRUE() != null) {
@@ -134,7 +209,7 @@ public class MyParseTreeVisitor extends JsonParseBaseVisitor<Json> {
         for (JsonParse.RemarkedPairContext cp: ctx.remarkedPair()) {
 
             JsonParse.PairContext pc = cp.pair();
-            String key = stripQuoteMarks(pc.STRING().getText());
+            String key = stripQuoteMarks(unescape(pc.STRING().getText()));
             if (key.indexOf('.') >= 0) {
                 throw new Error("Json-den does not allow dot(.) characters in JSON object member keys: '" +
                         key + "' at " + getLocation(pc.STRING()));

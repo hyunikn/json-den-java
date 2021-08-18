@@ -524,7 +524,7 @@ public class JsonObj extends JsonNonLeaf {
 
             writeIndent(sbuf, indentSize, indentLevel + 1);
             sbuf.append('"');
-            sbuf.append(key);
+            sbuf.append(Misc.escape(key));
             sbuf.append("\":");
             if (useIndents) {
                 sbuf.append(' ');
