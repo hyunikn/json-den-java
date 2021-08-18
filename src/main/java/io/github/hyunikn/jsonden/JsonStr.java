@@ -114,7 +114,7 @@ public class JsonStr extends JsonLeaf {
         }
 
         sbuf.append('"');
-        sbuf.append(text);
+        sbuf.append(Misc.escape(text));
         sbuf.append('"');
     }
 
